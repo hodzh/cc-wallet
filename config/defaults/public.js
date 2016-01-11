@@ -1,9 +1,9 @@
 module.exports = {
 
-    languages: [{
-        locale: 'en',
-        direction: 'ltr',
-    }],
+  languages: [{
+    locale: 'en',
+    direction: 'ltr',
+  }],
 
-    currentLanguage: 'en'
+  currentLanguage: 'en'
 };

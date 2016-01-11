@@ -1,14 +1,17 @@
- var passport = require('passport');
- var LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+var errorMessage = 'Incorrect email or password.';
 
 function localAuthenticate(User, email, password, done) {
   User.findOneAsync({
-    email: email.toLowerCase()
-  })
+      email: email.toLowerCase()
+    })
     .then(function(user) {
       if (!user) {
+        // This email is not registered.
         return done(null, false, {
-          message: 'This email is not registered.'
+          message: errorMessage
         });
       }
       user.authenticate(password, function(authError, authenticated) {
@@ -16,8 +19,9 @@ function localAuthenticate(User, email, password, done) {
           return done(authError);
         }
         if (!authenticated) {
+          // This password is not correct.
           return done(null, false, {
-            message: 'This password is not correct.'
+            message: errorMessage
           });
         } else {
           return done(null, user);
@@ -32,7 +36,7 @@ function localAuthenticate(User, email, password, done) {
 exports.setup = function(User, config) {
   passport.use(new LocalStrategy({
     usernameField: 'email',
-    passwordField: 'password' // this is the virtual field on the model
+    passwordField: 'password'
   }, function(email, password, done) {
     return localAuthenticate(User, email, password, done);
   }));

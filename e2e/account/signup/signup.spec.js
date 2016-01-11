@@ -1,7 +1,7 @@
 'use strict';
 
 var config = browser.params;
-var UserModel = require(config.serverConfig.root + '/server/api/user/user.model');
+var UserModel = require(config.serverConfig.root + '/server/model/user');
 
 describe('Signup View', function() {
   var page;

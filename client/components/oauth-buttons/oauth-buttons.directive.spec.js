@@ -17,7 +17,7 @@ describe('Directive: oauthButtons', function() {
             element = $compile(element)(parentScope);
             parentScope.$digest();
             elementScope = element.isolateScope();
-        })
+        });
     }
 
     it('should contain anchor buttons', function() {

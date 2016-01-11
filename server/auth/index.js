@@ -1,22 +1,20 @@
 'use strict';
 
-var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
 
 var config = require('../../config');
-var User = require('../api/user/user.model');
+var User = require('../model/user.js');
 
 var validateJwt = expressJwt({
-  secret: config.web.session.secret
+  secret: config.web.jwt.secret
 });
 
 module.exports = {
   isAuthenticated : isAuthenticated,
   hasRole : hasRole,
-  signToken : signToken,
-  setTokenCookie : setTokenCookie
+  signToken : signToken
 };
 
 /**
@@ -59,34 +57,30 @@ function hasRole(roleRequired) {
 
   return compose()
     .use(isAuthenticated())
-    .use(function meetsRequirements(req, res, next) {
-      if (config.userRoles.indexOf(req.user.role) >=
-        config.userRoles.indexOf(roleRequired)) {
-        next();
-      }
-      else {
-        res.status(403).send('Forbidden');
-      }
-    });
+    .use(meetsRequirements);
+
+  function meetsRequirements(req, res, next) {
+    if (config.shared.appConfig.userRoles.indexOf(req.user.role) >=
+      config.shared.appConfig.userRoles.indexOf(roleRequired)) {
+      next();
+    }
+    else {
+      res.status(403).send('Forbidden');
+    }
+  }
 }
 
 /**
  * Returns a jwt token signed by the app secret
  */
 function signToken(id, role) {
-  return jwt.sign({ _id: id, role: role }, config.web.session.secret, {
-    expiresIn: 60 * 60 * 5
-  });
-}
-
-/**
- * Set token cookie directly for oAuth strategies
- */
-function setTokenCookie(req, res) {
-  if (!req.user) {
-    return res.status(404).send('Something went wrong, please try again.');
-  }
-  var token = signToken(req.user._id, req.user.role);
-  res.cookie('token', token);
-  res.redirect('/');
+  return jwt.sign(
+    {
+      _id: id,
+      role: role
+    },
+    config.web.jwt.secret,
+    {
+      expiresIn: config.web.jwt.expiresIn
+    });
 }

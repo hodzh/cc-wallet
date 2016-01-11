@@ -23,37 +23,91 @@ module.exports = function(config) {
       // endinject
 
       // inject:js
-      './client/components/util/util.module.js',
-      './client/components/util/util.service.js',
+      './modules/wallet/client/user/module.js',
+      './modules/wallet/client/user/router.js',
+      './modules/wallet/client/user/accounts/model.js',
+      './modules/wallet/client/user/accounts/controller.js',
+      './modules/wallet/client/components/module.js',
+      './modules/wallet/client/admin/module.js',
+      './modules/wallet/client/admin/transactions/schema.js',
+      './modules/wallet/client/admin/transactions/model.js',
+      './modules/wallet/client/admin/transactions/controller.js',
+      './modules/wallet/client/admin/router.js',
+      './modules/wallet/client/admin/main-menu.js',
+      './modules/wallet/client/admin/accounts/schema.js',
+      './modules/wallet/client/admin/accounts/model.js',
+      './modules/wallet/client/admin/accounts/controller.js',
+      './client/components/util/module.js',
+      './client/components/util/service.js',
       './client/app/app.js',
       './client/components/socket/socket.service.js',
+      './client/components/module.js',
+      './client/components/password/directive.js',
+      './client/components/password/controller.js',
       './client/components/oauth-buttons/oauth-buttons.directive.js',
       './client/components/oauth-buttons/oauth-buttons.controller.js',
-      './client/components/navbar/navbar.directive.js',
-      './client/components/navbar/navbar.controller.js',
-      './client/components/mongoose-error/mongoose-error.directive.js',
-      './client/components/modal/modal.service.js',
-      './client/components/footer/footer.directive.js',
-      './client/components/auth/auth.module.js',
+      './client/components/navbar/directive.js',
+      './client/components/navbar/controller.js',
+      './client/components/mongoose-error/directive.js',
+      './client/components/modal/service.js',
+      './client/components/main-menu/factory.js',
+      './client/components/footer/directive.js',
+      './client/components/email/directive.js',
+      './client/components/email/controller.js',
+      './client/components/editable/xs-input-sync.directive.js',
+      './client/components/editable/enter.js',
+      './client/components/editable/editable-select.js',
+      './client/components/editable/editable-paragraph.js',
+      './client/components/editable/editable.js',
+      './client/components/auth/module.js',
       './client/components/auth/user.service.js',
+      './client/components/auth/token-storage.service.js',
       './client/components/auth/router.decorator.js',
       './client/components/auth/interceptor.service.js',
       './client/components/auth/auth.service.js',
-      './client/app/main/main.js',
-      './client/app/main/main.controller.js',
-      './client/app/constants/walle.js',
-      './client/app/admin/admin.module.js',
-      './client/app/admin/admin.router.js',
-      './client/app/admin/admin.controller.js',
-      './client/app/account/signup/signup.controller.js',
-      './client/app/account/settings/settings.controller.js',
-      './client/app/account/login/login.controller.js',
+      './client/app/main/router.js',
+      './client/app/main/controller.js',
+      './client/app/constants/currency.js',
+      './client/app/constants/app-config.js',
+      './client/app/admin/module.js',
+      './client/app/admin/users/model.js',
+      './client/app/admin/users/controller.js',
+      './client/app/admin/router.js',
+      './client/app/admin/dashboard/controller.js',
+      './client/app/account/signup/controller.js',
+      './client/app/account/settings/controller.js',
+      './client/app/account/login/controller.js',
       './client/app/account/account.js',
       // endinject
 
-      './client/**/*.mock.js',
-      './client/**/*.spec.js',
-      './client/**/*.html'
+      // inject-dev:js
+      './client/app/account/login/index.html',
+      './client/app/account/settings/index.html',
+      './client/app/account/signup/controller.spec.js',
+      './client/app/account/signup/index.html',
+      './client/app/admin/dashboard/index.html',
+      './client/app/admin/users/index.html',
+      './client/app/main/controller.spec.js',
+      './client/app/main/index.html',
+      './client/components/email/controller.spec.js',
+      './client/components/email/directive.spec.js',
+      './client/components/email/index.html',
+      './client/components/footer/index.html',
+      './client/components/modal/index.html',
+      './client/components/navbar/index.html',
+      './client/components/oauth-buttons/oauth-buttons.controller.spec.js',
+      './client/components/oauth-buttons/oauth-buttons.directive.spec.js',
+      './client/components/oauth-buttons/oauth-buttons.html',
+      './client/components/password/controller.spec.js',
+      './client/components/password/directive.spec.js',
+      './client/components/password/index.html',
+      './client/components/socket/socket.mock.js',
+      './client/components/ui-router/ui-router.mock.js',
+      './client/index.html',
+      './modules/wallet/client/admin/accounts/index.html',
+      './modules/wallet/client/admin/transactions/index.html',
+      './modules/wallet/client/user/accounts/index.html',
+      // endinject
     ],
 
     // frameworks to use
@@ -70,16 +124,15 @@ module.exports = function(config) {
       outputDir: 'tests/results/public/junit/'
     },
 
-    // coverage
     preprocessors: {
-      // source files that you want to generate coverage for
-      // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
       'client/app/**/*.js': ['coverage'],
       'client/components/**/*.js': ['coverage'],
+      'modules/**/client/**/*.js': ['coverage'],
 
       'client/app/**/*.html': ['ng-html2js'],
-      'client/components/**/*.html': ['ng-html2js']
+      'client/components/**/*.html': ['ng-html2js'],
+      'modules/wallet/client/**/*.html': ['ng-html2js'],
     },
 
     coverageReporter: {
@@ -117,8 +170,8 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    //browsers: ['PhantomJS'],
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
+    //browsers: ['Firefox'],
 
     urlRoot: '/__karma__/',
 

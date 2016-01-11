@@ -5,6 +5,9 @@ var config = require('./config');
 
 var server = require('./server');
 
+var wallet = require('./modules/wallet/server');
+wallet(server, config);
+
 server.start(config, onStart);
 
 function onStart(err) {

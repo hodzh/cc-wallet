@@ -1,3 +1,3 @@
 module.exports = {
-    host: process.env.MONGOHQ_URL
+  host: process.env.MONGOHQ_URL
 };

@@ -1,0 +1,15 @@
+<div class="password-input">
+  <input
+    type="{{vm.input.type}}"
+    placeholder="{{vm.input.placeholder}}"
+    class="form-control"
+    ng-model="value"
+    xs-input-sync>
+    <span
+      class="pic password {{vm.input.iconClass}}"
+      ng-click = "vm.togglePasswordVisible()">
+      <div class="hide-text-password">
+        {{vm.input.tooltipText}}
+      </div>
+    </span>
+</div>

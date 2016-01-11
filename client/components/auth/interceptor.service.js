@@ -1,10 +1,10 @@
 (function (window, angular) { 'use strict';
 
   angular.module('walleApp.auth')
-      .factory('authInterceptor',
-          ['$rootScope', '$q', '$cookies', '$injector', 'Util', authInterceptor]);
+    .factory('AuthInterceptor',
+      ['$rootScope', '$q', 'TokenStorage', '$injector', 'Util', AuthInterceptor]);
 
-  function authInterceptor($rootScope, $q, $cookies, $injector, Util) {
+  function AuthInterceptor($rootScope, $q, storage, $injector, Util) {
     var state;
     return {
       // Add authorization token to headers
@@ -16,8 +16,8 @@
 
     function request(config) {
       config.headers = config.headers || {};
-      if ($cookies.get('token') && Util.isSameOrigin(config.url)) {
-        config.headers.Authorization = 'Bearer ' + $cookies.get('token');
+      if (storage.get('token') && Util.isSameOrigin(config.url)) {
+        config.headers.Authorization = 'Bearer ' + storage.get('token');
       }
       return config;
     }
@@ -26,7 +26,7 @@
       if (response.status === 401) {
         (state || (state = $injector.get('$state'))).go('login');
         // remove any stale tokens
-        $cookies.remove('token');
+        storage.remove('token');
       }
       return $q.reject(response);
     }

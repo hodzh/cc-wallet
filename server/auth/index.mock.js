@@ -9,8 +9,5 @@ module.exports = {
   },
   signToken : function() {
 
-  },
-  setTokenCookie : function() {
-
   }
 };

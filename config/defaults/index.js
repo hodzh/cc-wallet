@@ -13,6 +13,6 @@ module.exports = {
   web: require('./web'),
   public: require('./public'),
   assets: require('./assets'),
-  shared: require('./shared')
+  shared: require('./app-config.public')
 
 };

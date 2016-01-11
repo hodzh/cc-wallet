@@ -1,10 +1,9 @@
 var fs = require('fs');
-
 var gulp = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var request = require('request');
 var karma = require('karma');
-//var _ = require('lodash');
+var paths = require('./path-settings');
 
 //var assets = require('../config/production/assets');
 
@@ -18,6 +17,9 @@ gulp.task('test', ['startServer', 'stopServer']);
 gulp.task('startServer', function(done) {
   var server = require('../server');
   var config = require('../config');
+  config.setEnv('test');
+  var wallet = require('../modules/wallet/server');
+  wallet(server, config);
   server.start(
       config,
       function(err){
@@ -31,11 +33,11 @@ gulp.task('stopServer', ['runKarma'], function() {
 });
 
 gulp.task('runMocha', ['startServer'], function () {
-  return gulp.src(['./server/**/*.spec.js', './server/**/*.integration.js'], {read: false})
+  return gulp.src(paths.jsMocha, {read: false})
       .pipe(plugins.mocha(
           {
             reporter: 'spec',
-            require: ['./mocha.conf.js'],
+            require: [paths.mochaConf],
             timeout: 5000
           }
       ))

@@ -15,5 +15,7 @@ module.exports = {
 
   logging: {
     format: 'tiny'
-  }
+  },
+
+  seed: require('./seed')
 };

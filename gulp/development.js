@@ -5,54 +5,25 @@ var gulp = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var through = require('through');
 var gutil = require('gulp-util');
+var paths = require('./path-settings');
+var config = require('../config');
+
 var plugins = gulpLoadPlugins();
 
-var paths = {
-  js: [
-    './*.js',
-    'config/**/*.js',
-    'gulp/**/*.js',
-    'tools/**/*.js',
-    'server/**/*.js',
-    '!.*/**',
-    '!tests/**',
-    '!node_modules/**',
-    '!bower_modules/**',
-    '!public/**'],
-
-  json: [
-    './*.json',
-    'config/**/*.json',
-    'gulp/**/*.json',
-    'tools/**/*.json',
-    'server/**/*.json',
-    '!.*/**',
-    '!tests/**',
-    '!node_modules/**',
-    '!bower_modules/**',
-    '!public/**'],
-
-  injectJs: [
-    'client/{app,components}/**/!(*.spec|*.mock).js'],
-  css: [
-    'client/{app,components}/**/*.css'],
-  html: [
-    'client/{app,components}/**/*.html'],
-  less: [
-    'client/{app,components}/**/*.less'],
-  sass: [
-    'client/{app,components}/**/*.scss',
-    '!client/app/app.scss'],
-  assets: 'client/assets/**/*.{css,png,jpg}',
-  favicon: 'client/favicon.ico',
-  index:'client/index.html',
-  karmaConf:'karma.conf.js'
-};
-
-var config = require('../config');
-var dest = 'public';
-
-var defaultTasks = ['clean', 'constants', 'less', 'sass', 'csslint', 'injectIndex', 'assetsCopy', 'faviconCopy', 'htmlCopy', 'devServe', 'watch'];
+var defaultTasks = [
+  'clean',
+  'constants',
+  'less',
+  'sass',
+  'csslint',
+  'injectIndex',
+  'injectKarma',
+  'assetsCopy',
+  'faviconCopy',
+  'htmlCopy',
+  'devServe',
+  'watch'
+];
 
 gulp.task('env:development', function () {
   process.env.NODE_ENV = 'development';
@@ -70,16 +41,22 @@ gulp.task('jsFormat', function() {
 });
 
 gulp.task('constants', function () {
-  return gulp.src('')
-    .pipe(plugins.ngConstant({
-      name: 'walleApp.constants',
-      deps: [],
-      constants: config.shared,
-      wrap: ''
-    }))
-    .pipe(gulp.dest('client/app/constants'));
+  return gulp.src(paths.jsShared, {read: false})
+    .pipe(plugins.foreach(
+      function(stream, file){
+        return gulp.src(file.path, {read: false})
+          .pipe(plugins.ngConstant({
+            name: 'walleApp.constants',
+            deps: [],
+            constants: require(file.path),
+            wrap: true
+          }))
+          .pipe(plugins.extReplace('.js', '.public.js'))
+          .pipe(gulp.dest('client/app/constants'));
+      }
+    ));
   // Writes config.js to dist/ folder
-  //.pipe(gulp.dest(path.join(dest,'constants')));
+  //.pipe(gulp.dest(path.join(paths.publicRoot,'constants')));
 });
 
 gulp.task('jshint', function () {
@@ -117,7 +94,7 @@ gulp.task('sass', function() {
         }
       }))
     .pipe(plugins.sass())
-    .pipe(gulp.dest(dest + '/css/'));
+    .pipe(gulp.dest(paths.publicRoot + '/css/'));
 });
 
 gulp.task('injectIndex', function() {
@@ -163,7 +140,7 @@ gulp.task('injectIndex', function() {
         }
       }
     ))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(paths.publicRoot));
 });
 
 gulp.task('injectKarma', function() {
@@ -191,6 +168,18 @@ gulp.task('injectKarma', function() {
         }
       }
     ))
+    .pipe(plugins.inject(
+      gulp.src(
+        paths.injectDev, {read: true})
+        .pipe(plugins.naturalSort()),
+      {
+        starttag: '// inject-dev:js',
+        endtag: '// endinject',
+        transform: function (filePath, file) {
+          return '\'.' + filePath + '\','
+        }
+      }
+    ))
     .pipe(gulp.dest(function (vinyl) {
       return vinyl.cwd;
     }));
@@ -198,17 +187,17 @@ gulp.task('injectKarma', function() {
 
 gulp.task('assetsCopy', function() {
   return gulp.src(paths.assets)
-    .pipe(gulp.dest(path.join(dest, 'assets')));
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')));
 });
 
 gulp.task('htmlCopy', function() {
   return gulp.src(paths.html)
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(paths.publicRoot));
 });
 
 gulp.task('faviconCopy', function() {
   return gulp.src(paths.favicon)
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(paths.publicRoot));
 });
 
 gulp.task('devServe', ['env:development'], function () {
@@ -246,7 +235,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.assets, ['assetsCopy']);
   gulp.watch(paths.favicon, ['faviconCopy']);
   gulp.watch(paths.index, ['injectIndex']);
-  gulp.watch(paths.injectJs, ['injectIndex']);
+  gulp.watch(paths.injectJs, ['injectIndex', 'injectKarma']);
   gulp.watch(paths.html, ['htmlCopy']);
 });
 

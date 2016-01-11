@@ -1,0 +1,57 @@
+<navbar></navbar>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Change Password</h1>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="vm.changePassword(form)" novalidate>
+
+        <div class="form-group">
+          <label>Current Password</label>
+          <password-input
+            name="password"
+            ng-model="vm.user.oldPassword"
+            required
+            mongoose-error></password-input>
+          <p class="help-block" ng-show="form.password.$error.mongoose">
+              {{ vm.errors.other }}
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>New Password</label>
+          <password-input
+            name="newPassword"
+            ng-model="vm.user.newPassword"
+            ng-minlength="8"
+            required></password-input>
+          <p class="help-block"
+             ng-show="(form.newPassword.$error.minlength || form.newPassword.$error.required) && (form.newPassword.$dirty || vm.submitted)">
+            Password must be at least 8 characters.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <password-input
+            name="confirmPassword"
+            placeholder-hidden="Repeat Password"
+            placeholder-visible="Repeat Password"
+            ng-model="vm.user.confirmPassword"
+            match="vm.user.newPassword">
+          </password-input>
+          <p class="help-block"
+             ng-show="form.confirmPassword.$error.match && vm.submitted">
+            Passwords must match.
+          </p>
+        </div>
+
+        <p class="help-block"> {{ vm.message }} </p>
+
+        <button class="btn btn-lg btn-primary" type="submit">Save changes</button>
+      </form>
+    </div>
+  </div>
+</div>

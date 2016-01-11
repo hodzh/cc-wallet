@@ -1,9 +1,9 @@
 module.exports = {
 
-    hostname: 'http://localhost:3000',
+    hostname: 'http://localhost:3010',
 
     http: {
-        port: 3000
+        port: 3010
     },
 
     session: {

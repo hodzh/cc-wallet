@@ -1,31 +1,28 @@
 'use strict';
 
- var express = require('express');
- var passport = require('passport');
+var passport = require('passport');
 
- var auth = require('../');
+module.exports = route;
 
-var router = express.Router();
+function route(router, auth){
+  router.post('/', localAuth);
 
-router.post('/', localAuth);
+  function localAuth(req, res, next) {
+    passport.authenticate('local', onLocalAuth)(req, res, next);
 
-module.exports = router;
+    function onLocalAuth(err, user, info) {
+      var error = err || info;
+      if (error) {
+        return res.status(401).json(error);
+      }
+      if (!user) {
+        return res.status(404).json({
+          message: 'Something went wrong, please try again.'
+        });
+      }
 
-function localAuth(req, res, next) {
-    passport.authenticate('local', passportLocalAuth)(req, res, next);
-
-    function passportLocalAuth(err, user, info) {
-        var error = err || info;
-        if (error) {
-            return res.status(401).json(error);
-        }
-        if (!user) {
-            return res.status(404).json({
-                message: 'Something went wrong, please try again.'
-            });
-        }
-
-        var token = auth.signToken(user._id, user.role);
-        res.json({ token: token });
+      var token = auth.signToken(user._id, user.role);
+      res.json({ token: token });
     }
+  }
 }
