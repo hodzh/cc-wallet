@@ -5,22 +5,21 @@ var app = {
   db: require('./db'),
   auth: require('./auth'),
   web: require('./web'),
-  start: start
+  start: start,
+  addModules: addModules
 };
 
 module.exports = app;
 
-function start(config, callback){
-  app.config = config;
-
+function start(callback){
   async.series([
 
-      app.db.init.bind(app.db, config.db),
+      app.db.init.bind(app.db, app.config.db),
       buildDbModels,
       initAuth,
       seed,
       initWeb,
-      app.web.start.bind(app.web, config.web, app.auth)
+      app.web.start.bind(app.web, app.config.web, app.auth)
 
     ],
     function(err) {
@@ -47,23 +46,31 @@ function start(config, callback){
 
   function seed(callback){
 
-    if (!config.seed) {
+    if (!app.config.seed) {
       return callback();
     }
 
-    if ('development' !== config.env &&
-      'test' !== config.env) {
+    if ('development' !== app.config.env &&
+      'test' !== app.config.env) {
       return callback();
     }
 
     async.each(
-      Object.keys(config.seed),
+      Object.keys(app.config.seed),
       seedCollection,
       onSeed);
 
+    function resolve(obj, path){
+      if(path) {
+        var r = path.split('.');
+        return resolve(obj[r.shift()], r.join('.'));
+      }
+      return obj;
+    }
+
     function seedCollection(name, callback) {
-      var seed = config.seed[name];
-      var model = app.db.models[name];
+      var seed = app.config.seed[name];
+      var model = resolve(app.db.models, name);
 
       async.series(
         [
@@ -111,7 +118,7 @@ function start(config, callback){
     var web = app.web;
     var auth = app.auth;
 
-    web.init(config);
+    web.init(app.config);
 
     // register core routes
 
@@ -123,4 +130,19 @@ function start(config, callback){
 
     callback();
   }
+}
+
+function addModules(modules) {
+  modules.forEach(initModule);
+}
+
+function initModule(name) {
+  var path = require('path');
+  var fs = require('fs');
+  var modulePath = path.join(__dirname, '../modules', name, 'server');
+  if (!fs.existsSync(modulePath)) {
+    return;
+  }
+  var moduleServer = require(modulePath);
+  moduleServer(app, app.config);
 }

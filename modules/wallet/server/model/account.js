@@ -21,26 +21,30 @@ var schema = new Schema({
 
   balance: {
     type: Schema.Types.Long,
-    default: '0'
+    default: mongoose.Types.Long(0),
+    require: true
   },
 
   enable: {
     type: Boolean,
-    default: true
+    default: true,
+    require: true
   },
 
   updateDate: {
-    type: Date
+    type: Date,
+    require: true
   },
 
   createDate: {
-    type: Date
+    type: Date,
+    require: true
   },
 
   pendingTransactions: [
     {
       type: Schema.ObjectId,
-      ref: "Transaction"
+      ref: 'Transaction'
     }
   ],
 
@@ -102,150 +106,6 @@ schema.statics.getAccounts = function (type, userId) {
     type: type,
     owner: userId
   });
-};
-
-schema.statics.rollbackTo = function (transaction) {
-  return this.updateAsync(
-    {
-      _id: transaction.to,
-      pendingTransactions: transaction._id
-    },
-    {
-      $dec: {
-        balance: transaction.amount
-      },
-      $pull: { pendingTransactions: transaction._id }
-    })
-    .then(
-      function(result) {
-        if (result.nMatched !== 1 || result.nModified !== 1){
-          Promise.reject();
-        }
-      }
-    );
-};
-
-schema.statics.rollbackFrom = function (transaction) {
-  return this.updateAsync(
-    {
-      _id: transaction.from,
-      pendingTransactions: {
-        $ne: transaction._id
-      }
-    },
-    {
-      $dec: {
-        balance: transaction.amount
-      },
-      $push: {
-        pendingTransactions: transaction._id
-      }
-    })
-    .then(
-      function(result) {
-        if (result.nMatched !== 1 || result.nModified !== 1){
-          Promise.reject();
-        }
-      }
-    );
-};
-
-schema.statics.transactionTo = function (transaction) {
-  return this.updateAsync(
-    {
-      _id: transaction.to,
-      pendingTransactions: {
-        $ne: transaction._id
-      }
-    },
-    {
-      $inc: {
-        balance: transaction.amount
-      },
-      $push: {
-        pendingTransactions: transaction._id
-      }
-    })
-    .then(
-      function(result) {
-        if (result.nModified !== 1){
-          Promise.reject();
-        }
-      }
-    );
-};
-
-schema.statics.transactionFrom = function (transaction) {
-  return this.updateAsync(
-    {
-      _id: transaction.from,
-      pendingTransactions: {
-        $ne: transaction._id
-      }
-    },
-    {
-      $inc: {
-        balance: transaction.amount.negate()
-      },
-      $push: {
-        pendingTransactions: transaction._id
-      }
-    })
-    .then(
-      function(result) {
-        if (result.nModified !== 1){
-          Promise.reject();
-        }
-      }
-    );
-};
-
-schema.statics.transactionCommitTo = function (transaction) {
-  return this.findOneAndUpdateAsync({
-      _id: transaction.to,
-      pendingTransactions: transaction._id
-    },
-    {
-      $pull: {
-        pendingTransactions: transaction._id
-      }
-    },
-    {
-      returnNewDocument:true,
-      new: true
-    })
-    .then(
-      function(result) {
-        if (!result){
-          return Promise.reject();
-        }
-        return result;
-      }
-    );
-};
-
-schema.statics.transactionCommitFrom = function (transaction) {
-  return this.findOneAndUpdateAsync({
-      _id: transaction.from,
-      pendingTransactions: transaction._id
-    },
-    {
-      $pull: {
-        pendingTransactions: transaction._id
-      }
-    },
-    {
-      returnNewDocument:true,
-      new: true
-    })
-    .then(
-      function(result) {
-        if (!result){
-          return Promise.reject();
-        }
-        return result;
-      }
-    );
 };
 
 schema.statics.getUserData = function (account) {

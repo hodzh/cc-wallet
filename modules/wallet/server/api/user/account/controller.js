@@ -54,38 +54,8 @@ exports.index = function(currencies) {
 
   function getUserAccounts(req, res) {
     Account.getAccounts('user', req.user._id)
-      .then(mergeAccounts)
       .then(responseWithResult(res))
       .catch(handleError(res));
-
-    function mergeAccounts(accounts) {
-      if (!accounts) {
-        return;
-      }
-      var userCurrencies = {};
-      Object.keys(currencies).map(keyToAccount);
-      accounts.forEach(getUserAccount);
-      return Object.keys(userCurrencies).map(keyToValue);
-
-      function keyToValue(key) {
-        return userCurrencies[key];
-      }
-
-      function keyToAccount(key) {
-        var currency = currencies[key];
-        userCurrencies[key] = {
-          currency: currency.name,
-          decimal: currency.decimal,
-          description: currency.description,
-          balance: '0',
-          enable: false
-        };
-      }
-
-      function getUserAccount(account) {
-        userCurrencies[account.currency] = account.getUserData();
-      }
-    }
   }
 };
 

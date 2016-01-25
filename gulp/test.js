@@ -14,17 +14,33 @@ process.env.NODE_ENV = 'test';
 
 gulp.task('test', ['startServer', 'stopServer']);
 
-gulp.task('startServer', function(done) {
+gulp.task('runMochaCover', function () {
+  // todo coverage report
+});
+
+gulp.task('runMochaCover1', function () {
+  return gulp.src(paths.jsServer)
+    .pipe(plugins.coverage.instrument({
+      pattern: paths.jsServer
+    }))
+});
+
+gulp.task('runMochaCover2', function () {
+  return gulp.src(paths.jsServer)
+    .pipe(plugins.istanbul())
+    //.pipe(plugins.istanbul.hookRequire())
+});
+
+gulp.task('startServer', ['runMochaCover'], function(done) {
   var server = require('../server');
   var config = require('../config');
   config.setEnv('test');
-  var wallet = require('../modules/wallet/server');
-  wallet(server, config);
+  server.config = config;
+  server.addModules(['wallet', 'vp']);
   server.start(
-      config,
-      function(err){
-        done();
-      });
+    function(err){
+      done();
+    });
 });
 
 gulp.task('stopServer', ['runKarma'], function() {
@@ -33,27 +49,40 @@ gulp.task('stopServer', ['runKarma'], function() {
 });
 
 gulp.task('runMocha', ['startServer'], function () {
-  return gulp.src(paths.jsMocha, {read: false})
-      .pipe(plugins.mocha(
-          {
-            reporter: 'spec',
-            require: [paths.mochaConf],
-            timeout: 5000
-          }
-      ))
-      .on('error', function(error){
-        console.error(error);
-        this.emit('end');
-      });
+  return gulp.src(paths.jsMocha)
+    .pipe(plugins.mocha(
+      {
+        reporter: 'spec',
+        require: [paths.mochaConf],
+        timeout: 5000
+      }
+    ))
+      /*
+    .pipe(plugins.istanbul.writeReports(
+      {
+        dir: './tests/server/coverage',
+        reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
+        reportOpts: { dir: './tests/server/coverage' }
+      }
+    ))*/
+    /*
+    .pipe(plugins.coverage.gather())
+    .pipe(plugins.coverage.format())
+    .pipe(gulp.dest('tests/server/coverage'))
+    */
+    .on('error', function(error){
+      console.error(error);
+      this.emit('end');
+    });
 });
 
 gulp.task('runKarma', ['runMocha'], function (done) {
-    var karma = new karmaServer({
-      configFile: __dirname + '/../karma.conf.js',
-      singleRun: true,
-    }, function () {
-      done();
-    });
+  var karma = new karmaServer({
+    configFile: __dirname + '/../karma.conf.js',
+    singleRun: true,
+  }, function () {
+    done();
+  });
 
-    karma.start();
+  karma.start();
 });

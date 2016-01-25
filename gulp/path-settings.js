@@ -25,9 +25,15 @@ module.exports = {
     '!bower_modules/**',
     '!public/**'],
 
+  jsServer: [
+    './config/**/!(*.spec|*.mock|*integration).js',
+    './server/**/!(*.spec|*.mock|*integration).js',
+    './modules/**/config/**/!(*.spec|*.mock|*integration).js',
+    './modules/**/server/**/!(*.spec|*.mock|*integration).js'],
+
   injectJs: [
-    'client/{app,components}/**/!(*.spec|*.mock).js',
-    'modules/*/client/**/!(*.spec|*.mock).js'],
+    'client/{app,components}/**/!(*.spec|*.mock|*.sprite).js',
+    'modules/*/client/**/!(*.spec|*.mock|*.sprite).js'],
 
   injectDev: [
     './client/**/*.mock.js',
@@ -44,11 +50,11 @@ module.exports = {
     './modules/**/server/**/*.integration.js'],
 
   jsShared: [
-    './config/**/*.public.js',
-    './modules/**/config/**/*.public.js',],
+    './{config,server}/**/*.public.js',
+    './modules/**/{config,server}/**/*.public.js',],
 
   css: [
-    'client/{app,components}/**/*.css',
+    'client/**/*.css',
     'modules/*/client/**/*.css'],
 
   html: [
@@ -65,12 +71,24 @@ module.exports = {
     'modules/*/client/**/*.scss'],
 
   assets: [
-    'client/assets/**/*.{css,png,jpg}',
-    'modules/*/client/assets/**/*.{css,png,jpg}'],
+    'client/assets/**/*.{png,jpg}',
+    'modules/wallet/client/assets/**/*.{png,jpg}',
+    'modules/vp/client/assets/**/*.{png,jpg}'],
+
+  sounds: [
+    'client/assets/**/*.{mp3,ogg}',
+    'modules/wallet/client/assets/**/*.{mp3,ogg}',
+    'modules/vp/client/assets/**/*.{mp3,ogg}'],
+
+  sprites: [
+    'client/sprites/**/*.sprite.js',
+    'modules/wallet/client/sprites/**/*.sprite.js',
+    'modules/vp/client/sprites/**/*.sprite.js'],
 
   favicon: 'client/favicon.ico',
   index: 'client/index.html',
   karmaConf: 'karma.conf.js',
   mochaConf: './mocha.conf.js',
-  publicRoot: 'public'
+  publicRoot: 'public',
+  tempRoot: 'temp'
 };

@@ -2,6 +2,7 @@
 
   angular.module('walleApp.wallet.user', [
     'walleApp.ui',
+    'walleApp.constants',
     'ui.router'
   ]);
 

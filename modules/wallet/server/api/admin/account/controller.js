@@ -20,16 +20,6 @@ function responseWithResult(res, statusCode) {
   };
 }
 
-function responseWithIncomeResult(res, statusCode) {
-  statusCode = statusCode || 200;
-  return function(entity) {
-    if (entity) {
-      res.status(statusCode).json(
-        entity.accountTo);
-    }
-  };
-}
-
 function handleEntityNotFound(res) {
   return function(entity) {
     if (!entity) {
@@ -106,13 +96,19 @@ exports.destroy = function(req, res) {
 exports.income = function(req, res) {
   Transaction.income(req.user._id, req.params.id, req.query)
     .then(handleEntityNotFound(res))
-    .then(responseWithIncomeResult(res))
+    .then(function(result){
+      return result.accountTo.toObject();
+    })
+    .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
 exports.outcome = function(req, res) {
   Transaction.outcome(req.user._id, req.params.id, req.query)
     .then(handleEntityNotFound(res))
-    .then(responseWithIncomeResult(res))
+    .then(function(result){
+      return result.accountFrom.toObject();
+    })
+    .then(responseWithResult(res))
     .catch(handleError(res));
 };

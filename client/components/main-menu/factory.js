@@ -5,7 +5,6 @@
 
   function MainMenu() {
     var items = [
-
       {
         'title': 'Dashboard',
         'state': 'adminDashboard',

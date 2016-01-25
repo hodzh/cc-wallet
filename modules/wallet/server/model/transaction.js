@@ -30,6 +30,7 @@ var schema = new Schema({
 
   amount: {
     type: Schema.Types.Long,
+    default: mongoose.Types.Long(0),
     require: true
   },
 
@@ -59,77 +60,12 @@ var schema = new Schema({
 });
 
 schema.pre('save', function (next) {
+  if (this.isNew) {
+    this.createDate = new Date();
+  }
   this.updateDate = new Date();
   next();
 });
-
-schema.statics.process = function (transaction) {
-  var Transaction = this;
-  return Account.transactionFrom(transaction)
-    .then(function(){
-      return Account.transactionTo(transaction);
-    })
-    .then(function(){
-      return Transaction.findByIdAndUpdateAsync(
-        transaction._id,
-        {
-          $set: {
-            state: 'commit'
-          }
-        });
-    })
-    .then(function(){
-      return [
-        Account.transactionCommitFrom(transaction),
-        Account.transactionCommitTo(transaction)
-      ];
-    })
-    .spread(function(accountFrom, accountTo){
-      return Transaction.findByIdAndUpdateAsync(
-        transaction._id,
-        {
-          $set: {
-            state: 'done'
-          }
-        },
-        {
-          returnNewDocument: true,
-          new: true
-        })
-        .then(function(transactionNew) {
-          return {
-            accountFrom: accountFrom,
-            accountTo: accountTo,
-            transaction: transactionNew
-          };
-        });
-    })
-    .catch(
-      function(err){
-        console.log('transaction failed', err);
-        return Transaction.rollback(transaction);
-      }
-    );
-};
-
-schema.statics.rollback = function (transaction) {
-  var Transaction = this;
-  return Account.rollbackFrom(transaction)
-    .then(function(){
-      return Account.rollbackTo(transaction);
-    })
-    .then(function(){
-      return Transaction.findByIdAndUpdateAsync(
-        transaction._id,
-        {
-          $set: {
-            state: 'error',
-            status: transaction.status
-          }
-        });
-    })
-    ;
-};
 
 schema.statics.getPendingTransactions = function (id, callback) {
   this.find({
@@ -174,12 +110,12 @@ schema.methods.getUserData = function () {
   };
 };
 
-function adminTransaction(Transaction, adminId, accountId, data, type) {
+function adminTransaction(Transaction, type, adminId, accountId, data) {
   console.log(type, adminId, accountId, JSON.stringify(data));
 
   return Account.findByIdAsync(accountId)
     .then(enableAdminAccount)
-    .spread(createIncomeTransaction);
+    .spread(createTransaction);
 
   function enableAdminAccount(userAccount){
     if (!userAccount) {
@@ -195,7 +131,7 @@ function adminTransaction(Transaction, adminId, accountId, data, type) {
     ];
   }
 
-  function createIncomeTransaction(userAccount, adminAccount) {
+  function createTransaction(userAccount, adminAccount) {
     if (!userAccount || !adminAccount){
       return null;
     }
@@ -215,11 +151,11 @@ function adminTransaction(Transaction, adminId, accountId, data, type) {
 }
 
 schema.statics.income = function (adminId, accountId, data) {
-  return adminTransaction(this, adminId, accountId, data, 'income');
+  return adminTransaction(this, 'income', adminId, accountId, data);
 };
 
 schema.statics.outcome = function (adminId, accountId, data) {
-  return adminTransaction(this, adminId, accountId, data, 'outcome');
+  return adminTransaction(this, 'outcome', adminId, accountId, data);
 };
 
 schema.statics.cashOut = function (userId, accountId, data) {
@@ -247,5 +183,8 @@ schema.statics.cashOut = function (userId, accountId, data) {
     }
   });
 };
+
+require('./transaction-events')(schema);
+require('./transaction-process')(schema, Account);
 
 module.exports = mongoose.model('Transaction', schema);

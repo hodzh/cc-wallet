@@ -1,5 +1,5 @@
 (function(angular, undefined) {
-  angular.module("walleApp.constants", [])
+  angular.module("walleApp.constants")
 
 .constant("appConfig", {
 	"userRoles": [

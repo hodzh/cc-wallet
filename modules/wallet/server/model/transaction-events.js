@@ -1,35 +1,35 @@
-/**
- * Transaction model events
- */
 
-'use strict';
+module.exports = transactionEvents;
 
-var EventEmitter = require('events').EventEmitter;
+function transactionEvents(schema) {
 
-var Transaction = require('./transaction');
+  var Promise = require("bluebird");
+  var EventEmitter = require('events').EventEmitter;
 
-var TransactionEvents = new EventEmitter();
+  var events = new EventEmitter();
 
-// Set max event listeners (0 == unlimited)
-TransactionEvents.setMaxListeners(0);
+  // Set max event listeners (0 == unlimited)
+  events.setMaxListeners(0);
 
-// Model events
-var events = {
-  'save': 'save',
-  'remove': 'remove'
-};
+  schema.statics.on = events.addListener.bind(events);
+  schema.statics.off = events.removeListener.bind(events);
 
-// Register the event emitter to the model events
-for (var e in events) {
-  var event = events[e];
-  Transaction.schema.post(e, emitEvent(event));
-}
+  schema.statics.emit = function (name) {
+    var listeners = events.listeners(name);
+    if (!listeners || !listeners.length) {
+      return Promise.fulfilled(false);
+    }
+    var args = Array.prototype.slice.call(arguments, 1);
+    return Promise.all(listeners.map(listenerInvoke));
 
-function emitEvent(event) {
-  return function(doc) {
-    TransactionEvents.emit(event + ':' + doc._id, doc);
-    TransactionEvents.emit(event, doc);
+    function listenerInvoke(listener) {
+      return listener.apply(events, args);
+    }
+  };
+
+  schema.post('save', onSave);
+
+  function onSave() {
+    events.emit('save', this);
   }
 }
-
-module.exports = TransactionEvents;

@@ -4,27 +4,34 @@
     .factory('UserAccounts', ['$resource', UserAccounts]);
 
   function UserAccounts($resource) {
-    return $resource('/api/account/:id/:controller',
+    return $resource('/api/account/:currency/:id/:controller',
       {
-        id: '@_id'
       },
       {
+        get: {
+          method: 'GET',
+          params: {
+            id: '@_id'
+          }
+        },
         enable: {
           method: 'PUT',
           params: {
-            controller:'enable'
+            controller: 'enable',
+            currency: '@currency'
           }
         },
         disable: {
           method: 'PUT',
           params: {
-            controller:'disable'
+            controller:'disable',
+            currency: '@currency'
           }
         },
         cashOut: {
           method: 'PUT',
           params: {
-            controller:'cashout'
+            id: '@_id'
           }
         }
       });

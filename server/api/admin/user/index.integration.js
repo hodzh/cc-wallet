@@ -1,7 +1,8 @@
 'use strict';
 
-var app = require('../../../index.js').web.express;
 var request = require('supertest');
+
+var app = require('../../../index.js').web.express;
 var User = require('../../../model/user');
 
 describe('User Admin API:', function() {
@@ -9,35 +10,36 @@ describe('User Admin API:', function() {
   var user;
   var token;
 
-  before(function(done) {
-    User.remove(genUser);
-    function genUser() {
-      user = new User({
-        provider: 'local',
-        email: 'admin@admin.admin',
-        password: 'admin',
-        role: 'admin'
-      });
-      user.save(auth);
-    }
+  before(function() {
+    return User.removeAsync();
+  });
 
-    function auth() {
-      request(app)
-        .post('/auth/local')
-        .send({
-          email: 'admin@admin.admin',
-          password: 'admin'
-        })
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(function(err, res) {
-          expect(res).to.have.property('body');
-          expect(res.body).to.have.property('token');
-          token = res.body.token;
-          expect(token).to.have.length.above(0);
-          done();
-        });
-    }
+  before(function() {
+    user = new User({
+      provider: 'local',
+      email: 'admin@admin.admin',
+      password: 'admin',
+      role: 'admin'
+    });
+    return user.saveAsync();
+  });
+
+  before(function(done) {
+    request(app)
+      .post('/auth/local')
+      .send({
+        email: 'admin@admin.admin',
+        password: 'admin'
+      })
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        expect(res).to.have.property('body');
+        expect(res.body).to.have.property('token');
+        token = res.body.token;
+        expect(token).to.have.length.above(0);
+        done();
+      });
   });
 
   after(function() {

@@ -42,6 +42,9 @@
       }
     }
 
+    function onError(data) {
+    }
+
     function remove(account) {
       if (!confirm([
           'Are you sure want to remove',

@@ -5,6 +5,6 @@ var plugins = gulpLoadPlugins;
 
 gulp.task('help', plugins.taskListing);
 
-gulp.task('clean', function (cb) {
-  return del(['bower_components/build'], cb);
+gulp.task('clean', function (callback) {
+  return del(['public'], callback);
 });

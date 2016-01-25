@@ -15,7 +15,7 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
   padding: 0.2em 0;
 }
 
-// Component styles are injected through grunt
+// Component styles are injected through gulp
 // injector
 @import './admin/admin.scss';
 @import './main/main.scss';

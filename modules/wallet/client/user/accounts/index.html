@@ -12,7 +12,7 @@
         <div ng-click="vm.disableAccount(account)">
           Remove
         </div>
-        <div class="currency-logo-{{account.currency.toLowerCase()}}"></div>
+        <div class="currency-logo-{{account.currency}}"></div>
         <div>{{account.currency}}</div>
         <div>Balance {{account.balance}}</div>
         <div>Address {{account.address}}</div>
@@ -44,13 +44,10 @@
                      value=""
                      class="input-xlarge">
             </div>
-            <input type="hidden"
-                   name="_csrf"
-                   value="<%= csrftoken %>"/>
             <input type="button"
                    value="CASH OUT"
                    class="btn"
-                   ng-click="cashOut(account.currency)">
+                   ng-click="vm.cashOut(account.currency)">
           </form>
         </div>
       </div>
@@ -60,10 +57,11 @@
       </div>
 
       <div>
-        <div ng-repeat="account in vm.accounts | filter : {enable:false} as disabledAccounts">
+        <div ng-repeat="account in vm.currencies | filter : {enable: false} as disabledAccounts">
           <div ng-click="vm.enableAccount(account)">
-            <div class="currency-logo-{{account.currency.toLowerCase()}}"></div>
+            <div class="currency-logo-{{account.currency}}"></div>
             <div>{{account.currency}}</div>
+            <div>{{account|json}}</div>
           </div>
         </div>
       </div>

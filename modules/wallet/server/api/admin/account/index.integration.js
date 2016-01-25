@@ -39,41 +39,33 @@ describe('Account Admin API:', function() {
     return Transaction.removeAsync();
   });
 
-  beforeEach(function(done) {
+  before(function() {
     user = new User({
       provider: 'local',
       email: 'admin@admin.admin',
       password: 'admin',
       role: 'admin'
     });
-    user.save(auth);
+    return user.saveAsync();
+  });
 
-    function onSave(err) {
-      if (err) {
-        return done(err);
-      }
-
-      accountToCreate.owner = user._id;
-      auth();
-    }
-
-    function auth() {
-      request(app)
-        .post('/auth/local')
-        .send({
-          email: 'admin@admin.admin',
-          password: 'admin'
-        })
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(function(err, res) {
-          expect(res).to.have.property('body');
-          expect(res.body).to.have.property('token');
-          token = res.body.token;
-          expect(token).to.have.length.above(0);
-          done();
-        });
-    }
+  before(function(done) {
+    accountToCreate.owner = user._id;
+    request(app)
+      .post('/auth/local')
+      .send({
+        email: 'admin@admin.admin',
+        password: 'admin'
+      })
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        expect(res).to.have.property('body');
+        expect(res.body).to.have.property('token');
+        token = res.body.token;
+        expect(token).to.have.length.above(0);
+        done();
+      });
   });
 
   after(function() {
@@ -98,11 +90,8 @@ describe('Account Admin API:', function() {
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
           accounts = res.body;
-          done();
+          done(err);
         });
     });
 
@@ -123,11 +112,8 @@ describe('Account Admin API:', function() {
         .expect(201)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
           newAccount = res.body;
-          done();
+          done(err);
         });
     });
 
@@ -154,11 +140,8 @@ describe('Account Admin API:', function() {
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
           account = res.body;
-          done();
+          done(err);
         });
     });
 
@@ -191,11 +174,8 @@ describe('Account Admin API:', function() {
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
           updatedAccount = res.body;
-          done();
+          done(err);
         });
     });
 
@@ -217,10 +197,7 @@ describe('Account Admin API:', function() {
         .set('authorization', 'Bearer ' + token)
         .expect(204)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          done();
+          done(err);
         });
     });
 
@@ -230,10 +207,7 @@ describe('Account Admin API:', function() {
         .set('authorization', 'Bearer ' + token)
         .expect(404)
         .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          done();
+          done(err);
         });
     });
 

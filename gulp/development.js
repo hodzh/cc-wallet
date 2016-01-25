@@ -13,12 +13,15 @@ var plugins = gulpLoadPlugins();
 var defaultTasks = [
   'clean',
   'constants',
+  'sprites',
   'less',
   'sass',
-  'csslint',
+  //'csslint',
+  'cssConcat',
   'injectIndex',
   'injectKarma',
   'assetsCopy',
+  'soundsCopy',
   'faviconCopy',
   'htmlCopy',
   'devServe',
@@ -47,7 +50,7 @@ gulp.task('constants', function () {
         return gulp.src(file.path, {read: false})
           .pipe(plugins.ngConstant({
             name: 'walleApp.constants',
-            deps: [],
+            deps: false,
             constants: require(file.path),
             wrap: true
           }))
@@ -57,6 +60,25 @@ gulp.task('constants', function () {
     ));
   // Writes config.js to dist/ folder
   //.pipe(gulp.dest(path.join(paths.publicRoot,'constants')));
+});
+
+gulp.task('sprites', function() {
+  return gulp.src(paths.sprites, {read: false})
+    .pipe(plugins.foreach(
+      function(stream, file){
+        var settings = require(file.path);
+        var dir = path.dirname(file.path);
+        var destDir = dir;
+        while(path.basename(destDir) !== 'client') {
+          destDir = path.dirname(destDir);
+        }
+        destDir = path.join(destDir, 'assets/sprites');
+        // console.log(destDir);
+        return gulp.src(path.join(dir, settings.src))
+          .pipe(plugins.spritesmith(settings.options))
+          .pipe(gulp.dest(destDir));
+      }
+    ));
 });
 
 gulp.task('jshint', function () {
@@ -83,7 +105,7 @@ gulp.task('less', function() {
 });
 
 gulp.task('sass', function() {
-  gulp.src('client/app/app.scss')
+  return gulp.src('client/app/app.scss')
     .pipe(plugins.inject(
       gulp.src(paths.sass, {read: false}),
       {
@@ -94,7 +116,13 @@ gulp.task('sass', function() {
         }
       }))
     .pipe(plugins.sass())
-    .pipe(gulp.dest(paths.publicRoot + '/css/'));
+    .pipe(gulp.dest('client/app'));
+});
+
+gulp.task('cssConcat', function() {
+  return gulp.src(paths.css)
+    .pipe(plugins.concat('app.css'))
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'css')));
 });
 
 gulp.task('injectIndex', function() {
@@ -187,7 +215,12 @@ gulp.task('injectKarma', function() {
 
 gulp.task('assetsCopy', function() {
   return gulp.src(paths.assets)
-    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')));
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')), {base: 'assets'});
+});
+
+gulp.task('soundsCopy', function() {
+  return gulp.src(paths.sounds)
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')), {base: 'assets'});
 });
 
 gulp.task('htmlCopy', function() {
@@ -203,40 +236,52 @@ gulp.task('faviconCopy', function() {
 gulp.task('devServe', ['env:development'], function () {
 
   plugins.nodemon({
-    script: 'start.js',
-    ext: 'html js',
-    env: { 'NODE_ENV': 'development' } ,
-    ignore: [
-      'node_modules/',
-      'bower_components/',
-      'logs/',
-      '.bower-*'
-    ],
-    nodeArgs: ['--debug'],
-    stdout: false
-  }).on('readable', function() {
-    this.stdout.on('data', function(chunk) {
-      if(/Walle server listening/.test(chunk)) {
-        setTimeout(function() { plugins.livereload.reload(); }, 500);
-      }
-      process.stdout.write(chunk);
+      script: 'start.js',
+      ext: 'html js',
+      env: {
+        'NODE_ENV': 'development'
+      },
+      ignore: [
+        'bower_components/',
+        'client',
+        'e2e/',
+        'gulp/',
+        'modules/*/client/',
+        'node_modules/',
+        'public/',
+        'temp/',
+        'tests/',
+        '.bower-*',
+        '.coverdata/',
+        'karma.conf.js'
+      ],
+      nodeArgs: ['--debug'],
+      stdout: false
+    })
+    .on('readable', function() {
+      this.stdout.on('data', function(chunk) {
+        if(/Walle server listening/.test(chunk)) {
+          setTimeout(function() { plugins.livereload.reload(); }, 500);
+        }
+        process.stdout.write(chunk);
+      });
+      this.stderr.pipe(process.stderr);
     });
-    this.stderr.pipe(process.stderr);
-  });
 });
 
 gulp.task('watch', function () {
-  //plugins.livereload.listen({interval:500});
+  plugins.livereload.listen({interval:500});
 
   //gulp.watch(paths.js, ['jshint']);
-  gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.less, ['less']);
-  gulp.watch(paths.sass, ['sass']);
-  gulp.watch(paths.assets, ['assetsCopy']);
-  gulp.watch(paths.favicon, ['faviconCopy']);
-  gulp.watch(paths.index, ['injectIndex']);
-  gulp.watch(paths.injectJs, ['injectIndex', 'injectKarma']);
-  gulp.watch(paths.html, ['htmlCopy']);
+  //gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.css, ['cssConcat']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.less, ['less', 'cssConcat']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.sass, ['sass', 'cssConcat']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.assets, ['assetsCopy']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.favicon, ['faviconCopy']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.index, ['injectIndex']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.injectJs, ['injectIndex', 'injectKarma']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.html, ['htmlCopy']).on('change', plugins.livereload.changed);
 });
 
 function count(taskName, message) {
