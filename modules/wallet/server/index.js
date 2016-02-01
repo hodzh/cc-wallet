@@ -10,8 +10,8 @@ function wallet(server, config){
   server.db.models.transaction = require('./model/transaction');
 
   server.web.route({
-    '/admin/account': require('./api/admin/account'),
-    '/admin/transaction': require('./api/admin/transaction'),
+    '/aapi/account': require('./api/admin/account'),
+    '/aapi/transaction': require('./api/admin/transaction'),
     '/api/account': require('./api/user/account')(config),
     '/api/transaction': require('./api/user/transaction')
   });

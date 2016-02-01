@@ -4,7 +4,7 @@
     .factory('AdminTransactions', ['$resource', AdminTransactions]);
 
   function AdminTransactions($resource) {
-    return $resource('/admin/transaction/:id/:controller',{
+    return $resource('/aapi/transaction/:id/:controller',{
       id: '@_id'
     });
   }

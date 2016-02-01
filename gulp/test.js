@@ -36,7 +36,7 @@ gulp.task('startServer', ['runMochaCover'], function(done) {
   var config = require('../config');
   config.setEnv('test');
   server.config = config;
-  server.addModules(['wallet', 'vp']);
+  server.addModules(require('../modules'));
   server.start(
     function(err){
       done();

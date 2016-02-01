@@ -27,7 +27,7 @@ index(routerStub, authServiceStub);
 
 describe('Admin User API Router:', function() {
 
-  describe('GET /admin/user', function() {
+  describe('GET /aapi/user', function() {
 
     it('should verify admin role and route to user.controller.index', function() {
       routerStub.get
@@ -37,7 +37,7 @@ describe('Admin User API Router:', function() {
 
   });
 
-  describe('DELETE /admin/user/:id', function() {
+  describe('DELETE /aapi/user/:id', function() {
 
     it('should verify admin role and route to user.controller.destroy', function() {
       routerStub.delete
@@ -47,7 +47,7 @@ describe('Admin User API Router:', function() {
 
   });
 
-  describe('GET /admin/user/:id', function() {
+  describe('GET /aapi/user/:id', function() {
 
     it('should be authenticated and route to user.controller.show', function() {
       routerStub.get
@@ -57,7 +57,7 @@ describe('Admin User API Router:', function() {
 
   });
 
-  describe('PUT /admin/user/:id', function() {
+  describe('PUT /aapi/user/:id', function() {
 
     it('should be authenticated and route to user.controller.update', function() {
       routerStub.put
@@ -67,7 +67,7 @@ describe('Admin User API Router:', function() {
 
   });
 
-  describe('POST /admin/user', function() {
+  describe('POST /aapi/user', function() {
 
     it('should route to user.controller.create', function() {
       routerStub.post

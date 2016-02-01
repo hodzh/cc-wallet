@@ -46,17 +46,23 @@ var schema = new Schema({
     require: true
   },
 
-  error: String,
-  category: String,
-  purpose: String,
-  status: String,
+  category: {
+    type: String,
+    require: true
+  },
 
-  crypto: {
-    time: Number,
-    account: String,
-    address: String,
-    txid: String
-  }
+  status: {
+    type: String,
+    require: true
+  },
+
+  purpose: {
+    type: String,
+  },
+
+  error: {
+    type: String
+  },
 });
 
 schema.pre('save', function (next) {
@@ -105,8 +111,7 @@ schema.methods.getUserData = function () {
     amount: me.amount,
     fee:me.fee,
     status: me.status,
-    error: me.error,
-    address: me.crypto ? me.crypto.address : ''
+    error: me.error
   };
 };
 
@@ -156,32 +161,6 @@ schema.statics.income = function (adminId, accountId, data) {
 
 schema.statics.outcome = function (adminId, accountId, data) {
   return adminTransaction(this, 'outcome', adminId, accountId, data);
-};
-
-schema.statics.cashOut = function (userId, accountId, data) {
-  var me = this;
-  /*var wallet = api.wallet[me.currency];
-   var amount = Number(data.amount);
-   var fee = Number(data.fee || 0);
-   if (!wallet || isNaN(amount) || isNaN(fee) ||
-   amount <= 0 || fee < 0) {
-   return  callback("bad arguments");
-   }
-   if (me.balance < amount + fee) {
-   return  callback("not enough");
-   }*/
-  return this.createAsync({
-    state: "new",
-    category: "outcome",
-    currency: me.currency,
-    amount: amount,
-    fee: fee,
-    from: me._id,
-    to: wallet.account._id,
-    crypto: {
-      address: data.address
-    }
-  });
 };
 
 require('./transaction-events')(schema);

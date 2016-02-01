@@ -30,7 +30,7 @@ index(routerStub, authServiceStub);
 
 describe('Account Admin API Router:', function() {
 
-  describe('GET /admin/account', function() {
+  describe('GET /aapi/account', function() {
 
     it('should route to account.controller.index', function() {
       routerStub.get
@@ -40,7 +40,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('GET /admin/account/:id', function() {
+  describe('GET /aapi/account/:id', function() {
 
     it('should route to account.controller.show', function() {
       routerStub.get
@@ -50,7 +50,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('POST /admin/account', function() {
+  describe('POST /aapi/account', function() {
 
     it('should route to account.controller.create', function() {
       routerStub.post
@@ -60,7 +60,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('PUT /admin/account/:id', function() {
+  describe('PUT /aapi/account/:id', function() {
 
     it('should route to account.controller.update', function() {
       routerStub.put
@@ -70,7 +70,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('PUT /admin/account/:id/income', function() {
+  describe('PUT /aapi/account/:id/income', function() {
 
     it('should route to account.controller.income', function() {
       routerStub.put
@@ -80,7 +80,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('PUT /admin/account/:id/outcome', function() {
+  describe('PUT /aapi/account/:id/outcome', function() {
 
     it('should route to account.controller.outcome', function() {
       routerStub.put
@@ -90,7 +90,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('PATCH /admin/account/:id', function() {
+  describe('PATCH /aapi/account/:id', function() {
 
     it('should route to account.controller.update', function() {
       routerStub.patch
@@ -100,7 +100,7 @@ describe('Account Admin API Router:', function() {
 
   });
 
-  describe('DELETE /admin/account/:id', function() {
+  describe('DELETE /aapi/account/:id', function() {
 
     it('should route to account.controller.destroy', function() {
       routerStub.delete

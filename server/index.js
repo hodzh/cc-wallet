@@ -125,7 +125,7 @@ function start(callback){
     web.route({
       '/auth/local': require('./auth/local'),
       '/api/me': require('./api/user/user'),
-      '/admin/user': require('./api/admin/user'),
+      '/aapi/user': require('./api/admin/user'),
     });
 
     callback();

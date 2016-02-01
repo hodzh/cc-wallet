@@ -80,12 +80,12 @@ describe('Account Admin API:', function() {
     return Transaction.removeAsync();
   });
 
-  describe('GET /admin/account', function() {
+  describe('GET /aapi/account', function() {
     var accounts;
 
     beforeEach(function(done) {
       request(app)
-        .get('/admin/account')
+        .get('/aapi/account')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -102,11 +102,11 @@ describe('Account Admin API:', function() {
 
   });
 
-  describe('POST /admin/account', function() {
+  describe('POST /aapi/account', function() {
 
     beforeEach(function(done) {
       request(app)
-        .post('/admin/account')
+        .post('/aapi/account')
         .set('authorization', 'Bearer ' + token)
         .send(accountToCreate)
         .expect(201)
@@ -130,12 +130,12 @@ describe('Account Admin API:', function() {
 
   });
 
-  describe('GET /admin/account/:id', function() {
+  describe('GET /aapi/account/:id', function() {
     var account;
 
     beforeEach(function(done) {
       request(app)
-        .get('/admin/account/' + newAccount._id)
+        .get('/aapi/account/' + newAccount._id)
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -163,12 +163,12 @@ describe('Account Admin API:', function() {
 
   });
 
-  describe('PUT /admin/account/:id', function() {
+  describe('PUT /aapi/account/:id', function() {
     var updatedAccount;
 
     beforeEach(function(done) {
       request(app)
-        .put('/admin/account/' + newAccount._id)
+        .put('/aapi/account/' + newAccount._id)
         .set('authorization', 'Bearer ' + token)
         .send(accountToUpdate)
         .expect(200)
@@ -189,11 +189,11 @@ describe('Account Admin API:', function() {
 
   });
 
-  describe('DELETE /admin/account/:id', function() {
+  describe('DELETE /aapi/account/:id', function() {
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete('/admin/account/' + newAccount._id)
+        .delete('/aapi/account/' + newAccount._id)
         .set('authorization', 'Bearer ' + token)
         .expect(204)
         .end(function(err, res) {
@@ -203,7 +203,7 @@ describe('Account Admin API:', function() {
 
     it('should respond with 404 when account does not exist', function(done) {
       request(app)
-        .delete('/admin/account/' + newAccount._id)
+        .delete('/aapi/account/' + newAccount._id)
         .set('authorization', 'Bearer ' + token)
         .expect(404)
         .end(function(err, res) {

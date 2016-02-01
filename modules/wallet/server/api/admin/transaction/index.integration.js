@@ -133,12 +133,12 @@ describe('Transaction Admin API:', function() {
     return Transaction.removeAsync();
   });
 
-  describe('GET /admin/transaction', function() {
+  describe('GET /aapi/transaction', function() {
     var transactions;
 
     beforeEach(function(done) {
       request(app)
-        .get('/admin/transaction')
+        .get('/aapi/transaction')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -157,10 +157,10 @@ describe('Transaction Admin API:', function() {
 
   });
 
-  describe('POST /admin/transaction', function() {
+  describe('POST /aapi/transaction', function() {
     beforeEach(function(done) {
       request(app)
-        .post('/admin/transaction')
+        .post('/aapi/transaction')
         .set('authorization', 'Bearer ' + token)
         .send(transactionToCreate)
         .expect(201)
@@ -188,12 +188,12 @@ describe('Transaction Admin API:', function() {
 
   });
 
-  describe('GET /admin/transaction/:id', function() {
+  describe('GET /aapi/transaction/:id', function() {
     var transaction;
 
     beforeEach(function(done) {
       request(app)
-        .get('/admin/transaction/' + newTransaction._id)
+        .get('/aapi/transaction/' + newTransaction._id)
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -225,12 +225,12 @@ describe('Transaction Admin API:', function() {
 
   });
 
-  describe('PUT /admin/transaction/:id', function() {
+  describe('PUT /aapi/transaction/:id', function() {
     var transaction;
 
     beforeEach(function(done) {
       request(app)
-        .put('/admin/transaction/' + newTransaction._id)
+        .put('/aapi/transaction/' + newTransaction._id)
         .set('authorization', 'Bearer ' + token)
         .send(transactionToUpdate)
         .expect(200)
@@ -263,11 +263,11 @@ describe('Transaction Admin API:', function() {
 
   });
 
-  describe('DELETE /admin/transaction/:id', function() {
+  describe('DELETE /aapi/transaction/:id', function() {
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete('/admin/transaction/' + newTransaction._id)
+        .delete('/aapi/transaction/' + newTransaction._id)
         .set('authorization', 'Bearer ' + token)
         .expect(204)
         .end(function(err, res) {
@@ -280,7 +280,7 @@ describe('Transaction Admin API:', function() {
 
     it('should respond with 404 when transaction does not exist', function(done) {
       request(app)
-        .delete('/admin/transaction/' + newTransaction._id)
+        .delete('/aapi/transaction/' + newTransaction._id)
         .set('authorization', 'Bearer ' + token)
         .expect(404)
         .end(function(err, res) {

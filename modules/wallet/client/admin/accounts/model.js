@@ -5,7 +5,7 @@
 
   function AdminAccounts($resource) {
     return $resource(
-      '/admin/account/:id/:controller',
+      '/aapi/account/:id/:controller',
       {
         id: '@_id'
       },

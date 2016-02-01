@@ -5,7 +5,7 @@ var config = require('./config');
 
 var server = require('./server');
 server.config = config;
-var modules = ['wallet', 'vp'];
+var modules = require('./modules');
 server.addModules(modules);
 server.start(onStart);
 

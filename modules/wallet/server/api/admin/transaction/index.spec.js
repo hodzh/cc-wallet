@@ -28,7 +28,7 @@ index(routerStub, authServiceStub);
 
 describe('Transaction Admin API Router:', function() {
 
-  describe('GET /admin/transaction', function() {
+  describe('GET /aapi/transaction', function() {
 
     it('should route to transaction.controller.index', function() {
       routerStub.get
@@ -38,7 +38,7 @@ describe('Transaction Admin API Router:', function() {
 
   });
 
-  describe('GET /admin/transaction/:id', function() {
+  describe('GET /aapi/transaction/:id', function() {
 
     it('should route to transaction.controller.show', function() {
       routerStub.get
@@ -48,7 +48,7 @@ describe('Transaction Admin API Router:', function() {
 
   });
 
-  describe('POST /admin/transaction', function() {
+  describe('POST /aapi/transaction', function() {
 
     it('should route to transaction.controller.create', function() {
       routerStub.post
@@ -58,7 +58,7 @@ describe('Transaction Admin API Router:', function() {
 
   });
 
-  describe('PUT /admin/transaction/:id', function() {
+  describe('PUT /aapi/transaction/:id', function() {
 
     it('should route to transaction.controller.update', function() {
       routerStub.put
@@ -68,7 +68,7 @@ describe('Transaction Admin API Router:', function() {
 
   });
 
-  describe('PATCH /admin/transaction/:id', function() {
+  describe('PATCH /aapi/transaction/:id', function() {
 
     it('should route to transaction.controller.update', function() {
       routerStub.patch
@@ -78,7 +78,7 @@ describe('Transaction Admin API Router:', function() {
 
   });
 
-  describe('DELETE /admin/transaction/:id', function() {
+  describe('DELETE /aapi/transaction/:id', function() {
 
     it('should route to transaction.controller.destroy', function() {
       routerStub.delete

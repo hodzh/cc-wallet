@@ -11,6 +11,16 @@ function transactionEvents(schema) {
   // Set max event listeners (0 == unlimited)
   events.setMaxListeners(0);
 
+  schema.statics.once = function(key, handler){
+    var model = this;
+    model.on(key, invokeHandler);
+    function invokeHandler(){
+      var result = handler();
+      model.off(key, invokeHandler);
+      return result;
+    }
+  };
+
   schema.statics.on = events.addListener.bind(events);
   schema.statics.off = events.removeListener.bind(events);
 

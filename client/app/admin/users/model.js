@@ -4,7 +4,7 @@
     .factory('UserResource', ['$resource', UserResource]);
 
   function UserResource($resource) {
-    return $resource('/admin/user/:id',
+    return $resource('/aapi/user/:id',
       {
         id: '@_id'
       },
