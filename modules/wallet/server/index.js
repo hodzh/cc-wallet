@@ -13,6 +13,6 @@ function wallet(server, config){
     '/aapi/account': require('./api/admin/account'),
     '/aapi/transaction': require('./api/admin/transaction'),
     '/api/account': require('./api/user/account')(config),
-    '/api/transaction': require('./api/user/transaction')
+    '/api/transaction': require('./api/user/transaction')(config)
   });
 }

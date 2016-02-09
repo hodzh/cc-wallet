@@ -1,17 +1,7 @@
-/**
- * Using Rails-like standard naming convention for endpoints.
- * GET     /api/accounts              ->  index
- * POST    /api/accounts              ->  create
- * GET     /api/accounts/:id          ->  show
- * PUT     /api/accounts/:id          ->  update
- * DELETE  /api/accounts/:id          ->  destroy
- */
-
 'use strict';
 
 var _ = require('lodash');
 var Account = require('../../../model/account');
-var Transaction = require('../../../model/transaction');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -88,13 +78,6 @@ exports.disable = function(req, res) {
       currency: req.params.id
     },
     false)
-    .then(handleEntityNotFound(res))
-    .then(responseWithUserResult(res))
-    .catch(handleError(res));
-};
-
-exports.cashOut = function(req, res) {
-  Transaction.cashOut(req.user._id, req.params.id, req.body)
     .then(handleEntityNotFound(res))
     .then(responseWithUserResult(res))
     .catch(handleError(res));

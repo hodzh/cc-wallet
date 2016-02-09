@@ -27,12 +27,6 @@
             controller:'disable',
             currency: '@currency'
           }
-        },
-        cashOut: {
-          method: 'PUT',
-          params: {
-            id: '@_id'
-          }
         }
       });
   }

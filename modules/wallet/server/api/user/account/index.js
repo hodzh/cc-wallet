@@ -12,6 +12,5 @@ function routeFactory(config) {
     router.get('/:id', auth.isAuthenticated(), controller.show);
     router.put('/:id/enable', auth.isAuthenticated(), controller.enable);
     router.put('/:id/disable', auth.isAuthenticated(), controller.disable);
-    router.put('/:id/cashout', auth.isAuthenticated(), controller.cashOut);
   }
 }

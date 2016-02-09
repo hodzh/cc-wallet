@@ -3,7 +3,11 @@ module.exports = transactionProcess;
 
 function transactionProcess(schema, Account) {
 
-  schema.statics.process = function (transaction) {
+  schema.statics.process = process;
+
+  schema.statics.rollback = rollback;
+
+  function process(transaction) {
     var Transaction = this;
 
     return transactionFrom(transaction)
@@ -79,9 +83,9 @@ function transactionProcess(schema, Account) {
               });
           });
       });
-  };
+  }
 
-  schema.statics.rollback = function (transaction) {
+  function rollback(transaction) {
     var Transaction = this;
     return rollbackFrom(transaction)
       .then(function () {
@@ -105,7 +109,7 @@ function transactionProcess(schema, Account) {
           console.log('transaction rollback failed', err);
         }
       );
-  };
+  }
 
   function rollbackTo(transaction) {
     return Account.updateAsync(
@@ -127,7 +131,7 @@ function transactionProcess(schema, Account) {
           }
         }
       );
-  };
+  }
 
   function rollbackFrom(transaction) {
     return Account.updateAsync(
@@ -149,7 +153,7 @@ function transactionProcess(schema, Account) {
           }
         }
       );
-  };
+  }
 
   function transactionTo(transaction) {
     return Account.updateAsync(
@@ -174,7 +178,7 @@ function transactionProcess(schema, Account) {
           }
         }
       );
-  };
+  }
 
   function transactionFrom(transaction) {
     return Account.updateAsync(
@@ -199,7 +203,7 @@ function transactionProcess(schema, Account) {
           }
         }
       );
-  };
+  }
 
   function transactionCommitTo(transaction) {
     return Account.findOneAndUpdateAsync({
@@ -223,7 +227,7 @@ function transactionProcess(schema, Account) {
           return result;
         }
       );
-  };
+  }
 
   function transactionCommitFrom(transaction) {
     return Account.findOneAndUpdateAsync({
@@ -247,6 +251,6 @@ function transactionProcess(schema, Account) {
           return result;
         }
       );
-  };
+  }
 
 }

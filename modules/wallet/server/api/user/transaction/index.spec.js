@@ -24,7 +24,11 @@ var index = proxyquire('./index', {
   './controller': transactionCtrlStub
 });
 
-index(routerStub, authServiceStub);
+var config = {
+  currency: 'currency'
+};
+
+index(config)(routerStub, authServiceStub);
 
 describe('Transaction API Router:', function() {
 

@@ -18,7 +18,8 @@
 
     vm.enableAccount = enableAccount;
     vm.disableAccount = disableAccount;
-    vm.cashOut = cashOut;
+
+    vm.withdrawalInfo = {};
 
     function onAccounts(){
       vm.accounts.forEach(onAccount);
@@ -69,10 +70,6 @@
       function onDisable() {
         vm.currency[account.currency].enable = false;
       }
-    }
-
-    function cashOut(account) {
-      account.$cashOut();
     }
   }
 

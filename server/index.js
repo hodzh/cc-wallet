@@ -69,6 +69,7 @@ function start(callback){
     }
 
     function seedCollection(name, callback) {
+      console.log('seed', name);
       var seed = app.config.seed[name];
       var model = resolve(app.db.models, name);
 
@@ -81,6 +82,9 @@ function start(callback){
         onSeedCollection);
 
       function onSeedCollection(err) {
+        if (err && err.errmsg === 'ns not found'){
+          return callback();
+        }
         callback(err);
       }
 
