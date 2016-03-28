@@ -20,7 +20,7 @@ gulp.task('e2e.update', function(done){
   });
 });
 
-var server = require('../server');
+var server = require('../modules/core/server');
 
 gulp.task('e2e.startServer', ['e2e.update'], function(done){
   var config = require('../config');

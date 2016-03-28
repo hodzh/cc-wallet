@@ -24,9 +24,31 @@ var defaultTasks = [
   'soundsCopy',
   'faviconCopy',
   'htmlCopy',
+  'jsCopy',
   'devServe',
   'watch'
 ];
+
+function resolveModules(paths, modules) {
+  //return;
+  Object.keys(paths).forEach(function (key) {
+    var val = paths[key];
+    if (Array.isArray(val)) {
+      for (var i = 0; i < val.length; ++i) {
+        var path = val[i];
+        var searchString = 'modules/*/';
+        if (path.indexOf(searchString) === 0) {
+          val[i] = ['modules/{',
+            modules.join(),
+            '}/',
+            path.substr(searchString.length)].join('');
+        }
+      }
+    }
+  });
+}
+
+resolveModules(paths, config.modules);
 
 gulp.task('env:development', function () {
   process.env.NODE_ENV = 'development';
@@ -55,7 +77,7 @@ gulp.task('constants', function () {
             wrap: true
           }))
           .pipe(plugins.extReplace('.js', '.public.js'))
-          .pipe(gulp.dest('client/app/constants'));
+          .pipe(gulp.dest(path.join(paths.publicRoot, 'modules/core/client/app/constants')));
       }
     ));
   // Writes config.js to dist/ folder
@@ -105,7 +127,7 @@ gulp.task('less', function() {
 });
 
 gulp.task('sass', function() {
-  return gulp.src('client/app/app.scss')
+  return gulp.src('modules/core/client/app/app.scss')
     .pipe(plugins.inject(
       gulp.src(paths.sass, {read: false}),
       {
@@ -116,7 +138,7 @@ gulp.task('sass', function() {
         }
       }))
     .pipe(plugins.sass())
-    .pipe(gulp.dest('client/app'));
+    .pipe(gulp.dest('modules/core/client/app'));
 });
 
 gulp.task('cssConcat', function() {
@@ -215,17 +237,22 @@ gulp.task('injectKarma', function() {
 
 gulp.task('assetsCopy', function() {
   return gulp.src(paths.assets)
-    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')), {base: 'assets'});
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'modules')));
 });
 
 gulp.task('soundsCopy', function() {
   return gulp.src(paths.sounds)
-    .pipe(gulp.dest(path.join(paths.publicRoot, 'assets')), {base: 'assets'});
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'modules')));
 });
 
 gulp.task('htmlCopy', function() {
   return gulp.src(paths.html)
-    .pipe(gulp.dest(paths.publicRoot));
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'modules')));
+});
+
+gulp.task('jsCopy', function() {
+  return gulp.src(paths.jsClient)
+    .pipe(gulp.dest(path.join(paths.publicRoot, 'modules')));
 });
 
 gulp.task('faviconCopy', function() {

@@ -5,7 +5,6 @@ var mongoose = Promise.promisifyAll(require('mongoose'));
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-
   type: {
     type: String,
     require: true
@@ -18,37 +17,30 @@ var schema = new Schema({
     type: String,
     require: true
   },
-
   balance: {
     type: Schema.Types.Long,
     default: mongoose.Types.Long(0),
     require: true
   },
-
   enable: {
     type: Boolean,
     default: true,
     require: true
   },
-
   updateDate: {
     type: Date,
     require: true
   },
-
   createDate: {
     type: Date,
     require: true
   },
-
   pendingTransactions: [
     {
       type: Schema.ObjectId,
       ref: 'Transaction'
     }
-  ],
-
-  address: String
+  ]
 });
 
 schema.index({

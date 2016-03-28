@@ -17,5 +17,9 @@ module.exports = {
     format: 'tiny'
   },
 
-  seed: require('./seed')
+  seed: require('./seed'),
+
+  paygates: {
+    bitcoin: require('./bitcoin'),
+  }
 };

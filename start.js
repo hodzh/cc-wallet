@@ -1,12 +1,8 @@
 'use strict';
 
 var config = require('./config');
-// console.log(config);
-
-var server = require('./server');
-server.config = config;
-var modules = require('./modules');
-server.addModules(modules);
+var server = require('./modules/core/server');
+server.init(config);
 server.start(onStart);
 
 function onStart(err) {

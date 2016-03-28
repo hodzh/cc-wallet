@@ -32,11 +32,10 @@ gulp.task('runMochaCover2', function () {
 });
 
 gulp.task('startServer', ['runMochaCover'], function(done) {
-  var server = require('../server');
+  var server = require('../modules/core/server');
   var config = require('../config');
   config.setEnv('test');
-  server.config = config;
-  server.addModules(require('../modules'));
+  server.init(config);
   server.start(
     function(err){
       done();

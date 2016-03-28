@@ -1,3 +1,4 @@
+var fs = require('fs');
 var path = require('path');
 var defaults = require('./defaults');
 
@@ -32,7 +33,7 @@ function tryRequire(path){
 function update(env){
   clear();
 
-  dirs.forEach(updateDir);
+  updateDir(__dirname);
 
   config.env = env;
   config.setEnv = setEnv;
@@ -62,34 +63,33 @@ function mergeConfig(data, dataToMerge){
 }
 
 function getAssets(ext) {
-    var jsFiles = [];
-    addAssets(config.assets);
-    return jsFiles;
+  var jsFiles = [];
+  addAssets(config.assets);
+  return jsFiles;
 
-    function addAssets(assets) {
-        Object.keys(assets).forEach(
-            function(key){
-                var asset = assets[key];
-                if (key === ext) {
-                    Object.keys(asset).forEach(
-                        function(jsKey){
-                            jsFiles = jsFiles.concat(asset[jsKey]);
-                        }
-                    );
-                }
-                else if (key === 'css') {
-
-                }
-                else if (!(asset instanceof Array)) {
-                    addAssets(asset);
-                }
+  function addAssets(assets) {
+    Object.keys(assets).forEach(
+      function(key){
+        var asset = assets[key];
+        if (key === ext) {
+          Object.keys(asset).forEach(
+            function(jsKey){
+              jsFiles = jsFiles.concat(asset[jsKey]);
             }
-        );
-    }
+          );
+        }
+        else if (key === 'css') {
+
+        }
+        else if (!(asset instanceof Array)) {
+          addAssets(asset);
+        }
+      }
+    );
+  }
 
 }
 
-function merge(dir) {
-  dirs.push(dir);
-  update(config.env);
+function merge(obj) {
+  mergeConfig(config, obj);
 }

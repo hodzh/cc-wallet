@@ -4,7 +4,6 @@ module.exports = wallet;
 function wallet(server, config){
 
   var path = require('path');
-  config.merge(path.join(__dirname, '../config'));
 
   server.db.models.account = require('./model/account');
   server.db.models.transaction = require('./model/transaction');
