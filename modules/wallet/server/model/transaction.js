@@ -7,62 +7,53 @@ var Schema = mongoose.Schema;
 var Account = require('./account');
 
 var schema = new Schema({
-
   state: {
     type: String,
     require: true
   },
-
   createDate: {
     type: Date,
     require: true
   },
-
   updateDate: {
     type: Date,
     require: true
   },
-
   currency: {
     type: String,
     require: true
   },
-
   amount: {
     type: Schema.Types.Long,
     default: mongoose.Types.Long(0),
     require: true
   },
-
   from: {
     type: Schema.ObjectId,
     ref: 'Account',
     require: true
   },
-
   to: {
     type: Schema.ObjectId,
     ref: 'Account',
     require: true
   },
-
   category: {
     type: String,
     require: true
   },
-
   status: {
     type: String,
     require: true
   },
-
   purpose: {
-    type: String,
+    type: String
   },
-
   error: {
     type: String
   },
+}, {
+  collection: 'transaction'
 });
 
 schema.pre('save', function (next) {
@@ -109,7 +100,7 @@ schema.methods.getUserData = function () {
     category: me.category,
     currency: me.currency,
     amount: me.amount,
-    fee:me.fee,
+    fee: me.fee,
     status: me.status,
     error: me.error
   };

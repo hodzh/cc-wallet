@@ -1,6 +1,6 @@
 (function (window, angular) { 'use strict';
 
-  angular.module('walleApp.vp.admin')
+  angular.module('walleApp.paygates.admin')
     .factory('AdminDepositSchema', [AdminDepositSchema]);
 
   function AdminDepositSchema() {

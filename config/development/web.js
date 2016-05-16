@@ -3,7 +3,7 @@ module.exports = {
   hostname: 'http://localhost:3002',
 
   http: {
-    port: process.env.PORT || 3002
+    port: process.env.PORT || 7002
   },
   https: {
     port: false,

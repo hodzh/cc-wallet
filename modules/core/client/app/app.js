@@ -14,6 +14,9 @@
       'walleApp.paygates.admin',
       'walleApp.paygates.user',
       'walleApp.paygates.ui',
+      'walleApp.bitcoin.admin',
+      'walleApp.bitcoin.ui',
+      'walleApp.bitcoin.user',
       'ngCookies',
       'ngResource',
       'ngSanitize',
@@ -26,6 +29,7 @@
         .otherwise('/');
 
       $locationProvider.html5Mode(true);
-    });
+    })
+  ;
 
 })(window, window.angular);

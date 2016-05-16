@@ -1,11 +1,9 @@
 module.exports = {
-
+  enable: true,
   maxConfirmations: 2,
 
   client: {
-    host: "localhost",
-    port: 7335,
-    user: "dogecoinrpc",
-    pass: "2uDxwNwA1md1zreZpfRpsyvZUP4D3NdL5mMbtFWtwvbn"
+    uri: "http://localhost:4001/rpc/dogecoin",
+    timeout: 300000 // 5 min
   }
 };

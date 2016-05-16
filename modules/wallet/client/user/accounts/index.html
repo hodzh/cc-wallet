@@ -7,7 +7,7 @@
     </div>
     <div class="col-sm-12">
 
-      <div ng-repeat="account in vm.accounts | filter : {enable:true}" class="account">
+      <div ng-repeat="account in vm.accounts | filter : {enable: true} as enabledAccounts" class="account">
 
         <div ng-click="vm.disableAccount(account)">
           Remove

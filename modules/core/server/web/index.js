@@ -13,6 +13,8 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var morgan = require('morgan');
 
+var log = require('log4js').getLogger('main');
+
 var app = express();
 var server = http.createServer(app);
 var web = {
@@ -63,7 +65,7 @@ function startServer(config, auth, callback) {
       return callback(err);
     }
 
-    console.log('Walle server listening on %d, in %s mode',
+    log.info('Walle server listening on %d, in %s mode',
       config.http.port, app.get('env'));
 
     callback();
@@ -89,7 +91,7 @@ function beforeStart(auth){
       else {
         registerApi(api, apiRouter, apiPath);
       }
-      console.log('route', apiPath);
+      log.info('route', apiPath);
       router.use(apiKey, apiRouter);
     }
   }
@@ -145,7 +147,7 @@ function beforeStart(auth){
 
 function renderRoot(req, res) {
   if (req.originalUrl !== '/') {
-    console.error(req.originalUrl, 'not found');
+    log.error(req.originalUrl, 'not found');
   }
   res.sendFile(path.join(app.get('appPath'), 'index.html'));
 }

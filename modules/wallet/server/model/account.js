@@ -1,7 +1,8 @@
 'use strict';
 
+var log = require('log4js').getLogger('wallet');
 var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -41,6 +42,8 @@ var schema = new Schema({
       ref: 'Transaction'
     }
   ]
+}, {
+  collection: 'account'
 });
 
 schema.index({
@@ -61,11 +64,12 @@ schema.pre('save', function (next) {
 });
 
 schema.statics.enable = function (index, value) {
-  return this.findOneAndUpdateAsync(
+  return this.findOneAndUpdate(
     index,
     {
       $setOnInsert: {
         createDate: new Date(),
+        updateDate: new Date(),
         balance: 0
       },
       $set: {
@@ -88,13 +92,13 @@ schema.statics.enable = function (index, value) {
     )
     .catch(
       function(error) {
-        console.log('failed', 'enable', 'account', JSON.stringify(index), 'due', JSON.stringify(error));
+        log.error('failed', 'enable', 'account', JSON.stringify(index), 'due', JSON.stringify(error));
       }
     );
 };
 
 schema.statics.getAccounts = function (type, userId) {
-  return this.findAsync({
+  return this.find({
     type: type,
     owner: userId
   });

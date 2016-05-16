@@ -10,6 +10,5 @@ function routeFactory(game) {
   function route(router, auth) {
     router.get('/', auth.isAuthenticated(), controller.index);
     router.get('/:id', auth.isAuthenticated(), controller.show);
-    router.post('/', auth.isAuthenticated(), controller.create);
   }
 }

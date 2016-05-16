@@ -1,4 +1,6 @@
 var async = require('async');
+var log = require('log4js').getLogger('db');
+
 module.exports = seed;
 
 function seed(models, config, callback){
@@ -21,7 +23,7 @@ function seed(models, config, callback){
   }
 
   function seedCollection(name, callback) {
-    console.log('seed', name);
+    log.info('seed', name);
     var seed = config[name];
     var model = resolve(models, name);
 
@@ -57,7 +59,7 @@ function seed(models, config, callback){
     function add(callback) {
       async.each(seed.add, addItem, callback);
       function addItem(item, callback) {
-        console.log('seed', name, JSON.stringify(item));
+        log.info('seed', name, JSON.stringify(item));
         var itemModel = new model(item);
         itemModel.save(callback);
       }

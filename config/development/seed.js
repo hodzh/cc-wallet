@@ -1,5 +1,5 @@
 module.exports = {
-  user: {
+  /*user: {
     clear: true,
     add: [
       {
@@ -14,5 +14,5 @@ module.exports = {
         password: 'user'
       }
     ]
-  }
+  }*/
 };

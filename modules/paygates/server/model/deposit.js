@@ -1,7 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -39,6 +39,8 @@ var schema = new Schema({
     type: String,
     require: true
   }
+}, {
+  collection: 'deposit'
 });
 
 schema.pre('save', function (next) {

@@ -309,6 +309,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.index, ['injectIndex']).on('change', plugins.livereload.changed);
   gulp.watch(paths.injectJs, ['injectIndex', 'injectKarma']).on('change', plugins.livereload.changed);
   gulp.watch(paths.html, ['htmlCopy']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.jsClient, ['jsCopy']).on('change', plugins.livereload.changed);
 });
 
 function count(taskName, message) {

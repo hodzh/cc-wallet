@@ -1,9 +1,9 @@
 (function (window, angular) { 'use strict';
 
   angular.module('walleApp.wallet.user')
-    .controller('UserAccountsController', ['UserAccounts', 'currency', UserAccountsController]);
+    .controller('UserAccountsController', ['$rootScope', 'UserAccounts', 'currency', UserAccountsController]);
 
-  function UserAccountsController(UserAccounts, currency) {
+  function UserAccountsController($rootScope, UserAccounts, currency) {
     var vm = this;
     vm.currency = {};
     vm.currencies = Object.keys(currency).map(function (name) {
@@ -23,8 +23,9 @@
 
     function onAccounts(){
       vm.accounts.forEach(onAccount);
+
       function  onAccount(account){
-        vm.currency[account.currency].enable = true;
+        vm.currency[account.currency].enable = account.enable;
       }
     }
 
@@ -62,6 +63,7 @@
         if (!accountExists) {
           vm.accounts.push(enabledAccount);
         }
+        $rootScope.$emit('accountEnable', enabledAccount);
       }
     }
 

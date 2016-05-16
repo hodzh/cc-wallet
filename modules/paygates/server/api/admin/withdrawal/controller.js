@@ -1,5 +1,6 @@
 'use strict';
 
+var log = require('log4js').getLogger('paygates');
 var _ = require('lodash');
 var Withdrawal = require('../../../model/withdrawal');
 
@@ -56,7 +57,7 @@ function controllerFactory(){
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
-    console.log(err);
+    log.error(err);
     res.status(statusCode).send(err);
   };
 }
