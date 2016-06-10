@@ -14,19 +14,19 @@ describe('Deposit Model', function() {
   var adminAccount;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   before(function() {
@@ -35,7 +35,7 @@ describe('Deposit Model', function() {
       email: 'user@user.user',
       password: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -45,7 +45,7 @@ describe('Deposit Model', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -75,23 +75,23 @@ describe('Deposit Model', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   it('should begin with no deposit', function() {
-    return Deposit.findAsync({}).should
+    return Deposit.find({}).should
       .eventually.have.length(0);
   });
 

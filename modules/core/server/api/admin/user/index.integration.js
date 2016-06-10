@@ -11,7 +11,7 @@ describe('User Admin API:', function() {
   var token;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
@@ -21,7 +21,7 @@ describe('User Admin API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function(done) {
@@ -43,7 +43,7 @@ describe('User Admin API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   describe('GET /api/me', function() {

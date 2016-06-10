@@ -1,3 +1,4 @@
+'use strict';
 
 module.exports = paygates;
 
@@ -5,14 +6,16 @@ function paygates(server, config){
 
   var Promise = require('bluebird');
   var path = require('path');
-  var log = require('log4js').getLogger('bitcoin');
+  var log = require('log4js').getLogger('paygates');
+  var auth = require('./auth');
+  var approve = require('./approve');
 
   var paygatesModels = require('./model');
   server.db.models.deposit = paygatesModels.deposit;
   server.db.models.withdrawal = paygatesModels.withdrawal;
 
-  var depositEvents = require('./model/deposit-events');
-  depositEvents.on('save', onDepositSave);
+  server.db.models.withdrawal.on('unconfirmed', onWithdrawalUnconfirmed);
+  server.db.models.withdrawal.on('confirmed', onWithdrawalConfirmed);
 
   server.web.route({
     '/aapi/paygates/deposit': require('./api/admin/deposit')(),
@@ -21,40 +24,22 @@ function paygates(server, config){
     '/api/paygates/withdrawal': require('./api/user/withdrawal')()
   });
 
-  function onDepositSave(deposit){
-    if (deposit.status != 'confirmed') {
-      return;
-    }
-    processDeposit(deposit);
-  }
-
-  function processDeposit(deposit) {
+  function onWithdrawalUnconfirmed(withdrawal) {
+    log.trace('on unconfirmed withdrawal');
     return Promise.resolve()
       .then(function () {
-        return server.db.models.account.enable({
-          owner: null,
-          type: 'paygate',
-          currency: deposit.currency
-        });
+        return auth(withdrawal);
       })
-      .then(function (account) {
-        var transaction = new server.db.models.transaction({
-          currency: deposit.currency,
-          amount: deposit.amount,
-          to: deposit.account,
-          from: account._id,
-          category: 'deposit',
-          state: 'new'
-        });
-        return transaction.save()
-          .thenReturn(transaction);
-      })
-      .then(function (transaction) {
-        return server.db.models.transaction
-          .process(transaction);
-      })
-      .then(function (result) {
-        log.trace('transaction processed', result.transaction.txid);
+      .catch(function (error) {
+        log.error(error);
+      });
+  }
+
+  function onWithdrawalConfirmed(withdrawal) {
+    log.trace('on confirmed withdrawal');
+    return Promise.resolve()
+      .then(function () {
+        return approve(withdrawal);
       })
       .catch(function (error) {
         log.error(error);

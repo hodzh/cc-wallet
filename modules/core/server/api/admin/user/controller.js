@@ -24,7 +24,7 @@ function handleError(res, statusCode) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.findAsync({}, '-salt -password')
+  User.find({}, '-salt -password')
     .then(function(users) {
       res.status(200).json(users);
     })
@@ -37,7 +37,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res, next) {
   var userId = req.params.id;
 
-  User.findByIdAsync(userId)
+  User.findById(userId)
     .then(function(user) {
       if (!user) {
         return res.status(404).end();
@@ -55,7 +55,7 @@ exports.show = function(req, res, next) {
 exports.update = function(req, res, next) {
   var userId = req.params.id;
 
-  User.findByIdAsync(userId)
+  User.findById(userId)
     .then(
       function(user) {
         if (!user) {
@@ -73,7 +73,7 @@ exports.update = function(req, res, next) {
         if (req.body.role) {
           user.role = req.body.role;
         }
-        return user.saveAsync();
+        return user.save();
       }
     )
     .then(
@@ -90,7 +90,7 @@ exports.update = function(req, res, next) {
  * Deletes a user
  */
 exports.destroy = function(req, res) {
-  User.findByIdAndRemoveAsync(req.params.id)
+  User.findByIdAndRemove(req.params.id)
     .then(function() {
       res.status(204).end();
     })
@@ -104,7 +104,7 @@ exports.create = function(req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';
-  newUser.saveAsync()
+  newUser.save()
     .spread(function(user) {
       res.json(user);
     })

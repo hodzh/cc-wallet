@@ -35,7 +35,7 @@ function createUserAuth(auth) {
     });
     newUser.provider = 'local';
     newUser.role = 'user';
-    newUser.saveAsync()
+    newUser.save()
       .spread(function (user) {
         var token = auth.signToken(user._id, user.role);
         res.json({token: token});
@@ -52,7 +52,7 @@ exports.changePassword = function(req, res, next) {
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
 
-  User.findByIdAsync(userId)
+  User.findById(userId)
     .then(function(user) {
       if (user.authenticate(oldPass)) {
         user.password = newPass;
@@ -73,7 +73,7 @@ exports.changePassword = function(req, res, next) {
 exports.me = function(req, res, next) {
   var userId = req.user._id;
 
-  User.findOneAsync({ _id: userId }, '-salt -password')
+  User.findOne({ _id: userId }, '-salt -password')
     .then(function(user) { // don't ever give out the password or salt
       if (!user) {
         return res.status(401).end();
@@ -100,7 +100,7 @@ exports.create = function (auth){
     var newUser = new User(req.body);
     newUser.provider = 'local';
     newUser.role = 'user';
-    newUser.saveAsync()
+    newUser.save()
       .spread(function(user) {
         var token = auth.signToken(user._id, user.role);
         res.json({ token: token });

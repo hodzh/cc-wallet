@@ -69,7 +69,6 @@ schema.statics.enable = function (index, value) {
     {
       $setOnInsert: {
         createDate: new Date(),
-        updateDate: new Date(),
         balance: 0
       },
       $set: {
@@ -84,8 +83,8 @@ schema.statics.enable = function (index, value) {
     })
     .then(
       function(account) {
-        if (account) {
-          // console.log('enable', 'account', JSON.stringify(account.toObject()));
+        if (!account) {
+          throw new Error('fail upsert account');
         }
         return account;
       }

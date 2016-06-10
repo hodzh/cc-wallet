@@ -23,7 +23,7 @@ describe('User API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   describe('GET /api/me', function() {

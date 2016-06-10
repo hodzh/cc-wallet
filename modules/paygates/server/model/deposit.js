@@ -4,6 +4,10 @@ var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var Account = require('../../../wallet/server/model/account');
+var Transaction = require('../../../wallet/server/model/transaction');
+var log = require('log4js').getLogger('paygates');
+
 var schema = new Schema({
   owner: {
     type: Schema.ObjectId,
@@ -40,6 +44,7 @@ var schema = new Schema({
     require: true
   }
 }, {
+  discriminatorKey: 'kind',
   collection: 'deposit'
 });
 
@@ -50,5 +55,73 @@ schema.pre('save', function (next) {
   this.updateDate = new Date();
   next();
 });
+
+schema.post('save', function (doc) {
+  emitEvent('save', doc);
+});
+
+var EventEmitter = require('events').EventEmitter;
+var DepositEvents = new EventEmitter();
+// Set max event listeners (0 == unlimited)
+DepositEvents.setMaxListeners(0);
+
+function emitEvent(event, doc) {
+  DepositEvents.emit(event + ':' + doc._id, doc);
+  DepositEvents.emit(event, doc);
+}
+
+schema.methods.confirm = function () {
+  var deposit = this;
+  log.trace('confirm deposit');
+  return Promise.resolve()
+    .then(function () {
+      deposit.status = 'confirmed';
+      return deposit.save();
+    })
+    .then(function () {
+      return Account.enable({
+        owner: null,
+        type: 'paygate',
+        currency: deposit.currency
+      });
+    })
+    .then(function (account) {
+      var transaction = new Transaction({
+        currency: deposit.currency,
+        amount: deposit.amount,
+        to: deposit.account,
+        from: account._id,
+        category: 'deposit',
+        state: 'new'
+      });
+      return transaction.save()
+        .thenReturn(transaction);
+    })
+    .then(function (transaction) {
+      deposit.transaction = transaction._id;
+      deposit.status = 'process';
+      return deposit.save()
+        .thenReturn(transaction);
+    })
+    .then(function (transaction) {
+      return Transaction
+        .process(transaction);
+    })
+    .then(function (result) {
+      deposit.status = 'done';
+      return deposit.save()
+        .thenReturn(result.transaction);
+    })
+    .then(function (transaction) {
+      log.trace('deposit processed', transaction._id);
+    })
+    .catch(function (error) {
+      log.error(error);
+    });
+};
+
+schema.statics.on = DepositEvents.on.bind(DepositEvents);
+schema.statics.off = DepositEvents.removeListener.bind(DepositEvents);
+schema.statics.once = DepositEvents.once.bind(DepositEvents);
 
 module.exports = mongoose.model('Deposit', schema);

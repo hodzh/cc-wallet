@@ -1,7 +1,8 @@
 'use strict';
 
 var Promise = require("bluebird");
-var mongoose = Promise.promisifyAll(require('mongoose'));
+var mongoose = require('mongoose');
+var log = require('log4js').getLogger('wallet');
 var Schema = mongoose.Schema;
 
 var Account = require('./account');
@@ -51,7 +52,7 @@ var schema = new Schema({
   },
   error: {
     type: String
-  },
+  }
 }, {
   collection: 'transaction'
 });
@@ -78,7 +79,8 @@ schema.statics.getPendingTransactions = function (id, callback) {
 
 schema.statics.getStatistics = function(currency, callback) {
   var me = this;
-  me.aggregate({$match:{
+  me.aggregate(
+    {$match:{
       currency:currency
     }},
     {$group:{
@@ -107,42 +109,40 @@ schema.methods.getUserData = function () {
 };
 
 function adminTransaction(Transaction, type, adminId, accountId, data) {
-  console.log(type, adminId, accountId, JSON.stringify(data));
+  log.trace(type, adminId, accountId, JSON.stringify(data));
 
-  return Account.findByIdAsync(accountId)
-    .then(enableAdminAccount)
-    .spread(createTransaction);
+  return Account.findById(accountId)
+    .then(enableAdminAccount);
 
   function enableAdminAccount(userAccount){
     if (!userAccount) {
-      return null;
+      throw new Error('account not found');
     }
-    return [
-      userAccount,
-      Account.enable({
+    return Account.enable({
         type: 'admin',
         owner: adminId,
         currency: userAccount.currency
       }, true)
-    ];
-  }
+      .then(createTransaction);
 
-  function createTransaction(userAccount, adminAccount) {
-    if (!userAccount || !adminAccount){
-      return null;
-    }
-    var transaction = new Transaction({
-      state: 'new',
-      category: type,
-      currency: adminAccount.currency,
-      amount: data.amount,
-      from: type === 'income' ? adminAccount._id : userAccount._id,
-      to: type === 'outcome' ? adminAccount._id : userAccount._id
-    });
-    return transaction.saveAsync().then(
-      function () {
-        return Transaction.process(transaction);
+    function createTransaction(adminAccount) {
+      if (!adminAccount){
+        throw new Error('admin account not found');
+      }
+      log.trace('create transaction');
+      var transaction = new Transaction({
+        state: 'new',
+        category: type,
+        currency: adminAccount.currency,
+        amount: data.amount,
+        from: type === 'income' ? adminAccount._id : userAccount._id,
+        to: type === 'outcome' ? adminAccount._id : userAccount._id
       });
+      return transaction.save().then(
+        function () {
+          return Transaction.process(transaction);
+        });
+    }
   }
 }
 

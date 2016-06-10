@@ -115,23 +115,23 @@ describe('Withdrawal API:', function() {
       currency: userAccount.currency,
       amount: '1'
     });
-    return withdrawal.saveAsync();
+    return withdrawal.save();
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   describe('GET /api/vp/withdrawal', function() {

@@ -8,8 +8,8 @@ describe('Controller: SignupController', function() {
   beforeEach(module('modules/core/client/components/oauth-buttons/oauth-buttons.html'));
   beforeEach(module('modules/core/client/components/email/index.html'));
   beforeEach(module('modules/core/client/components/password/index.html'));
-  beforeEach(module('modules/wallet/client/admin/accounts/index.html'));
-  beforeEach(module('modules/wallet/client/user/accounts/index.html'));
+  beforeEach(module('modules/wallet/client/admin/account/index.html'));
+  beforeEach(module('modules/wallet/client/user/account/index.html'));
   beforeEach(module('modules/core/client/app/account/login/index.html'));
   beforeEach(module('modules/core/client/app/account/signup/index.html'));
   beforeEach(module('modules/core/client/app/main/index.html'));

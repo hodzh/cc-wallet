@@ -20,19 +20,19 @@ describe('Deposit API:', function() {
   var deposit;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   before(function() {
@@ -42,7 +42,7 @@ describe('Deposit API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -109,19 +109,19 @@ describe('Deposit API:', function() {
       amount: '1'
     });
 
-    return deposit.saveAsync();
+    return deposit.save();
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {

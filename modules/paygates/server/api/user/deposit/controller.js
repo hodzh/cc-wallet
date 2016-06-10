@@ -13,7 +13,7 @@ function controllerFactory() {
   };
 
   function index(req, res) {
-    Deposit.findAsync({
+    Deposit.find({
         owner: req.user._id
       })
       .then(responseWithResult(res))
@@ -21,7 +21,7 @@ function controllerFactory() {
   }
 
   function show(req, res) {
-    Deposit.findByIdAsync(req.params.id)
+    Deposit.findById(req.params.id)
       .then(checkOwner(req.user._id))
       .then(handleEntityNotFound(res))
       .then(responseWithResult(res))

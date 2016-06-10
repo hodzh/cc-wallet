@@ -14,19 +14,19 @@ describe('Withdrawal Model', function() {
   var adminAccount;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   before(function() {
@@ -35,7 +35,7 @@ describe('Withdrawal Model', function() {
       email: 'user@user.user',
       password: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -45,7 +45,7 @@ describe('Withdrawal Model', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -75,23 +75,23 @@ describe('Withdrawal Model', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   it('should begin with no withdrawal', function() {
-    return Withdrawal.findAsync({}).should
+    return Withdrawal.find({}).should
       .eventually.have.length(0);
   });
 

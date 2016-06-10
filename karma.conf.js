@@ -75,6 +75,7 @@ module.exports = function(config) {
       './modules/paygates-bitcoin/client/user/module.js',
       './modules/paygates-bitcoin/client/user/withdrawal-form/directive.js',
       './modules/paygates-bitcoin/client/user/withdrawal-form/controller.js',
+      './modules/paygates-bitcoin/client/user/withdrawal/model.js',
       './modules/paygates-bitcoin/client/user/transaction/model.js',
       './modules/paygates-bitcoin/client/user/transaction/controller.js',
       './modules/paygates/client/user/module.js',

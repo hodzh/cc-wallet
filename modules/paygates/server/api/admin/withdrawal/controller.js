@@ -16,13 +16,13 @@ function controllerFactory(){
   };
 
   function index(req, res) {
-    Withdrawal.find().limit(20).execAsync()
+    Withdrawal.find().limit(20).exec()
       .then(responseWithResult(res))
       .catch(handleError(res));
   }
 
   function show(req, res) {
-    Withdrawal.findByIdAsync(req.params.id)
+    Withdrawal.findById(req.params.id)
       .then(handleEntityNotFound(res))
       .then(responseWithResult(res))
       .catch(handleError(res));
@@ -30,7 +30,7 @@ function controllerFactory(){
 
   function create(req, res) {
     var withdrawal = new Withdrawal(req.body);
-    withdrawal.saveAsync()
+    withdrawal.save()
       .then(function () {
         return withdrawal.toObject();
       })
@@ -39,7 +39,7 @@ function controllerFactory(){
   }
 
   function update(req, res) {
-    Withdrawal.findByIdAsync(req.params.id)
+    Withdrawal.findById(req.params.id)
       .then(handleEntityNotFound(res))
       .then(saveUpdates(req.body))
       .then(responseWithResult(res))
@@ -47,7 +47,7 @@ function controllerFactory(){
   }
 
   function destroy(req, res) {
-    Withdrawal.findByIdAsync(req.params.id)
+    Withdrawal.findById(req.params.id)
       .then(handleEntityNotFound(res))
       .then(removeEntity(res))
       .catch(handleError(res));
@@ -84,7 +84,7 @@ function handleEntityNotFound(res) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
-    return updated.saveAsync()
+    return updated.save()
       .spread(function(updated) {
         return updated;
       });
@@ -94,7 +94,7 @@ function saveUpdates(updates) {
 function removeEntity(res) {
   return function(entity) {
     if (entity) {
-      return entity.removeAsync()
+      return entity.remove()
         .then(function() {
           res.status(204).end();
         });
