@@ -1,7 +1,8 @@
 'use strict';
 
 var crypto = require('crypto');
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+var Promise = require('bluebird');
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
@@ -109,7 +110,7 @@ function validatePassword(password) {
 
 function validateEmailAlreadyInUse(value, respond) {
   var self = this;
-  return this.constructor.findOneAsync({ email: value })
+  return this.constructor.findOne({ email: value })
     .then(function(user) {
       if (user) {
         if (self.id === user.id) {
