@@ -4,7 +4,6 @@ module.exports = transactionProcess;
 function transactionProcess(schema, Account) {
 
   schema.statics.process = process;
-
   schema.statics.rollback = rollback;
 
   function process(transaction) {
@@ -35,7 +34,7 @@ function transactionProcess(schema, Account) {
         }
       )
       .then(function () {
-        return Transaction.findByIdAndUpdateAsync(
+        return Transaction.findByIdAndUpdate(
           transaction._id,
           {
             $set: {
@@ -61,7 +60,7 @@ function transactionProcess(schema, Account) {
         ];
       })
       .spread(function (accountFrom, accountTo) {
-        return Transaction.findByIdAndUpdateAsync(
+        return Transaction.findByIdAndUpdate(
           transaction._id,
           {
             $set: {
@@ -84,7 +83,6 @@ function transactionProcess(schema, Account) {
           });
       });
   }
-
   function rollback(transaction) {
     var Transaction = this;
     return rollbackFrom(transaction)
@@ -92,7 +90,7 @@ function transactionProcess(schema, Account) {
         return rollbackTo(transaction);
       })
       .then(function () {
-        return Transaction.findByIdAndUpdateAsync(
+        return Transaction.findByIdAndUpdate(
           transaction._id,
           {
             $set: {
@@ -101,7 +99,7 @@ function transactionProcess(schema, Account) {
           });
       })
       .then(function () {
-        return Transaction.findByIdAndRemoveAsync(
+        return Transaction.findByIdAndRemove(
           transaction._id);
       })
       .catch(
@@ -110,9 +108,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function rollbackTo(transaction) {
-    return Account.updateAsync(
+    return Account.update(
       {
         _id: transaction.to,
         pendingTransactions: transaction._id
@@ -132,9 +129,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function rollbackFrom(transaction) {
-    return Account.updateAsync(
+    return Account.update(
       {
         _id: transaction.from,
         pendingTransactions: transaction._id
@@ -154,9 +150,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function transactionTo(transaction) {
-    return Account.updateAsync(
+    return Account.update(
       {
         _id: transaction.to,
         pendingTransactions: {
@@ -179,9 +174,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function transactionFrom(transaction) {
-    return Account.updateAsync(
+    return Account.update(
       {
         _id: transaction.from,
         pendingTransactions: {
@@ -204,9 +198,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function transactionCommitTo(transaction) {
-    return Account.findOneAndUpdateAsync({
+    return Account.findOneAndUpdate({
         _id: transaction.to,
         pendingTransactions: transaction._id
       },
@@ -228,9 +221,8 @@ function transactionProcess(schema, Account) {
         }
       );
   }
-
   function transactionCommitFrom(transaction) {
-    return Account.findOneAndUpdateAsync({
+    return Account.findOneAndUpdate({
         _id: transaction.from,
         pendingTransactions: transaction._id
       },

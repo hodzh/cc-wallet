@@ -41,7 +41,7 @@ function isAuthenticated() {
     })
     // Attach user to request
     .use(function(req, res, next) {
-      User.findByIdAsync(req.user._id)
+      User.findById(req.user._id)
         .then(function(user) {
           if (!user) {
             return res.status(401).end();

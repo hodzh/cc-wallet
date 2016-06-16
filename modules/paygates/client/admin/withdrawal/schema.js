@@ -13,7 +13,7 @@
       },
       {
         title: 'update date',
-        schemaKey: 'updateDate',
+        schemaKey: 'updated',
         type: 'text',
         inTable: true
       }

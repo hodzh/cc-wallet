@@ -12,11 +12,11 @@ var schema = new Schema({
     type: String,
     require: true
   },
-  createDate: {
+  created: {
     type: Date,
     require: true
   },
-  updateDate: {
+  updated: {
     type: Date,
     require: true
   },
@@ -59,9 +59,9 @@ var schema = new Schema({
 
 schema.pre('save', function (next) {
   if (this.isNew) {
-    this.createDate = new Date();
+    this.created = new Date();
   }
-  this.updateDate = new Date();
+  this.updated = new Date();
   next();
 });
 
@@ -73,7 +73,7 @@ schema.statics.getPendingTransactions = function (id, callback) {
       {from: id}
     ]
   }).sort({
-    createDate: -1
+    created: -1
   }).exec(callback);
 };
 
@@ -97,8 +97,8 @@ schema.statics.getStatistics = function(currency, callback) {
 schema.methods.getUserData = function () {
   var me = this;
   return {
-    createDate: me.createDate,
-    updateDate: me.updateDate,
+    created: me.created,
+    updated: me.updated,
     category: me.category,
     currency: me.currency,
     amount: me.amount,

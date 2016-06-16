@@ -1,5 +1,5 @@
 module.exports = {
-  // enable: true,
+  //enable: true,
   maxConfirmations: 2,
 
   client: {

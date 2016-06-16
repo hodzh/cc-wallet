@@ -19,8 +19,8 @@ describe('Transaction Admin API:', function() {
   var transactionToCreate = {
     state: 'state',
     error: 'error',
-    createDate: new Date(),
-    updateDate: new Date(),
+    created: new Date(),
+    updated: new Date(),
     category: 'category',
     currency: 'currency',
     amount: '1',
@@ -31,8 +31,8 @@ describe('Transaction Admin API:', function() {
   var transactionToUpdate = {
     state: 'state2',
     error: 'error2',
-    createDate: new Date(),
-    updateDate: new Date(),
+    created: new Date(),
+    updated: new Date(),
     category: 'category2',
     currency: 'currency2',
     amount: '2',
@@ -41,15 +41,15 @@ describe('Transaction Admin API:', function() {
   };
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function(done) {
@@ -87,7 +87,7 @@ describe('Transaction Admin API:', function() {
       password: 'user',
       role: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -122,15 +122,15 @@ describe('Transaction Admin API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   describe('GET /aapi/transaction', function() {
@@ -177,8 +177,8 @@ describe('Transaction Admin API:', function() {
     it('should respond with the newly created transaction', function() {
       transactionToCreate.state.should.equal(newTransaction.state);
       transactionToCreate.error.should.equal(newTransaction.error);
-      //transactionToCreate.createDate.should.equal(newTransaction.createDate.toString());
-      //transactionToCreate.updateDate.should.equal(newTransaction.updateDate.toString());
+      //transactionToCreate.created.should.equal(newTransaction.created.toString());
+      //transactionToCreate.updated.should.equal(newTransaction.updated.toString());
       transactionToCreate.category.should.equal(newTransaction.category);
       transactionToCreate.currency.should.equal(newTransaction.currency);
       transactionToCreate.amount.should.equal(newTransaction.amount);
@@ -214,8 +214,8 @@ describe('Transaction Admin API:', function() {
       transaction._id.should.equal(newTransaction._id.toString());
       transaction.state.should.equal(newTransaction.state);
       transaction.error.should.equal(newTransaction.error);
-      //transaction.createDate.should.equal(newTransaction.createDate.toString());
-      //transaction.updateDate.should.equal(newTransaction.updateDate.toString());
+      //transaction.created.should.equal(newTransaction.created.toString());
+      //transaction.updated.should.equal(newTransaction.updated.toString());
       transaction.category.should.equal(newTransaction.category);
       transaction.currency.should.equal(newTransaction.currency);
       transaction.amount.should.equal(newTransaction.amount);
@@ -252,8 +252,8 @@ describe('Transaction Admin API:', function() {
       transaction._id.should.equal(newTransaction._id.toString());
       transaction.state.should.equal(transactionToUpdate.state);
       transaction.error.should.equal(transactionToUpdate.error);
-      //transaction.createDate.should.equal(transactionToUpdate.createDate);
-      //transaction.updateDate.should.equal(transactionToUpdate.updateDate);
+      //transaction.created.should.equal(transactionToUpdate.created);
+      //transaction.updated.should.equal(transactionToUpdate.updated);
       transaction.category.should.equal(transactionToUpdate.category);
       transaction.currency.should.equal(transactionToUpdate.currency);
       transaction.amount.should.equal(transactionToUpdate.amount);

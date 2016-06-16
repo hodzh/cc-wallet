@@ -31,14 +31,14 @@ function handleEntityNotFound(res) {
 
 // Gets a list of Transactions
 exports.index = function(req, res) {
-  Transaction.findAsync()
+  Transaction.find()
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
 // Gets a single Transaction from the DB
 exports.show = function(req, res) {
-  Transaction.findByIdAsync(req.params.id)
+  Transaction.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(responseWithResult(res))
     .catch(handleError(res));

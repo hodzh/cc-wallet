@@ -24,8 +24,8 @@
         inTable: true
       },
       {
-        title: 'updateDate',
-        schemaKey: 'updateDate',
+        title: 'updated',
+        schemaKey: 'updated',
         type: 'text',
         inTable: true
       }

@@ -32,19 +32,19 @@ describe('Withdrawal Admin API:', function() {
   };
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   before(function() {
@@ -54,7 +54,7 @@ describe('Withdrawal Admin API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function(done) {
@@ -95,19 +95,19 @@ describe('Withdrawal Admin API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   describe('GET /aapi/paygates/withdrawal', function() {

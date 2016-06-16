@@ -7,14 +7,14 @@
     return [
       {
         title: 'Create Date',
-        schemaKey: 'createDate',
+        schemaKey: 'created',
         type: 'text',
         inTable: true,
         auto: true
       },
       {
         title: 'Update Date',
-        schemaKey: 'updateDate',
+        schemaKey: 'updated',
         type: 'text',
         inTable: true,
         auto: true

@@ -16,7 +16,7 @@ function controllerFactory(){
   };
 
   function index(req, res) {
-    Deposit.find().limit(20).execAsync()
+    Deposit.find().limit(20).exec()
       .then(responseWithResult(res))
       .catch(handleError(res));
   }

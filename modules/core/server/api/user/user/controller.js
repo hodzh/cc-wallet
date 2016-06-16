@@ -56,7 +56,7 @@ exports.changePassword = function(req, res, next) {
     .then(function(user) {
       if (user.authenticate(oldPass)) {
         user.password = newPass;
-        return user.saveAsync()
+        return user.save()
           .then(function() {
             res.status(204).end();
           })

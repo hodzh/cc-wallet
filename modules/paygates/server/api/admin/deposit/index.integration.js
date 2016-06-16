@@ -29,19 +29,19 @@ describe('Deposit Admin API:', function() {
   };
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   before(function() {
@@ -51,7 +51,7 @@ describe('Deposit Admin API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -92,19 +92,19 @@ describe('Deposit Admin API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   after(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   describe('GET /aapi/paygates/deposit', function() {

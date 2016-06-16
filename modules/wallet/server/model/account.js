@@ -28,11 +28,11 @@ var schema = new Schema({
     default: true,
     require: true
   },
-  updateDate: {
+  updated: {
     type: Date,
     require: true
   },
-  createDate: {
+  created: {
     type: Date,
     require: true
   },
@@ -57,9 +57,9 @@ schema.index({
 
 schema.pre('save', function (next) {
   if (this.isNew) {
-    this.createDate = new Date();
+    this.created = new Date();
   }
-  this.updateDate = new Date();
+  this.updated = new Date();
   next();
 });
 
@@ -68,12 +68,12 @@ schema.statics.enable = function (index, value) {
     index,
     {
       $setOnInsert: {
-        createDate: new Date(),
+        created: new Date(),
         balance: 0
       },
       $set: {
         enable: value,
-        updateDate: new Date()
+        updated: new Date()
       }
     },
     {

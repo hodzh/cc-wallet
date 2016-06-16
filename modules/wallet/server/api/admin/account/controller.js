@@ -33,7 +33,7 @@ function handleEntityNotFound(res) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
-    return updated.saveAsync()
+    return updated.save()
       .spread(function(updated) {
         return updated;
       });
@@ -43,7 +43,7 @@ function saveUpdates(updates) {
 function removeEntity(res) {
   return function(entity) {
     if (entity) {
-      return entity.removeAsync()
+      return entity.remove()
         .then(function() {
           res.status(204).end();
         });
@@ -53,14 +53,14 @@ function removeEntity(res) {
 
 // Gets a list of Accounts
 exports.index = function(req, res) {
-  Account.find().limit(20).execAsync()
+  Account.find().limit(20).exec()
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
 // Gets a single Account from the DB
 exports.show = function(req, res) {
-  Account.findByIdAsync(req.params.id)
+  Account.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(responseWithResult(res))
     .catch(handleError(res));
@@ -68,7 +68,7 @@ exports.show = function(req, res) {
 
 // Creates a new Account in the DB
 exports.create = function(req, res) {
-  Account.createAsync(req.body)
+  Account.create(req.body)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
 };
@@ -78,7 +78,7 @@ exports.update = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Account.findByIdAsync(req.params.id)
+  Account.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(responseWithResult(res))
@@ -87,7 +87,7 @@ exports.update = function(req, res) {
 
 // Deletes a Account from the DB
 exports.destroy = function(req, res) {
-  Account.findByIdAsync(req.params.id)
+  Account.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));

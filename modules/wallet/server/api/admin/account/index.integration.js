@@ -13,8 +13,8 @@ var accountToCreate = {
   currency: 'bitcoin',
   balance: '0',
   enable: true,
-  updateDate: new Date(),
-  createDate: new Date(),
+  updated: new Date(),
+  created: new Date(),
   pendingTransactions: [],
   address: 'address'
 };
@@ -28,15 +28,15 @@ describe('Account Admin API:', function() {
   var token;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
@@ -46,7 +46,7 @@ describe('Account Admin API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function(done) {
@@ -69,15 +69,15 @@ describe('Account Admin API:', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   describe('GET /aapi/account', function() {

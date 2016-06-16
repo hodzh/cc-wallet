@@ -39,11 +39,11 @@ var schema = new Schema({
     type: String,
     require: true
   },
-  updateDate: {
+  updated: {
     type: Date,
     require: true
   },
-  createDate: {
+  created: {
     type: Date,
     require: true
   },
@@ -71,9 +71,9 @@ var schema = new Schema({
 
 schema.pre('save', function (next) {
   if (this.isNew){
-    this.createDate = new Date();
+    this.created = new Date();
   }
-  this.updateDate = new Date();
+  this.updated = new Date();
   next();
 });
 

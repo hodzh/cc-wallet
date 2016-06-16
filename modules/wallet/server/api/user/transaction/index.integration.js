@@ -13,7 +13,7 @@ describe('Transaction API:', function() {
   var token;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   beforeEach(function(done) {
@@ -44,7 +44,7 @@ describe('Transaction API:', function() {
   });
 
   afterEach(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   beforeEach(function(done) {

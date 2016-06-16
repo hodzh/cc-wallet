@@ -15,7 +15,7 @@ describe('Account API:', function() {
   var currency = 'bitcoin';
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   beforeEach(function(done) {
@@ -46,7 +46,7 @@ describe('Account API:', function() {
   });
 
   afterEach(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   describe('GET /api/account', function() {

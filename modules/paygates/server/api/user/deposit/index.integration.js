@@ -52,7 +52,7 @@ describe('Deposit API:', function() {
       password: 'user',
       role: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function(done) {
@@ -125,7 +125,7 @@ describe('Deposit API:', function() {
   });
 
   after(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   describe('GET /api/paygates/deposit', function() {

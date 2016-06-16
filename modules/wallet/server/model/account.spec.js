@@ -16,15 +16,15 @@ describe('Account Model', function() {
   var adminAccount;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
@@ -33,7 +33,7 @@ describe('Account Model', function() {
       email: 'user@user.user',
       password: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -43,7 +43,7 @@ describe('Account Model', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -60,19 +60,19 @@ describe('Account Model', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   it('should begin with no accounts', function() {
-    return Account.findAsync({}).should
+    return Account.find({}).should
       .eventually.have.length(0);
   });
 
@@ -100,7 +100,7 @@ describe('Account Model', function() {
 
   it('should fail when saving a duplicate user account', function() {
     var dublicate = new Account(userAccountId);
-    return dublicate.saveAsync().should.be.rejected;
+    return dublicate.save().should.be.rejected;
   });
 
   it('should enable admin account', function() {
@@ -127,7 +127,7 @@ describe('Account Model', function() {
 
   it('should fail when saving a duplicate admin account', function() {
     var dublicate = new Account(adminAccountId);
-    return dublicate.saveAsync().should.be.rejected;
+    return dublicate.save().should.be.rejected;
   });
 
 });

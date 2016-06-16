@@ -51,7 +51,7 @@ exports.index = function(currencies) {
 
 // Gets a single Account from the DB
 exports.show = function(req, res) {
-  Account.findByIdAsync(req.params.id)
+  Account.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(responseWithUserResult(res))
     .catch(handleError(res));

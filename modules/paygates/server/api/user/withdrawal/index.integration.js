@@ -24,23 +24,23 @@ describe('Withdrawal API:', function() {
   };
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
-    return Withdrawal.removeAsync();
+    return Withdrawal.remove();
   });
 
   before(function() {
-    return Deposit.removeAsync();
+    return Deposit.remove();
   });
 
   before(function() {
@@ -50,7 +50,7 @@ describe('Withdrawal API:', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -60,7 +60,7 @@ describe('Withdrawal API:', function() {
       password: 'user',
       role: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function(done) {

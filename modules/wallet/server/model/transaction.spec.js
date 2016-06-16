@@ -14,15 +14,15 @@ describe('Transaction Model', function() {
   var adminAccount;
 
   before(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   before(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   before(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   before(function() {
@@ -31,7 +31,7 @@ describe('Transaction Model', function() {
       email: 'user@user.user',
       password: 'user'
     });
-    return user.saveAsync();
+    return user.save();
   });
 
   before(function() {
@@ -41,7 +41,7 @@ describe('Transaction Model', function() {
       password: 'admin',
       role: 'admin'
     });
-    return admin.saveAsync();
+    return admin.save();
   });
 
   before(function() {
@@ -69,19 +69,19 @@ describe('Transaction Model', function() {
   });
 
   after(function() {
-    return User.removeAsync();
+    return User.remove();
   });
 
   after(function() {
-    return Account.removeAsync();
+    return Account.remove();
   });
 
   after(function() {
-    return Transaction.removeAsync();
+    return Transaction.remove();
   });
 
   it('should begin with no transactions', function() {
-    return Transaction.findAsync({}).should
+    return Transaction.find({}).should
       .eventually.have.length(0);
   });
 
@@ -185,7 +185,7 @@ describe('Transaction Model', function() {
   describe('rollback', function(){
 
     beforeEach(function(){
-      return Account.findByIdAsync(userAccount._id)
+      return Account.findById(userAccount._id)
         .then(
           function(account){
             userAccount = account;
@@ -194,7 +194,7 @@ describe('Transaction Model', function() {
     });
 
     beforeEach(function(){
-      return Account.findByIdAsync(adminAccount._id)
+      return Account.findById(adminAccount._id)
         .then(
           function(account){
             adminAccount = account;
@@ -203,7 +203,7 @@ describe('Transaction Model', function() {
     });
 
     afterEach(function(){
-      return Account.findByIdAsync(userAccount._id)
+      return Account.findById(userAccount._id)
         .then(
           function(account){
             // a test of this section
@@ -215,7 +215,7 @@ describe('Transaction Model', function() {
     });
 
     afterEach(function(){
-      return Account.findByIdAsync(adminAccount._id)
+      return Account.findById(adminAccount._id)
         .then(
           function(account){
             // a test of this section

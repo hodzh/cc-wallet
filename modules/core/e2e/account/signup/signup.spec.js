@@ -48,7 +48,7 @@ describe('Signup View', function() {
   describe('with local auth', function() {
 
     beforeAll(function(done) {
-      UserModel.removeAsync().then(done);
+      UserModel.remove().then(done);
     });
 
     it('should signup a new user, log them in, and redirecting to "/"', function() {

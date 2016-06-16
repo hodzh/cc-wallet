@@ -4,7 +4,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var errorMessage = 'Incorrect email or password.';
 
 function localAuthenticate(User, email, password, done) {
-  User.findOneAsync({
+  User.findOne({
       email: email.toLowerCase()
     })
     .then(function(user) {

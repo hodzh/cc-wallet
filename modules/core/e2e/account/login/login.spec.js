@@ -22,9 +22,9 @@ describe('Login View', function() {
   beforeEach(
     function(done) {
       UserModel
-        .removeAsync()
+        .remove()
         .then(function() {
-          return UserModel.createAsync(testUser);
+          return UserModel.create(testUser);
         })
         .then(loadPage)
         .finally(done);
