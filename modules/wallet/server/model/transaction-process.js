@@ -10,29 +10,21 @@ function transactionProcess(schema, Account) {
     var Transaction = this;
 
     return transactionFrom(transaction)
-      .then(
-        function () {
-          return Transaction.emit('processFrom', transaction);
-        }
-      )
-      .then(
-        function () {
-          return Transaction.emit('processFrom:' + transaction._id, transaction);
-        }
-      )
+      .then(function () {
+        return Transaction.emit('processFrom', transaction);
+      })
+      .then(function () {
+        return Transaction.emit('processFrom:' + transaction._id, transaction);
+      })
       .then(function () {
         return transactionTo(transaction);
       })
-      .then(
-        function () {
-          return Transaction.emit('processTo', transaction);
-        }
-      )
-      .then(
-        function () {
-          return Transaction.emit('processTo:' + transaction._id, transaction);
-        }
-      )
+      .then(function () {
+        return Transaction.emit('processTo', transaction);
+      })
+      .then(function () {
+        return Transaction.emit('processTo:' + transaction._id, transaction);
+      })
       .then(function () {
         return Transaction.findByIdAndUpdate(
           transaction._id,
@@ -42,17 +34,15 @@ function transactionProcess(schema, Account) {
             }
           });
       })
-      .catch(
-        function (err) {
-          console.log('transaction failed', err);
-          return Transaction.rollback(transaction)
-            .then(
-              function () {
-                throw new Error(err);
-              }
-            );
-        }
-      )
+      .catch(function (err) {
+        console.log('transaction failed', err);
+        return Transaction.rollback(transaction)
+          .then(
+            function () {
+              throw new Error(err);
+            }
+          );
+      })
       .then(function () {
         return [
           transactionCommitFrom(transaction),
@@ -166,13 +156,11 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(
-        function (result) {
-          if (result.nModified !== 1) {
-            throw new Error('failed process to');
-          }
+      .then(function (result) {
+        if (result.nModified !== 1) {
+          throw new Error('failed process to');
         }
-      );
+      });
   }
   function transactionFrom(transaction) {
     return Account.update(
@@ -190,13 +178,11 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(
-        function (result) {
-          if (result.nModified !== 1) {
-            throw new Error('failed process from');
-          }
+      .then(function (result) {
+        if (result.nModified !== 1) {
+          throw new Error('failed process from');
         }
-      );
+      });
   }
   function transactionCommitTo(transaction) {
     return Account.findOneAndUpdate({

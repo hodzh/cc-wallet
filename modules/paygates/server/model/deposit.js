@@ -120,6 +120,10 @@ schema.methods.confirm = function () {
     });
 };
 
+schema.methods.verify = function () {
+  var deposit = this;
+};
+
 schema.statics.on = DepositEvents.on.bind(DepositEvents);
 schema.statics.off = DepositEvents.removeListener.bind(DepositEvents);
 schema.statics.once = DepositEvents.once.bind(DepositEvents);

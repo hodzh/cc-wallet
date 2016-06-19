@@ -248,5 +248,8 @@ schema.methods.cancel = function () {
       return withdrawal;
     });
 };
+schema.methods.verify = function () {
+  var withdrawal = this;
+};
 
 module.exports = mongoose.model('Withdrawal', schema);

@@ -1,8 +1,4 @@
 module.exports = {
-  currency: {
-    dogecoin: require('./dogecoin'),
-    dash: require('./dash'),
-    bitcoin: require('./bitcoin')
-  },
+  currency: require('./currency'),
   sign: require('./sign')
 };
