@@ -250,6 +250,8 @@ schema.methods.cancel = function () {
 };
 schema.methods.verify = function () {
   var withdrawal = this;
+  //todo
+  return Promise.resolve();
 };
 
 module.exports = mongoose.model('Withdrawal', schema);

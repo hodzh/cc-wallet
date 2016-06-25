@@ -6,7 +6,7 @@ var app = {
   auth: require('./auth'),
   web: require('./web'),
   init: init,
-  start: start,
+  start: start
 };
 
 module.exports = app;
@@ -18,14 +18,13 @@ function init(config){
 
 function start(callback){
   async.series([
-
       app.db.init.bind(app.db, app.config.db),
       buildDbModels,
       initAuth,
       seed,
+      initMailer,
       initWeb,
       app.web.start.bind(app.web, app.config.web, app.auth)
-
     ],
     function(err) {
       if (err) {
@@ -39,13 +38,11 @@ function start(callback){
     app.db.models.user = require('./model/user');
     callback();
   }
-
   function initAuth(callback){
     var userModel = require('./model/user');
     app.auth.init(userModel, app.config);
     callback();
   }
-
   function seed(callback){
     if ('development' !== app.config.env &&
       'test' !== app.config.env) {
@@ -53,7 +50,6 @@ function start(callback){
     }
     app.db.seed(app.config.seed, callback);
   }
-
   function initWeb(callback){
 
     var web = app.web;
@@ -69,6 +65,11 @@ function start(callback){
       '/aapi/user': require('./api/admin/user'),
     });
 
+    callback();
+  }
+  function initMailer(callback){
+    var mail = require('./mailer');
+    app.mail = mail;
     callback();
   }
 }

@@ -60,5 +60,13 @@ module.exports = {
   karmaConf: 'karma.conf.js',
   mochaConf: './mocha.conf.js',
   publicRoot: 'public',
-  tempRoot: 'temp'
+  tempRoot: 'temp/client',
+
+  email: {
+    public: 'public-email',
+    temp: 'temp/email',
+    css: ['modules/*/server/email/**/*.css'],
+    less: ['modules/*/server/email/**/*.less'],
+    sass: ['modules/*/server/email/**/*.sass']
+  }
 };

@@ -168,7 +168,12 @@ function transactionProcess(schema, Account) {
         _id: transaction.from,
         pendingTransactions: {
           $ne: transaction._id
-        }
+        },
+        $or: [{
+          balance: {$gte: transaction.amount}
+        },{
+          type: {$ne: 'user'}
+        }]
       },
       {
         $inc: {

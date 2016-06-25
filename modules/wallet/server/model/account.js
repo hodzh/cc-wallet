@@ -72,7 +72,7 @@ schema.statics.enable = function (index, value) {
         balance: 0
       },
       $set: {
-        enable: value,
+        enable: (typeof value === 'undefined' ? true : value),
         updated: new Date()
       }
     },

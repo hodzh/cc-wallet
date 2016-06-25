@@ -3,7 +3,6 @@ var path = require('path');
 var defaults = require('./defaults');
 
 var config = {};
-var dirs = [__dirname];
 
 setEnv(defaults.env);
 

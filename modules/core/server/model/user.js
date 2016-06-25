@@ -26,6 +26,8 @@ var UserSchema = new Schema({
   twitter: {},
   google: {},
   github: {}
+}, {
+  collection: 'user'
 });
 
 /**

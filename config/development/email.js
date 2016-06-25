@@ -1,10 +1,7 @@
 module.exports = {
-  emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
+  from: 'Jack Major <jackmajorgame@gmail.com>',
   mailer: {
-    service: 'SERVICE_PROVIDER', // Gmail, SMTP
-    auth: {
-      user: 'EMAIL_ID',
-      pass: 'PASSWORD'
-    }
+    service: 'Gmail', // Gmail, SMTP
+    auth: require('./email-auth')
   }
 };

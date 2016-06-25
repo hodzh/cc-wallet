@@ -1,0 +1,12 @@
+Hello,
+
+A request to withdraw {{amount}} {{currency}} from your Poloniex account to address {{address}} was just made.
+
+To confirm the withdrawal, please click the following link: {{site.tokenUrl}}{{token}}
+
+If you did not request this withdrawal, please contact {{site.name}} support immediately at {{site.support}}.
+
+
+Sincerely,
+
+The {{site.name}} Team

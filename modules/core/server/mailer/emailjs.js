@@ -1,12 +1,12 @@
-module.exports = function (api) {
+module.exports = function (options) {
 
-    var options = api.options.email;
     var server = require("emailjs").server.connect(options);
 
     this.sendPasswordReset = function (user, callback) {
 
         var title = api.options.render.locals.site.title;
-        var link = api.options.render.locals.site.url + "/reset-password?ticket=" + user.ticket;
+        var link = api.options.render.locals.site.url +
+          "/reset-password?ticket=" + user.ticket;
 
         function composePasswordReset() {
             var text = "Dear Member,\n" +
