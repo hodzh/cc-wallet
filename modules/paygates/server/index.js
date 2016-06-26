@@ -14,7 +14,6 @@ function paygates(server, config){
   server.db.models.deposit = paygatesModels.deposit;
   server.db.models.withdrawal = paygatesModels.withdrawal;
 
-  server.db.models.withdrawal.on('unconfirmed', onWithdrawalUnconfirmed);
   server.db.models.withdrawal.on('confirmed', onConfirmWithdrawal);
 
   server.web.route({
@@ -23,17 +22,6 @@ function paygates(server, config){
     '/api/paygates/deposit': require('./api/user/deposit')(),
     '/api/paygates/withdrawal': require('./api/user/withdrawal')()
   });
-
-  function onWithdrawalUnconfirmed(withdrawal) {
-    log.trace('on unconfirmed withdrawal');
-    return Promise.resolve()
-      .then(function () {
-        return confirm.create(withdrawal);
-      })
-      .catch(function (error) {
-        log.error(error);
-      });
-  }
 
   function onConfirmWithdrawal(withdrawal) {
     log.trace('on confirmed withdrawal', withdrawal._id);

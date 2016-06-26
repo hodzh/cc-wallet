@@ -13,6 +13,7 @@ module.exports = function(config){
   };
 
   function send(options, key, context) {
+    log.trace('send email', key);
     var mail = mails[key];
     var sender = transport.templateSender(mail, {
       from: options.from

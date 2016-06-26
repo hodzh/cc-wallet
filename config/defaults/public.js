@@ -1,10 +1,10 @@
 module.exports = {
 
   site: {
-    name: 'CC',
-    url: 'https://cc.cc',
-    support: 'https://cc.cc/support',
-    tokenUrl: 'https://cc.cc/api/token/'
+    name: 'Walle',
+    url: 'http://localhost:7002/',
+    support: 'http://localhost:7002/support',
+    tokenUrl: 'http://localhost:7002/api/token/'
   },
 
   languages: [{

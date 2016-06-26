@@ -65,9 +65,11 @@ module.exports = {
   email: {
     public: 'public-email',
     temp: 'temp/email',
+    js: ['modules/*/server/email/index.js'],
+    html: ['modules/*/server/email/**/*.html'],
+    text: ['modules/*/server/email/**/*.txt'],
     css: ['modules/*/server/email/**/*.css'],
     less: ['modules/*/server/email/**/*.less'],
-    sass: ['modules/*/server/email/**/*.sass'],
-    html: ['modules/*/server/email/**/*.html']
+    sass: ['modules/*/server/email/**/*.sass']
   }
 };

@@ -75,6 +75,9 @@ schema.methods.confirm = function () {
   log.trace('confirm deposit');
   return Promise.resolve()
     .then(function () {
+      if (deposit.status != 'unconfirmed') {
+        throw new Error('bad deposit status');
+      }
       deposit.status = 'confirmed';
       return deposit.save();
     })
@@ -122,6 +125,12 @@ schema.methods.confirm = function () {
 
 schema.methods.verify = function () {
   var deposit = this;
+  return Promise.resolve()
+    .then(function(){
+      if (deposit.status != 'approved') {
+        throw new Error('bad deposit status', deposit.status);
+      }
+    });
 };
 
 schema.statics.on = DepositEvents.on.bind(DepositEvents);

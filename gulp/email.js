@@ -15,6 +15,7 @@ var gulpAutoprefixer = require('gulp-autoprefixer');
 var inlineCss = require('gulp-inline-css');
 var rename = require('gulp-rename');
 var htmlmin = require('gulp-htmlmin');
+var gulpData = require('gulp-data');
 
 var autoprefixer = gulpAutoprefixer.bind(null,
   'last 2 version',
@@ -42,6 +43,16 @@ var config = require('../config');
 var tempHtmlPath = path.join(paths.email.temp, 'html');
 var tempTextPath = path.join(paths.email.temp, 'text');
 
+function renameAsset() {
+  return rename(function (file) {
+    //log(file.dirname);
+    var parts = file.dirname.split(path.sep);
+    parts.splice(0, 4); // remove 4 parts: modules/*/server/email
+    file.dirname = parts.join(path.sep);
+    //log(file.dirname);
+  });
+}
+
 gulp.task('email-less', function() {
   return gulp.src(paths.email.less, {base: 'modules/*/server/email/html'})
     .pipe(less())
@@ -65,32 +76,24 @@ gulp.task('email-css', function() {
     .pipe(gulp.dest(tempHtmlPath));
 });
 
-function renameAsset() {
-  return rename(function (file) {
-    //log(file.dirname);
-    var parts = file.dirname.split(path.sep);
-    parts.splice(0, 4);
-    file.dirname = parts.join(path.sep);
-    //log(file.dirname);
-  });
-}
-
-var index = {};
+var index;
 
 gulp.task('email-index-build', function() {
+  index = {};
   return gulp.src([
       'modules/{',
       config.modules.join(','),
       '}/server/email/index.js'].join(''),
     {read: false})
-    .pipe(indexBuilder('index.json'));
+    .pipe(indexBuilder());
 
-  function indexBuilder(fileName) {
+  function indexBuilder() {
     return through.obj(transform, flush);
 
     function transform(file, enc, cb) {
       log(file.path);
       var emails = require(file.path);
+      delete require.cache[require.resolve(file.path)];
       Object.keys(emails).forEach(function (key) {
         log(key);
         var email = emails[key];
@@ -151,12 +154,8 @@ gulp.task('email-text', ['email-index-build'], function() {
       mail.text = path.join(tempTextPath, path.basename(text));
       return text;
     }))
-    .pipe(gulpSwig({
-      varControls: ['<{', '}>'],
-      tagControls: ['<%', '%>'],
-      cmtControls: ['<#', '#>'],
-      data: config.public
-    }))
+    .pipe(gulpData(config.public))
+    .pipe(gulpSwig(swigOptions))
     .pipe(extReplace('.txt'))
     .pipe(gulp.dest(tempTextPath));
 });
@@ -170,12 +169,8 @@ gulp.task('email-html-inline',
         mail.html = changeExtension(html, '.inline.html');
         return html;
       }))
-      .pipe(gulpSwig({
-        varControls: ['<{', '}>'],
-        tagControls: ['<%', '%>'],
-        cmtControls: ['<#', '#>'],
-        data: config.public
-      }))
+      .pipe(gulpData(config.public))
+      .pipe(gulpSwig(swigOptions))
       .pipe(inlineCss())
       .pipe(htmlmin({
         collapseWhitespace: true,
@@ -198,10 +193,27 @@ gulp.task('email-index', ['email-html-inline', 'email-text'], function() {
   );
 });
 
-gulp.task('email', [
+gulp.task('email-build', [
   //'email-clean',
-  'email-index',
+  'email-index'
 ]);
+
+gulp.task('email-dev', [
+  'email-build',
+  'email-watch'
+]);
+
+gulp.task('email-watch', function () {
+  //livereload.listen({interval:500});
+  //gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
+
+  var everything = Array.prototype.concat.call(
+    paths.email.js, paths.email.html, paths.email.text,
+    paths.email.css, paths.email.sass, paths.email.less);
+  log(everything);
+  gulp.watch(everything, ['email-build']);
+
+});
 
 function changeExtension(file, ext) {
   var lastDotPosition = file.lastIndexOf('.');

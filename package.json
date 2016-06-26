@@ -48,6 +48,7 @@
     "gulp-coverage": "^0.3.38",
     "gulp-csslint": "latest",
     "gulp-cssmin": "latest",
+    "gulp-data": "^1.2.1",
     "gulp-ext-replace": "^0.2.0",
     "gulp-foreach": "^0.1.0",
     "gulp-htmlmin": "^2.0.0",

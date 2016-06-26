@@ -88,7 +88,7 @@ function emitEvent(event, doc, params) {
 
 schema.statics.on = WithdrawalEvents.on.bind(WithdrawalEvents);
 schema.statics.off = WithdrawalEvents.removeListener.bind(WithdrawalEvents);
-schema.statics.once = WithdrawalEvents.once.bind(WithdrawalEvents);
+// schema.statics.once = WithdrawalEvents.once.bind(WithdrawalEvents);
 
 schema.statics.create = function (params) {
   var Withdrawal = this;
@@ -176,6 +176,9 @@ schema.methods.confirm = function () {
   log.trace('confirm withdrawal');
   return Promise.resolve()
     .then(function () {
+      if (withdrawal.status != 'unconfirmed') {
+        throw new Error('bad withdrawal status', withdrawal.status);
+      }
       withdrawal.status = 'confirmed';
       return withdrawal.save();
     })
@@ -188,6 +191,9 @@ schema.methods.approve = function () {
   log.trace('approve withdrawal');
   return Promise.resolve()
     .then(function () {
+      if (withdrawal.status != 'confirmed') {
+        throw new Error('bad withdrawal status', withdrawal.status);
+      }
       withdrawal.status = 'approved';
       return withdrawal.save();
     })
@@ -201,6 +207,9 @@ schema.methods.cancel = function () {
 
   return Promise.resolve()
     .then(function () {
+      if (withdrawal.status != 'unconfirmed') {
+        throw new Error('bad withdrawal status', withdrawal.status);
+      }
       return Account.findById(withdrawal.account);
     })
     .then(function (account) {
@@ -248,10 +257,17 @@ schema.methods.cancel = function () {
       return withdrawal;
     });
 };
-schema.methods.verify = function () {
+schema.methods.sign = function () {
   var withdrawal = this;
-  //todo
-  return Promise.resolve();
+  return Promise.resolve()
+    .then(function(){
+      if (withdrawal.status != 'approved') {
+        throw new Error('bad withdrawal status', withdrawal.status);
+      }
+      withdrawal.status = 'signed';
+      return withdrawal.save()
+        .thenReturn(withdrawal);
+    });
 };
 
 module.exports = mongoose.model('Withdrawal', schema);

@@ -15,8 +15,13 @@ function controllerFactory(token){
       .then(function(){
         return token.verify(req.params.token);
       })
-      .then(responseWithResult(res))
+      //.then(responseWithResult(res))
+      .then(redirect())
       .catch(handleError(res));
+
+    function redirect(){
+      res.redirect('/');
+    }
   }
 }
 
