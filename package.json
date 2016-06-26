@@ -4,6 +4,7 @@
   "dependencies": {
     "async": "^1.5.0",
     "bitcoin": "^3.0.1",
+    "bluebird": "latest",
     "body-parser": "^1.14.1",
     "bower": "^1.7.0",
     "composable-middleware": "^0.3.0",
@@ -32,6 +33,7 @@
     "request": "^2.67.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.13.0",
     "chai": "latest",
     "chai-as-promised": "latest",
     "chai-things": "latest",
@@ -101,6 +103,7 @@
     "sinon-chai": "latest",
     "supertest": "latest",
     "swig": "^1.4.2",
-    "through": "latest"
+    "through": "latest",
+    "through2": "latest"
   }
 }

@@ -16,6 +16,7 @@ var inlineCss = require('gulp-inline-css');
 var rename = require('gulp-rename');
 var htmlmin = require('gulp-htmlmin');
 var gulpData = require('gulp-data');
+var browserSync = require('browser-sync').create();
 
 var autoprefixer = gulpAutoprefixer.bind(null,
   'last 2 version',
@@ -26,7 +27,6 @@ var autoprefixer = gulpAutoprefixer.bind(null,
   'android 4');
 
 var util = require('gulp-util');
-var File = util.File;
 var log = util.log;
 
 var swig  = require('swig');
@@ -130,7 +130,7 @@ gulp.task('email-index-build', function() {
     function flush(cb) {
       log('flush');
       Object.keys(index).forEach(function (key) {
-        return function (cb) {
+        return function () {
           index[key].subject =
             swig.render(index[key].subject,
               config.public);
@@ -200,19 +200,28 @@ gulp.task('email-build', [
 
 gulp.task('email-dev', [
   'email-build',
+  'email-browser-sync',
   'email-watch'
 ]);
 
 gulp.task('email-watch', function () {
-  //livereload.listen({interval:500});
-  //gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
-
   var everything = Array.prototype.concat.call(
     paths.email.js, paths.email.html, paths.email.text,
     paths.email.css, paths.email.sass, paths.email.less);
-  log(everything);
+  //log(everything);
   gulp.watch(everything, ['email-build']);
+  gulp.watch(tempHtmlPath + '/*.inline.html')
+    .on('change', browserSync.reload);
+});
 
+gulp.task('email-browser-sync', function() {
+  browserSync.init({
+    server: {
+      baseDir: tempHtmlPath,
+      directory: true
+    },
+    files: tempHtmlPath + '/*.inline.html'
+  });
 });
 
 function changeExtension(file, ext) {
