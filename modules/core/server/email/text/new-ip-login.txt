@@ -1,15 +1,17 @@
 Hello,
 
-This email is to notify you of a successful login
-to your <{site.name}> account from an IP address
-not previously associated with this account.
+This email is to notify you of a successful login to your <{site.name}> account from an IP address not previously associated with this account.
 
 Username/email:{{username}}
 IP Address: {{ipAddress}}
 
-If you do not recognize this login, you should
-<{site.name}> your account immediately
-and contact support <{site.url}>/support
+If you do not recognize this login, you should freeze your account immediately
+
+<{site.name}>
+
+and contact support
+
+<{site.support}>
 
 Sincerely,
 

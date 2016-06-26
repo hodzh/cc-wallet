@@ -7,7 +7,7 @@ function paygates(server, config){
   var Promise = require('bluebird');
   var path = require('path');
   var log = require('log4js').getLogger('paygates');
-  var auth = require('./auth');
+
   var approve = require('./approve');
 
   var paygatesModels = require('./model');
@@ -15,7 +15,7 @@ function paygates(server, config){
   server.db.models.withdrawal = paygatesModels.withdrawal;
 
   server.db.models.withdrawal.on('unconfirmed', onWithdrawalUnconfirmed);
-  server.db.models.withdrawal.on('confirmed', onWithdrawalConfirmed);
+  server.db.models.withdrawal.on('confirmed', onConfirmWithdrawal);
 
   server.web.route({
     '/aapi/paygates/deposit': require('./api/admin/deposit')(),
@@ -28,15 +28,15 @@ function paygates(server, config){
     log.trace('on unconfirmed withdrawal');
     return Promise.resolve()
       .then(function () {
-        return auth(withdrawal);
+        return confirm.create(withdrawal);
       })
       .catch(function (error) {
         log.error(error);
       });
   }
 
-  function onWithdrawalConfirmed(withdrawal) {
-    log.trace('on confirmed withdrawal');
+  function onConfirmWithdrawal(withdrawal) {
+    log.trace('on confirmed withdrawal', withdrawal._id);
     return Promise.resolve()
       .then(function () {
         return approve(withdrawal);

@@ -1,3 +1,5 @@
+'use strict';
+
 var async = require('async');
 
 var app = {
@@ -13,18 +15,51 @@ module.exports = app;
 
 function init(config){
   app.config = config;
+  initModels();
+  initAuth();
+  initMailer();
+  initToken();
   addModules(config.modules.slice(1));
+
+  function initModels(){
+    app.db.models.user = require('./model/user');
+  }
+  function initAuth(){
+    var userModel = require('./model/user');
+    app.auth.init(userModel, app.config);
+  }
+  function initMailer(){
+    var mail = require('./mailer')(config.email);
+    app.mail = mail;
+  }
+  function initToken(){
+    var token = require('./token')(config.token);
+    app.token = token;
+  }
+  function addModules(modules) {
+    modules.forEach(initModule);
+  }
+  function initModule(name) {
+    var path = require('path');
+    var fs = require('fs');
+    var modulePath = path.join(
+      __dirname, '../../../modules',
+      name, 'server');
+    if (!fs.existsSync(modulePath)) {
+      return;
+    }
+    var moduleServer = require(modulePath);
+    moduleServer(app, app.config);
+  }
 }
 
 function start(callback){
   async.series([
       app.db.init.bind(app.db, app.config.db),
-      buildDbModels,
-      initAuth,
       seed,
-      initMailer,
       initWeb,
-      app.web.start.bind(app.web, app.config.web, app.auth)
+      app.web.start.bind(
+        app.web, app.config.web, app.auth)
     ],
     function(err) {
       if (err) {
@@ -34,15 +69,6 @@ function start(callback){
     }
   );
 
-  function buildDbModels(callback){
-    app.db.models.user = require('./model/user');
-    callback();
-  }
-  function initAuth(callback){
-    var userModel = require('./model/user');
-    app.auth.init(userModel, app.config);
-    callback();
-  }
   function seed(callback){
     if ('development' !== app.config.env &&
       'test' !== app.config.env) {
@@ -61,30 +87,11 @@ function start(callback){
 
     web.route({
       '/auth/local': require('./auth/local'),
-      '/api/me': require('./api/user/user'),
-      '/aapi/user': require('./api/admin/user'),
+      '/api/me': require('./api/user/user')(),
+      '/api/token': require('./api/user/token')(app.token),
+      '/aapi/user': require('./api/admin/user')
     });
 
     callback();
   }
-  function initMailer(callback){
-    var mail = require('./mailer');
-    app.mail = mail;
-    callback();
-  }
-}
-
-function addModules(modules) {
-  modules.forEach(initModule);
-}
-
-function initModule(name) {
-  var path = require('path');
-  var fs = require('fs');
-  var modulePath = path.join(__dirname, '../../../modules', name, 'server');
-  if (!fs.existsSync(modulePath)) {
-    return;
-  }
-  var moduleServer = require(modulePath);
-  moduleServer(app, app.config);
 }

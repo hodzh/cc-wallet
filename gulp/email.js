@@ -39,33 +39,33 @@ swig.setDefaults(swigOptions);
 var paths = require('./path-settings');
 var config = require('../config');
 
-var tempHtmpPath = path.join(paths.email.temp, 'html');
+var tempHtmlPath = path.join(paths.email.temp, 'html');
 var tempTextPath = path.join(paths.email.temp, 'text');
 
 gulp.task('email-less', function() {
   return gulp.src(paths.email.less, {base: 'modules/*/server/email/html'})
     .pipe(less())
     .pipe(autoprefixer())
-    .pipe(renameCss())
-    .pipe(gulp.dest(tempHtmpPath));
+    .pipe(renameAsset())
+    .pipe(gulp.dest(tempHtmlPath));
 });
 
 gulp.task('email-sass', function() {
   return gulp.src(paths.email.sass, {base: 'modules/*/server/email/html'})
     .pipe(sass())
     .pipe(autoprefixer())
-    .pipe(renameCss())
-    .pipe(gulp.dest(tempHtmpPath));
+    .pipe(renameAsset())
+    .pipe(gulp.dest(tempHtmlPath));
 });
 
 gulp.task('email-css', function() {
   return gulp.src(paths.email.css)
     .pipe(autoprefixer())
-    .pipe(renameCss())
-    .pipe(gulp.dest(tempHtmpPath));
+    .pipe(renameAsset())
+    .pipe(gulp.dest(tempHtmlPath));
 });
 
-function renameCss() {
+function renameAsset() {
   return rename(function (file) {
     //log(file.dirname);
     var parts = file.dirname.split(path.sep);
@@ -118,7 +118,7 @@ gulp.task('email-index-build', function() {
         }
 
         function getHtmlPath(name) {
-          return path.join(path.dirname(file.path), 'html', name + '.html');
+          return path.join(tempHtmlPath, name + '.html');
         }
       });
       cb();
@@ -138,23 +138,19 @@ gulp.task('email-index-build', function() {
   }
 });
 
-gulp.task('email-html', ['email-index-build'], function() {
-  return gulp.src(Object.keys(index).map(function (key) {
-      log(index[key].html);
-      return index[key].html;}))
-    .pipe(gulpSwig({
-      varControls: ['<{', '}>'],
-      tagControls: ['<%', '%>'],
-      cmtControls: ['<#', '#>'],
-      data: config.public
-    }))
-    .pipe(gulp.dest(tempHtmpPath));
+gulp.task('email-html', function() {
+  return gulp.src(paths.email.html)
+    .pipe(renameAsset())
+    .pipe(gulp.dest(tempHtmlPath));
 });
 
 gulp.task('email-text', ['email-index-build'], function() {
   return gulp.src(Object.keys(index).map(function (key) {
-      log(index[key].text);
-      return index[key].text;}))
+      var mail = index[key];
+      var text = mail.text;
+      mail.text = path.join(tempTextPath, path.basename(text));
+      return text;
+    }))
     .pipe(gulpSwig({
       varControls: ['<{', '}>'],
       tagControls: ['<%', '%>'],
@@ -166,16 +162,19 @@ gulp.task('email-text', ['email-index-build'], function() {
 });
 
 gulp.task('email-html-inline',
-  ['email-html', 'email-text', 'email-css', 'email-sass', 'email-less'],
+  ['email-html', 'email-css', 'email-sass', 'email-less'],
   function() {
-    Object.keys(index).forEach(function (key) {
-      var mail = index[key];
-      mail.html = path.join(tempHtmpPath, path.basename(mail.html));
-      mail.text = path.join(tempTextPath, path.basename(mail.text));
-    });
     return gulp.src(Object.keys(index).map(function (key) {
-        log(index[key].html);
-        return index[key].html;
+        var mail = index[key];
+        var html = mail.html;
+        mail.html = changeExtension(html, '.inline.html');
+        return html;
+      }))
+      .pipe(gulpSwig({
+        varControls: ['<{', '}>'],
+        tagControls: ['<%', '%>'],
+        cmtControls: ['<#', '#>'],
+        data: config.public
       }))
       .pipe(inlineCss())
       .pipe(htmlmin({
@@ -183,13 +182,13 @@ gulp.task('email-html-inline',
         minifyCSS: true
       }))
       .pipe(extReplace('.inline.html'))
-      .pipe(gulp.dest(tempHtmpPath));
+      .pipe(gulp.dest(tempHtmlPath));
   });
 
-gulp.task('email-index', ['email-html-inline'], function() {
+gulp.task('email-index', ['email-html-inline', 'email-text'], function() {
   Object.keys(index).forEach(function (key) {
     var mail = index[key];
-    mail.html = fs.readFileSync(changeExtension(mail.html, '.inline.html'), 'utf8');
+    mail.html = fs.readFileSync(mail.html, 'utf8');
     mail.text = fs.readFileSync(mail.text, 'utf8');
   });
   fs.writeFileSync(

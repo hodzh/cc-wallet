@@ -1,7 +1,9 @@
+'use strict';
+
 module.exports = {
   from: 'Jack Major <jackmajorgame@gmail.com>',
   mailer: {
-    service: 'Gmail', // Gmail, SMTP
+    service: 'gmail',
     auth: require('./email-auth')
   }
 };

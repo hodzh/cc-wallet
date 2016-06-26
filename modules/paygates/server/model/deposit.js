@@ -44,7 +44,7 @@ var schema = new Schema({
     require: true
   }
 }, {
-  discriminatorKey: 'kind',
+  discriminatorKey: 'type',
   collection: 'deposit'
 });
 

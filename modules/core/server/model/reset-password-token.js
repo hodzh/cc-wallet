@@ -12,7 +12,7 @@ var ResetPasswordTokenSchema = new Schema({
     require: true
   }
 }, {
-  discriminatorKey: 'action',
+  discriminatorKey: 'type',
   collection: 'token'
 });
 

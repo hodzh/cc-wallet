@@ -1,11 +1,17 @@
 'use strict';
 
-var controller = require('./controller');
+module.exports = routeFactory;
 
-module.exports = route;
+function routeFactory() {
 
-function route(router, auth) {
-  router.get('/', auth.isAuthenticated(), controller.me);
-  router.put('/password', auth.isAuthenticated(), controller.changePassword);
-  router.post('/', controller.create(auth));
+  var controllerFactory = require('./controller');
+  var controller = controllerFactory();
+  return route;
+
+  function route(router, auth) {
+    router.get('/', auth.isAuthenticated(), controller.me);
+    router.put('/password', auth.isAuthenticated(), controller.changePassword);
+    router.post('/', controller.create(auth));
+
+  }
 }

@@ -1,6 +1,5 @@
 Welcome to <{site.name}>!
 
-Please copy and paste the address into your
-browser to confirm your registration:
+Please copy and paste the address into your browser to confirm your registration:
 
 <{site.url}>/api/token/{{token}}

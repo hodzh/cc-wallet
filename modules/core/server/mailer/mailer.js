@@ -1,10 +1,12 @@
 var Promise = require('bluebird');
 var mailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('log4js').getLogger('email');
 var mails = require('../../../../public-email');
 
 module.exports = function(config){
-  var transport = mailer.createTransport('SMTP', config.mailer);
+  var transport = mailer.createTransport(
+    smtpTransport(config.mailer));
 
   return {
     send: send

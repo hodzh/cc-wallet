@@ -65,7 +65,7 @@ var schema = new Schema({
     confirmations: Number
   }
 }, {
-  discriminatorKey: 'kind',
+  discriminatorKey: 'type',
   collection: 'withdrawal'
 });
 

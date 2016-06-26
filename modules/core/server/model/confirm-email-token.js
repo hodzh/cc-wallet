@@ -11,7 +11,7 @@ var ConfirmEmailTokenSchema = new Schema({
     require: true
   }
 }, {
-  discriminatorKey: 'action',
+  discriminatorKey: 'type',
   collection: 'token'
 });
 

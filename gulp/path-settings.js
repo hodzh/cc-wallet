@@ -67,6 +67,7 @@ module.exports = {
     temp: 'temp/email',
     css: ['modules/*/server/email/**/*.css'],
     less: ['modules/*/server/email/**/*.less'],
-    sass: ['modules/*/server/email/**/*.sass']
+    sass: ['modules/*/server/email/**/*.sass'],
+    html: ['modules/*/server/email/**/*.html']
   }
 };
