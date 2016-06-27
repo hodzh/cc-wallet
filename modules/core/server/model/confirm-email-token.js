@@ -6,8 +6,9 @@ var Schema = mongoose.Schema;
 var Token = require('./token');
 
 var ConfirmEmailTokenSchema = new Schema({
-  email: {
-    type: String,
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User',
     require: true
   }
 }, {

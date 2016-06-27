@@ -12,14 +12,15 @@ module.exports = {
   init: init,
   isAuthenticated : isAuthenticated,
   hasRole : hasRole,
-  signToken : signToken
+  signToken : signToken,
+  isEmailVerify: isEmailVerify
 };
 
 function init(userModel, appConfig) {
   User = userModel;
   config = appConfig;
   validateJwt = expressJwt({
-    secret: config.web.jwt.secret
+    secret: config.auth.jwt.secret
   });
   var authSetup = require('./setup');
   authSetup(userModel, config);
@@ -57,22 +58,46 @@ function isAuthenticated() {
 
 /**
  * Checks if the user role meets the minimum requirements of the route
+ * @param roleRequired {String}
+ * @returns {*}
  */
 function hasRole(roleRequired) {
-  if (!roleRequired) {
-    throw new Error('Required role needs to be set');
-  }
-
   return compose()
     .use(isAuthenticated())
     .use(meetsRequirements);
 
   function meetsRequirements(req, res, next) {
-    if (config.shared.appConfig.userRoles.indexOf(req.user.role) >=
-      config.shared.appConfig.userRoles.indexOf(roleRequired)) {
-      next();
+    // check application config
+    if (!roleRequired ||
+      config.auth.role.indexOf(roleRequired) === -1) {
+      return forbidden();
     }
-    else {
+    // admin suits any role
+    if (req.user.role == 'admin' &&
+      config.auth.role.indexOf('admin') !== -1) {
+      return next();
+    }
+
+    // check user role
+    if (req.user.role != roleRequired) {
+      return forbidden();
+    }
+
+    // user email should be valid
+    if (config.auth.local.verify &&
+        req.user.role == 'user' &&
+        req.user.provider == 'local' &&
+        !req.user.emailValid) {
+      return forbidden();
+    }
+
+    // success auth
+    return next();
+
+    /**
+     * auth has failed
+     */
+    function forbidden() {
       res.status(403).send('Forbidden');
     }
   }
@@ -87,8 +112,12 @@ function signToken(id, role) {
       _id: id,
       role: role
     },
-    config.web.jwt.secret,
+    config.auth.jwt.secret,
     {
-      expiresIn: config.web.jwt.expiresIn
+      expiresIn: config.auth.jwt.expiresIn
     });
+}
+
+function isEmailVerify(){
+  return config.auth.local.verify;
 }

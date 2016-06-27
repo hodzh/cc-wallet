@@ -14,6 +14,10 @@ var UserSchema = new Schema({
     unique: true,
     require: true
   },
+  emailValid: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: String,
     default: 'user',
@@ -77,10 +81,23 @@ UserSchema
 UserSchema.methods = {
   authenticate: authenticate,
   makeSalt: makeSalt,
-  encryptPassword: encryptPassword
+  encryptPassword: encryptPassword,
+  sanitize: sanitize
 };
 
 module.exports = mongoose.model('User', UserSchema);
+
+/**
+ * returns only non secret data
+ */
+function sanitize(){
+  return {
+    _id: this._id.toString(),
+    email: this.email,
+    emailValid: this.emailValid,
+    role: this.role
+  };
+}
 
 function getProfile() {
   return {

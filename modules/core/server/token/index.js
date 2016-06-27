@@ -4,23 +4,47 @@ module.exports = function(config){
 
   var Promise = require('bluebird');
   var events = new (require('events').EventEmitter)();
-  var iface = require('./jwt')(config);
+  var token = require('./jwt')(config);
 
   return {
     create: create,
     verify: verify,
 
+    /**
+     * add event listener
+     * @param {String} event moniker
+     * @param {Function} event handler
+     * @returns {*}
+     */
     on: events.on.bind(events),
+
+    /**
+     * remove event listener
+     * @param {String} event moniker
+     * @param {Function} event handler
+     * @returns {*}
+     */
     off: events.removeListener.bind(events)
   };
 
+  /**
+   * Create token code
+   * @param {Object} data to encode
+   * @returns {String} token code string
+   */
   function create(data) {
-    return iface.create(data);
+    return token.create(data);
   }
+
+  /**
+   * Decode and verify token code, fire event if success
+   * @param {String} code
+   * @returns {Object} decoded data object if success
+   */
   function verify(code) {
     return Promise.resolve()
       .then(function(){
-        return iface.verify(code);
+        return token.verify(code);
       })
       .then(function(token){
         events.emit(token.type, token);

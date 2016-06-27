@@ -8,7 +8,7 @@ function routeFactory(config) {
   return route;
 
   function route(router, auth) {
-    router.get('/', auth.isAuthenticated(), controller.index);
-    router.get('/:id', auth.isAuthenticated(), controller.show);
+    router.get('/', auth.hasRole('user'), controller.index);
+    router.get('/:id', auth.hasRole('user'), controller.show);
   }
 }

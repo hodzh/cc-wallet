@@ -8,13 +8,105 @@ var User = require('../../../model/user');
 
 module.exports = controllerFactory;
 
-function controllerFactory() {
+function controllerFactory(token, mail) {
+
+  token.on('confirmEmail', confirmEmail);
+
   return {
     create: create,
     changePassword: changePassword,
-    me: me,
-    authCallback: authCallback
+    me: me
   };
+
+  /**
+   * Change a users password
+   */
+  function changePassword(req, res, next) {
+    return Promise.resolve()
+      .then(function(){
+        var userId = req.user._id;
+        return User.findById(userId);
+      })
+      .then(function (user) {
+        var oldPass = String(req.body.oldPassword);
+        var newPass = String(req.body.newPassword);
+        if (user.authenticate(oldPass)) {
+          user.password = newPass;
+          return user.save()
+            .then(function () {
+              res.status(204).end();
+            })
+            .catch(validationError(res));
+        } else {
+          return res.status(403).end();
+        }
+      })
+      .catch(handleError(res));
+  }
+
+  /**
+   * Get my info
+   */
+  function me(req, res, next) {
+
+    return Promise.resolve()
+      .then(function(){
+        var userId = req.user._id;
+        return User.findOne({_id: userId}, '-salt -password');
+      })
+      .then(function (user) {
+        if (!user) {
+          return res.status(401).end();
+        }
+        // don't ever give out the password or salt
+        res.json(user.sanitize());
+      })
+      .catch(function (err) {
+        return next(err);
+      });
+  }
+
+  /**
+   * Creates a new user
+   */
+  function create(auth) {
+    return function (req, res, next) {
+      var user;
+      return Promise.resolve()
+        .then(function(){
+          var newUser = new User(req.body);
+          newUser.provider = 'local';
+          newUser.role = 'user';
+          user = newUser;
+          return newUser.save();
+        })
+        .spread(function (user) {
+          var code = auth.signToken(user._id, user.role);
+          res.json({token: code});
+          return user;
+        })
+        .catch(validationError(res))
+        .then(function () {
+          if (!auth.isEmailVerify()) {
+            return;
+          }
+          // create verification code
+          var code = token.create({
+            type: 'confirmEmail',
+            user: user._id
+          });
+          // send email with code
+          return mail.send({
+            to: user.email
+          }, 'confirmEmail', {
+            token: code
+          });
+        })
+        .catch(function(err) {
+          log.error(err);
+        });
+    };
+  }
 
   function validationError(res, statusCode) {
     statusCode = statusCode || 422;
@@ -30,68 +122,24 @@ function controllerFactory() {
     };
   }
 
-  /**
-   * Change a users password
-   */
-  function changePassword(req, res, next) {
-    var userId = req.user._id;
-    var oldPass = String(req.body.oldPassword);
-    var newPass = String(req.body.newPassword);
-
-    User.findById(userId)
-      .then(function (user) {
-        if (user.authenticate(oldPass)) {
-          user.password = newPass;
-          return user.save()
-            .then(function () {
-              res.status(204).end();
-            })
-            .catch(validationError(res));
-        } else {
-          return res.status(403).end();
+  function confirmEmail(token){
+    return Promise.resolve()
+      .then(function() {
+        return User.update({
+          _id: token.user
+        }, {
+          $set: {
+            emailValid: true
+          }
+        });
+      })
+      .then(function (result) {
+        if (!result || !result.nModified) {
+          log.error('fail to confirm email');
         }
-      });
-  }
-
-  /**
-   * Get my info
-   */
-  function me(req, res, next) {
-    var userId = req.user._id;
-
-    User.findOne({_id: userId}, '-salt -password')
-      .then(function (user) { // don't ever give out the password or salt
-        if (!user) {
-          return res.status(401).end();
-        }
-        res.json(user);
       })
       .catch(function (err) {
-        return next(err);
+        log.error('fail to confirm email');
       });
   }
-
-  /**
-   * Authentication callback
-   */
-  function authCallback(req, res, next) {
-    res.redirect('/');
-  }
-
-  /**
-   * Creates a new user
-   */
-  function create(auth) {
-    return function (req, res, next) {
-      var newUser = new User(req.body);
-      newUser.provider = 'local';
-      newUser.role = 'user';
-      newUser.save()
-        .spread(function (user) {
-          var token = auth.signToken(user._id, user.role);
-          res.json({token: token});
-        })
-        .catch(validationError(res));
-    }
-  }
-};
+}

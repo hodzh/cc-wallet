@@ -1,11 +1,22 @@
+var Promise = require('bluebird');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var errorMessage = 'Incorrect email or password.';
 
+/**
+ * Find the user by email, validate password
+ * @param User {Object} user collection model
+ * @param email {String} user email
+ * @param password {String} user password
+ * @param done {Function} callback
+ */
 function localAuthenticate(User, email, password, done) {
-  User.findOne({
-      email: email.toLowerCase()
+  return Promise.resolve()
+    .then(function() {
+      return User.findOne({
+        email: email.trim().toLowerCase()
+      });
     })
     .then(function(user) {
       if (!user) {
@@ -33,7 +44,7 @@ function localAuthenticate(User, email, password, done) {
     });
 }
 
-exports.setup = function(User, config) {
+module.exports.setup = function(User, config) {
   passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'

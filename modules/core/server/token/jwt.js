@@ -8,6 +8,11 @@ module.exports = function(config){
     verify: verify
   };
 
+  /**
+   * Create token code
+   * @param {Object} data to encode
+   * @returns {String} token code string
+   */
   function create(data) {
     return jwt.sign(data,
       config.secret, {
@@ -16,6 +21,11 @@ module.exports = function(config){
       });
   }
 
+  /**
+   * Decode and verify token code
+   * @param {String} code
+   * @returns {Object} decoded data object if success
+   */
   function verify(code) {
     return jwt.verify(code,
       config.secret, {

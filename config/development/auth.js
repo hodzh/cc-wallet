@@ -1,10 +1,38 @@
 'use strict';
 
 module.exports = {
-  local: {
-    enabled: true
+  /**
+   * user roles supported by application
+   */
+  role: ['user', 'admin', 'paygate'],
+
+  /**
+   * json web token settings
+   */
+  jwt: {
+    secret: 'G5rT9pLnljwVvCdcmUlM6kiC097IGC0I5228kTjuqUxiACYvXJl7E42KYfcUEWf3',
+    expiresIn: 60 * 60 * 5 /* seconds */
   },
-  landingPage: '/',
+
+  /**
+   * redirect
+   */
+  // landingPage: '/',
+
+  /**
+   * auth using email
+   */
+  local: {
+    /**
+     * enable email auth
+     */
+    enabled: true,
+    /**
+     * validate user email by sending a token
+     */
+    verify: true
+  },
+
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'APP_SECRET',

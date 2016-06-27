@@ -2,18 +2,16 @@
 
 var path = require('path');
 
-var rootPath = path.normalize(__dirname + '/../..');
-
 module.exports = {
 
   env: process.env.NODE_ENV || 'development',
-  root: rootPath,
+  root: path.normalize(__dirname + '/../..'),
 
+  app: require('./app'),
+  assets: require('./assets'),
+  currency: require('./currency'),
   db: require('./db'),
   web: require('./web'),
   public: require('./public'),
-  assets: require('./assets'),
-  shared: require('./app-config.public'),
-  currency: require('./currency'),
   modules: require('./modules')
 };

@@ -87,7 +87,7 @@ function start(callback){
 
     web.route({
       '/auth/local': require('./auth/local'),
-      '/api/me': require('./api/user/user')(),
+      '/api/me': require('./api/user/user')(app.token, app.mail),
       '/api/token': require('./api/user/token')(app.token),
       '/aapi/user': require('./api/admin/user')
     });
