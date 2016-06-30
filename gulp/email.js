@@ -42,6 +42,7 @@ var config = require('../config');
 
 var tempHtmlPath = path.join(paths.email.temp, 'html');
 var tempTextPath = path.join(paths.email.temp, 'text');
+var finalHtml = path.join(tempHtmlPath,'*.inline.html');
 
 function renameAsset() {
   return rename(function (file) {
@@ -210,17 +211,20 @@ gulp.task('email-watch', function () {
     paths.email.css, paths.email.sass, paths.email.less);
   //log(everything);
   gulp.watch(everything, ['email-build']);
-  gulp.watch(tempHtmlPath + '/*.inline.html')
-    .on('change', browserSync.reload);
+
+  // use browsersync 'files' option to reload
+  //gulp.watch(finalHtml)
+  //  .on('change', browserSync.reload);
 });
 
-gulp.task('email-browser-sync', function() {
+gulp.task('email-browser-sync', ['email-build'], function() {
+  // log(finalHtml);
   browserSync.init({
     server: {
       baseDir: tempHtmlPath,
       directory: true
     },
-    files: tempHtmlPath + '/*.inline.html'
+    files: finalHtml
   });
 });
 

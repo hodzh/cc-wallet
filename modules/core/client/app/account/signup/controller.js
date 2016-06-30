@@ -8,8 +8,6 @@
     vm.user = {};
     vm.errors = {};
     vm.submitted = false;
-    vm.Auth = Auth;
-    vm.$state = $state;
 
     vm.register = function(form) {
       vm.submitted = true;
@@ -18,13 +16,13 @@
         return;
       }
 
-      vm.Auth.createUser({
+      Auth.createUser({
           email: vm.user.email,
           password: vm.user.password
         })
         .then(function() {
           // Account created, redirect to home
-          vm.$state.go('main');
+          $state.go('main');
         })
         .catch(function(err) {
           err = err.data;
