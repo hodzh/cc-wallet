@@ -103,7 +103,8 @@ schema.statics.getAccounts = function (type, userId) {
   });
 };
 
-schema.statics.getUserData = function (account) {
+schema.methods.sanitize = function () {
+  let account = this;
   return {
     _id: String(account._id),
     enable: account.enable,
@@ -113,8 +114,6 @@ schema.statics.getUserData = function (account) {
   }
 };
 
-schema.methods.getUserData = function () {
-  return this.model(this.constructor.modelName).getUserData(this);
-};
+schema.plugin(require('../../../core/server/db/query'));
 
 module.exports = mongoose.model('Account', schema);

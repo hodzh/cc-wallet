@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1>Change Password</h1>
+  </div>
+  <div class="col-sm-12">
+    <form
+      class="form"
+      role="form"
+      [formGroup]="settingsForm"
+      (ngSubmit)="changePassword()">
+      <div
+        class="form-group"
+        [class.has-success]="password.valid && submitted"
+        [class.has-error]="!password.valid && submitted">
+        <label>Current Password</label>
+        <cc-password-input
+          [formControl]="password"
+        ></cc-password-input>
+        <p
+          class="help-block"
+          *ngIf="submitted && settingsForm.controls.password.errors?.required">
+          Please enter a password.
+        </p>
+      </div>
+      <div
+        class="form-group"
+        [class.has-success]="newPassword.valid && submitted"
+        [class.has-error]="!newPassword.valid && submitted">
+        <label>New Password</label>
+        <cc-password-input
+          name="newPassword"
+          [formControl]="newPassword"
+        ></cc-password-input>
+        <p class="help-block"
+           *ngIf="(newPassword.errors?.minlength ||
+            newPassword.errors?.required) && submitted">
+          Password must be at least {{MIN_PASSWORD_LENGTH}} characters.
+        </p>
+        <p class="help-block"
+           *ngIf="newPassword.errors?.maxlength && submitted">
+          Password must be less then {{MAX_PASSWORD_LENGTH}} characters.
+        </p>
+      </div>
+      <div
+        class="form-group"
+        [class.has-success]="(confirmPassword.valid &&
+            settingsForm.controls.matchingPassword.valid) &&
+             submitted"
+        [class.has-error]="(!confirmPassword.valid ||
+            !settingsForm.controls.matchingPassword.valid) &&
+             submitted">
+        <label>Confirm New Password</label>
+        <cc-password-input
+          name="confirmPassword"
+          placeholderHidden="Repeat Password"
+          placeholderVisible="Repeat Password"
+          [formControl]="confirmPassword"
+        ></cc-password-input>
+        <p class="help-block"
+           *ngIf="confirmPassword.errors?.required && submitted">
+          Repeat your password.
+        </p>
+        <p class="help-block"
+           *ngIf="!confirmPassword.errors?.required &&
+            settingsForm.controls.matchingPassword.errors?.areEqual &&
+             submitted">
+          Passwords must match.
+        </p>
+      </div>
+      <p class="help-block"> {{ message }} </p>
+      <button class="btn btn-lg btn-primary" type="submit">Save changes</button>
+    </form>
+  </div>
+</div>

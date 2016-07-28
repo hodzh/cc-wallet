@@ -13,7 +13,7 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var morgan = require('morgan');
 
-var log = require('log4js').getLogger('main');
+var log = require('log4js').getLogger('core');
 
 var app = express();
 var server = http.createServer(app);

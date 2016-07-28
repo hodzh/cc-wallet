@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1>Sign up</h1>
+  </div>
+
+  <div class="col-sm-12">
+    <form
+      class="form"
+      role="form"
+      [formGroup]="signupForm"
+      (ngSubmit)="signup()">
+      <div
+        class="form-group"
+        [class.has-success]="signupForm.controls.email.valid && submitted"
+        [class.has-error]="!signupForm.controls.email.valid && submitted">
+
+        <label>Email</label>
+        <cc-email-input
+          [formControl]="signupForm.controls.email"
+        ></cc-email-input>
+        <p class="help-block"
+           *ngIf="signupForm.controls.email.errors?.emailFormat && submitted">
+          Doesn't look like a valid email.
+        </p>
+        <p
+          class="help-block"
+          *ngIf="signupForm.controls.email.errors?.required && submitted">
+          What's your email address?
+        </p>
+        <p class="help-block"
+           *ngIf="signupForm.controls.email.errors">
+          {{ errors.email }}
+        </p>
+      </div>
+      <div
+        class="form-group"
+        [class.has-success]="password.valid && submitted"
+        [class.has-error]="!password.valid && submitted">
+        <label>Password</label>
+        <cc-password-input
+          [formControl]="password"
+        ></cc-password-input>
+        <p class="help-block"
+           *ngIf="(password.errors?.minlength ||
+            password.errors?.required) && submitted">
+          Password must be at least {{MIN_PASSWORD_LENGTH}} characters.
+        </p>
+        <p class="help-block"
+           *ngIf="password.errors?.maxlength && submitted">
+          Password must be less then {{MAX_PASSWORD_LENGTH}} characters.
+        </p>
+      </div>
+      <div
+        class="form-group"
+        [class.has-success]="(confirmPassword.valid &&
+            signupForm.controls.matchingPassword.valid) &&
+             submitted"
+        [class.has-error]="(!confirmPassword.valid ||
+            !signupForm.controls.matchingPassword.valid) &&
+             submitted">
+        <label>Confirm Password</label>
+        <cc-password-input
+          name="confirmPassword"
+          placeholderHidden="Repeat Password"
+          placeholderVisible="Repeat Password"
+          [formControl]="confirmPassword"
+        ></cc-password-input>
+        <p class="help-block"
+           *ngIf="confirmPassword.errors?.required && submitted">
+          Repeat your password.
+        </p>
+        <p class="help-block"
+           *ngIf="!confirmPassword.errors?.required &&
+            signupForm.controls.matchingPassword.errors?.areEqual &&
+             submitted">
+          Passwords must match.
+        </p>
+      </div>
+      <div>
+        <button class="btn btn-inverse btn-lg btn-register" type="submit">
+          Sign up
+        </button>
+        <a class="btn btn-default btn-lg btn-login" [routerLink]="['/login']">
+          Login
+        </a>
+      </div>
+      <hr/>
+      <div class="row" *ngIf="false">
+        <div class="col-sm-4 col-md-3">
+          <cc-oauth-buttons class="btn-block"></cc-oauth-buttons>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

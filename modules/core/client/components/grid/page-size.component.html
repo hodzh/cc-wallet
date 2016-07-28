@@ -1,0 +1,12 @@
+<ul class="pagination">
+  <li
+    *ngFor="let sizeVal of sizes"
+    [class.active]="sizeVal===size"
+  >
+    <a
+      (click)="setCurrentSize(sizeVal)"
+    >
+      {{sizeVal}}
+    </a>
+  </li>
+</ul>

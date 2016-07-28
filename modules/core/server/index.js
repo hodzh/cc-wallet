@@ -1,6 +1,7 @@
 'use strict';
 
 var async = require('async');
+var log = require('log4js').getLogger('core');
 
 var app = {
   config: null,
@@ -95,3 +96,13 @@ function start(callback){
     callback();
   }
 }
+
+process.on('unhandledRejection', function (reason, p) {
+  throw reason;
+});
+
+process.on('uncaughtException', function (error) {
+  log.error(error);
+  // todo exit gracefully
+  process.exit(1);
+});

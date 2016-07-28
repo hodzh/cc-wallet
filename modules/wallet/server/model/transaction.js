@@ -94,9 +94,11 @@ schema.statics.getStatistics = function(currency, callback) {
     });
 };
 
-schema.methods.getUserData = function () {
+schema.methods.sanitize = function () {
   var me = this;
   return {
+    _id: me._id.toString(),
+    state: me.state,
     created: me.created,
     updated: me.updated,
     category: me.category,
@@ -156,5 +158,7 @@ schema.statics.outcome = function (adminId, accountId, data) {
 
 require('./transaction-events')(schema);
 require('./transaction-process')(schema, Account);
+
+schema.plugin(require('../../../core/server/db/query'));
 
 module.exports = mongoose.model('Transaction', schema);

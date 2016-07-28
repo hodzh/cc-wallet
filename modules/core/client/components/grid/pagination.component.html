@@ -1,0 +1,11 @@
+<ul class="pagination">
+  <li
+    *ngFor="let page of pages"
+    [class.active]="page==currentPage"
+    [class.disabled]="page==='...'">
+    <a
+      (click)="setCurrentPage($event.target.outerText)">
+      {{page}}
+    </a>
+  </li>
+</ul>

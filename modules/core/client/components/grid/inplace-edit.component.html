@@ -1,0 +1,4 @@
+<div>
+  <span (click)="edit(value)" [hidden]="editing">{{ value }}</span>
+  <input #inlineEditControl class="form-control" [(ngModel)]="value" [hidden]="!editing"/>
+</div>

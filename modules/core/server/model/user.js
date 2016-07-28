@@ -38,11 +38,6 @@ var UserSchema = new Schema({
  * Virtuals
  */
 
-// Public profile information
-UserSchema
-    .virtual('profile')
-    .get(getProfile);
-
 // Non-sensitive info we'll be putting in the token
 UserSchema
   .virtual('token')
@@ -85,6 +80,8 @@ UserSchema.methods = {
   sanitize: sanitize
 };
 
+UserSchema.plugin(require('../db/query'));
+
 module.exports = mongoose.model('User', UserSchema);
 
 /**
@@ -92,24 +89,17 @@ module.exports = mongoose.model('User', UserSchema);
  */
 function sanitize(){
   return {
-    _id: this._id.toString(),
+    // _id: this._id.toString(),
     email: this.email,
     emailValid: this.emailValid,
     role: this.role
   };
 }
 
-function getProfile() {
-  return {
-    'name': this.name,
-    'role': this.role
-  };
-}
-
 function getToken() {
   return {
-    '_id': this._id,
-    'role': this.role
+    _id: this._id,
+    role: this.role
   };
 }
 

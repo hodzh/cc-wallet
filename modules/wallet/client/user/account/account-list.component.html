@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Accounts</h1>
+    </div>
+    <div class="col-sm-12">
+      <div>
+        <div class="">
+          <span>
+            <input type="checkbox" name="hideZero" value="" id="hideZeroBalances">
+            <label for="hideZeroBalances">Hide 0 Balances</label>
+          </span>
+        </div>
+        <div>
+          <div>
+            <form>
+              <input type="search" autocomplete="off" required="">
+              <span class="glyphicon glyphicon-search"></span>
+              <button type="reset">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <cc-grid [schema]="schema" [source]="source"></cc-grid>
+    </div>
+  </div>
+</div>

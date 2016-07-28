@@ -24,9 +24,16 @@ function handleError(res, statusCode) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -password')
-    .then(function(users) {
-      res.status(200).json(users);
+  Promise.resolve()
+    .then(function () {
+      return User.query({}, {
+        page: req.query.page,
+        limit: req.query.limit
+      });
+    })
+    .then(function (result) {
+      res.status(200)
+        .json(result);
     })
     .catch(handleError(res));
 };
@@ -36,13 +43,15 @@ exports.index = function(req, res) {
  */
 exports.show = function(req, res, next) {
   var userId = req.params.id;
-
-  User.findById(userId)
+  Promise.resolve()
+    .then(function () {
+      return User.findById(userId);
+    })
     .then(function(user) {
       if (!user) {
         return res.status(404).end();
       }
-      res.json(user.profile);
+      res.json(user.sanitize());
     })
     .catch(function(err) {
       return next(err);
@@ -54,33 +63,31 @@ exports.show = function(req, res, next) {
  */
 exports.update = function(req, res, next) {
   var userId = req.params.id;
-
-  User.findById(userId)
-    .then(
-      function(user) {
-        if (!user) {
-          return res.status(404).end();
-        }
-        if (req.body.name) {
-          user.name = req.body.name;
-        }
-        if (req.body.email) {
-          user.email = req.body.email;
-        }
-        if (req.body.password) {
-          user.password = req.body.password;
-        }
-        if (req.body.role) {
-          user.role = req.body.role;
-        }
-        return user.save();
+  Promise.resolve()
+    .then(function () {
+      return User.findById(userId);
+    })
+    .then(function(user) {
+      if (!user) {
+        return res.status(404).end();
       }
-    )
-    .then(
-      function(user){
-        res.json(user.profile);
+      if (req.body.name) {
+        user.name = req.body.name;
       }
-    )
+      if (req.body.email) {
+        user.email = req.body.email;
+      }
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+      if (req.body.role) {
+        user.role = req.body.role;
+      }
+      return user.save();
+    })
+    .then(function(user){
+      res.json(user.profile);
+    })
     .catch(function(err) {
       return next(err);
     });
@@ -90,7 +97,10 @@ exports.update = function(req, res, next) {
  * Deletes a user
  */
 exports.destroy = function(req, res) {
-  User.findByIdAndRemove(req.params.id)
+  Promise.resolve()
+    .then(function () {
+      return User.findByIdAndRemove(req.params.id);
+    })
     .then(function() {
       res.status(204).end();
     })

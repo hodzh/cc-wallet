@@ -1,4 +1,6 @@
 module.exports = {
+
+  // any js file
   js: [
     '*.js',
     'config/**/*.js',
@@ -6,6 +8,15 @@ module.exports = {
     'tools/**/*.js',
     'modules/**/*.js'],
 
+  // any ts file
+  ts: [
+    '*.ts',
+    'config/**/*.ts',
+    'gulp/**/*.ts',
+    'tools/**/*.ts',
+    'modules/**/*.ts'],
+
+  // any json file
   json: [
     '*.json',
     'config/**/*.json',
@@ -13,55 +24,55 @@ module.exports = {
     'tools/**/*.json',
     'modules/**/*.json'],
 
-  jsServer: [
-    'config/**/!(*.spec|*.mock|*integration).js',
-    'modules/*/server/**/!(*.spec|*.mock|*integration).js'],
+  // backend settings
+  server: {
+    js: [
+      'config/**/!(*.spec|*.mock|*integration).js',
+      'modules/*/server/**/!(*.spec|*.mock|*integration).js'],
+    mochaConf: './mocha.conf.js'
+  },
 
-  jsClient: [
-    'modules/*/client/**/!(*.spec|*.mock|*.sprite).js'],
+  // frontend settings
+  client: {
+    public: 'public',
+    temp: 'temp/client',
+    favicon: 'modules/core/client/favicon.ico',
+    index: 'modules/core/client/index.html',
+    indexTs: 'modules/core/client/index.ts',
+    karmaConf: 'karma.conf.js',
 
-  injectJs: [
-    'modules/*/client/**/!(*.spec|*.mock|*.sprite).js'],
+    js: [
+      'modules/*/client/**/!(*.spec|*.mock|*.sprite).js'],
+    ts: [
+      'modules/*/client/**/!(*.spec|*.mock|*.sprite).ts'],
+    css: [
+      'modules/*/client/**/*.css'],
+    html: [
+      'modules/*/client/**/*.html'],
+    less: [
+      'modules/*/client/**/*.less'],
+    sass: [
+      'modules/*/client/**/*.scss'],
+    images: [
+      'modules/*/client/images/**/*.{png,jpg}'],
+    sounds: [
+      'modules/*/client/assets/**/*.{mp3,ogg}'],
+    sprites: [
+      'modules/*/client/sprites/**/*.sprite.js'],
 
-  injectDev: [
-    'modules/*/client/**/*.{mock,spec}.js',
-    'modules/*/client/**/*.html'],
+    boot: [
+      'modules/**/client/**/*.boot.ts'],
 
-  jsMocha: [
-    'modules/*/server/**/*.{spec,integration}.js'],
+    assets: [
+      'node_modules/angular2/bundles/angular2-polyfills.js',
+      'node_modules/systemjs/dist/system.src.js',
+      'node_modules/rxjs/bundles/Rx.js',
+      'node_modules/angular2/bundles/angular2.dev.js',
+      'node_modules/angular2/bundles/router.dev.js'
+    ]
+  },
 
-  jsShared: [
-    'config/**/*.public.js',
-    'modules/*/{server}/**/*.public.js'],
-
-  css: [
-    'modules/*/client/**/*.css'],
-
-  html: [
-    'modules/*/client/**/*.html'],
-
-  less: [
-    'modules/*/client/**/*.less'],
-
-  sass:[
-    'modules/*/client/**/*.scss'],
-
-  assets: [
-    'modules/*/client/assets/**/*.{png,jpg}'],
-
-  sounds: [
-    'modules/*/client/assets/**/*.{mp3,ogg}'],
-
-  sprites: [
-    'modules/*/client/sprites/**/*.sprite.js'],
-
-  favicon: 'modules/core/client/favicon.ico',
-  index: 'modules/core/client/index.html',
-  karmaConf: 'karma.conf.js',
-  mochaConf: './mocha.conf.js',
-  publicRoot: 'public',
-  tempRoot: 'temp/client',
-
+  // email builder settings
   email: {
     public: 'public-email',
     temp: 'temp/email',

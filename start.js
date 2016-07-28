@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('log4js').getLogger('main');
+var log = require('log4js').getLogger('core');
 var config = require('./config');
 var server = require('./modules/core/server');
 server.init(config);
