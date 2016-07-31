@@ -4,8 +4,7 @@ module.exports = routeFactory;
 
 function routeFactory() {
 
-  var controllerFactory = require('./controller');
-  var controller = controllerFactory();
+  var controller = require('./controller');
   return route;
 
   function route(router, auth) {

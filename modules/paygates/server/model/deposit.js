@@ -137,4 +137,6 @@ schema.statics.on = DepositEvents.on.bind(DepositEvents);
 schema.statics.off = DepositEvents.removeListener.bind(DepositEvents);
 schema.statics.once = DepositEvents.once.bind(DepositEvents);
 
+schema.plugin(require('../../../core/server/db/query'));
+
 module.exports = mongoose.model('Deposit', schema);

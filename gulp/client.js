@@ -63,7 +63,7 @@ gulp.task('tsconfig', function (callback) {
   });
 });
 
-gulp.task('boot-inject', function () {
+function injectBoot() {
   var dest = path.dirname(paths.indexTs);
   return gulp.src(paths.indexTs)
     .pipe(plugin.inject(
@@ -73,14 +73,16 @@ gulp.task('boot-inject', function () {
         starttag: '// inject boot',
         endtag: '// end inject',
         transform: function (filepath) {
-          var importPath = '../../..' + filepath; 
+          var importPath = '../../..' + filepath;
           return ['import \'', importPath, '\';'].join('');
         }
       }))
     .pipe(gulp.dest(dest));
-});
+}
 
-gulp.task('compile', ['tsconfig', 'boot-inject'], function (callback) {
+gulp.task('inject-boot', injectBoot);
+
+gulp.task('compile', ['tsconfig', 'inject-boot'], function (callback) {
   var compiler = webpack(webpackOptions);
   compiler.run(function(err, stats) {
     if (err) {
@@ -178,6 +180,13 @@ gulp.task('client-watch', ['client-build'], function () {
     .on('change', livereload.changed);
   
   gulp.watch(paths.ts, ['tsconfig']);
+  gulp.watch(paths.boot, function(event){
+    if (event.type === 'changed') {
+      return;
+    }
+    //return injectBoot();
+    gulp.run('inject-boot');
+  });
   
   /*gulp.watch(Array.concat.call(
    paths.js,

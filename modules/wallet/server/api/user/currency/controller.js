@@ -6,6 +6,6 @@ module.exports = function(config) {
   };
   
   function index(req, res) {
-    res.json(config.currencies);
+    res.json(Object.values(config.currency));
   }
 };

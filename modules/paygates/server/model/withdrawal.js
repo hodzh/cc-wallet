@@ -270,4 +270,6 @@ schema.methods.sign = function () {
     });
 };
 
+schema.plugin(require('../../../core/server/db/query'));
+
 module.exports = mongoose.model('Withdrawal', schema);

@@ -11,20 +11,23 @@ import { HTTP_PROVIDERS } from '@angular/http';
 
 // inject boot
 import '../../../modules/wallet/client/admin/home-page.boot.ts';
-import '../../../modules/wallet/client/admin/main-menu.boot.ts';
-import '../../../modules/wallet/client/admin/routes.boot.ts';
-import '../../../modules/wallet/client/user/home-page.boot.ts';
+import '../../../modules/wallet/client/user/currency/provider.boot.ts';
 import '../../../modules/wallet/client/user/main-menu.boot.ts';
+import '../../../modules/wallet/client/user/home-page.boot.ts';
+import '../../../modules/wallet/client/admin/routes.boot.ts';
+import '../../../modules/wallet/client/admin/main-menu.boot.ts';
 import '../../../modules/vp/client/admin/main-menu.boot.ts';
-import '../../../modules/paygates/client/admin/main-menu.boot.ts';
 import '../../../modules/paygates/client/admin/routes.boot.ts';
-import '../../../modules/paygates-bitcoin/client/admin/main-menu.boot.ts';
+import '../../../modules/paygates/client/user/account-actions.boot.ts';
+import '../../../modules/paygates/client/admin/main-menu.boot.ts';
 import '../../../modules/paygates-bitcoin/client/admin/routes.boot.ts';
+import '../../../modules/paygates-bitcoin/client/admin/main-menu.boot.ts';
 // end inject
 
 import { App } from './app';
 import { routes } from './app.routes';
-import { AUTH_PROVIDERS } from "./auth";
+import { AUTH_PROVIDERS } from './auth';
+import { ROOT_PROVIDERS } from './common/root-providers';
 
 //require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css');
 //require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css.map');
@@ -37,6 +40,7 @@ bootstrap(
     provideForms(),
     provideRouter(routes),
     HTTP_PROVIDERS,
-    ...AUTH_PROVIDERS
+    ...AUTH_PROVIDERS,
+    ...ROOT_PROVIDERS
   ]
 );

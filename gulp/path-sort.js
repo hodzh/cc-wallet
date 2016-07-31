@@ -10,6 +10,6 @@ module.exports = function(a, b) {
 function getModule(file) {
   var filepath = file.path;
   var match = filepath.match(/.*[\/\\]modules[\/\\]([^\/\\]*)[\/\\].*/);
-  log(match[1]);
+  //log(match[1]);
   return match[1];
 }
