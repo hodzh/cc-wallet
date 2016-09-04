@@ -4,7 +4,7 @@ function getPathSettings() {
 
   var paths = require('./path-settings');
 
-  // replace 'modules/*/' with 'modules/{list of modules}/
+  // replace 'src/*/' with 'src/{list of modules}/
   // regarding current configuration
 
   var config = require('../config');

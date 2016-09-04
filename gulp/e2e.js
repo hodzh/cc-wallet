@@ -21,7 +21,7 @@ gulp.task('e2e.update', function (done) {
 });
 
 gulp.task('e2e.startServer', ['e2e.update'], function (done) {
-  var server = require('../modules/core/server');
+  var server = require('../dist/server');
   var config = require('../config');
   config.setEnv('development');
   server.start(config, onStart);

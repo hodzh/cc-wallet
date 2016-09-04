@@ -86,7 +86,7 @@ function injectBoot() {
 
 gulp.task('inject-boot', injectBoot);
 
-gulp.task('compile', ['tsconfig', 'inject-boot'], function (callback) {
+gulp.task('compile', ['inject-boot'], function (callback) {
   var compiler = webpack(webpackOptions);
   compiler.run(function (err, stats) {
     if (err) {
@@ -111,7 +111,7 @@ gulp.task('bootstrap-fonts', function () {
 });
 
 gulp.task('html', function () {
-  return gulp.src('modules/core/client/index.html')
+  return gulp.src('src/core/client/index.html')
     .pipe(gulp.dest(paths.client.public));
 });
 
@@ -175,12 +175,11 @@ gulp.task('favicon', function () {
  });
  });*/
 
-gulp.task('client-watch', ['client-build'], function () {
+gulp.task('watch', ['client-build'], function () {
   livereload.listen({interval: 500});
   gulp.watch(path.join(paths.client.public, '**/*'))
     .on('change', livereload.changed);
 
-  //gulp.watch(paths.client.ts, ['tsconfig']);
   gulp.watch(paths.client.boot, function (event) {
     if (event.type === 'changed') {
       return;
@@ -194,7 +193,7 @@ gulp.task('client-watch', ['client-build'], function () {
 
   gulp.watch(paths.client.images, ['images']);
 
-  const config = Object.create(webpackOptions[0]);
+  const config = Object.create(webpackOptions);
   config.watch = true;
   //config.cache = true;
   config.debug = true;
@@ -268,22 +267,6 @@ gulp.task('server-modules', function () {
     code);
 });
 
-gulp.task('server-watch', ['server-modules'], function () {
-  const config = Object.create(webpackOptions[1]);
-  config.watch = true;
-  //config.cache = true;
-  config.debug = true;
-  config.bail = false;
-
-  webpack(config, function (error, stats) {
-    if (error) {
-      log('[webpack]', error);
-      return;
-    }
-    showWebpackSummary(stats);
-  });
-});
-
 function showWebpackSummary(stats) {
   log('[webpack]', stats.toString({
     colors: colors.supportsColor,
@@ -313,7 +296,7 @@ function renameAsset() {
   return plugin.rename(function (file) {
     //log(file.dirname);
     var parts = file.dirname.split(path.sep);
-    parts.splice(0, 4); // remove 4 parts: modules/*/server/email
+    parts.splice(0, 4); // remove 4 parts: src/*/server/email
     file.dirname = parts.join(path.sep);
     //log(file.dirname);
   });

@@ -26,7 +26,7 @@ gulp.task('server-start', ['env:development'], function () {
       'client',
       'e2e/',
       'gulp/',
-      'modules/*/client/',
+      'src/*/client/',
       'node_modules/',
       'public/',
       'temp/',

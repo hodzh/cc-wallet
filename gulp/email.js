@@ -55,7 +55,7 @@ function renameAsset() {
   return plugin.rename(function (file) {
     //log(file.dirname);
     var parts = file.dirname.split(path.sep);
-    parts.splice(0, 4); // remove 4 parts: modules/*/server/email
+    parts.splice(0, 4); // remove 4 parts: src/*/server/email
     file.dirname = parts.join(path.sep);
     //log(file.dirname);
   });
@@ -66,7 +66,7 @@ gulp.task('email-clean', function (callback) {
 });
 
 gulp.task('email-less', function () {
-  return gulp.src(paths.less, {base: 'modules/*/server/email/html'})
+  return gulp.src(paths.less, {base: 'src/*/server/email/html'})
     .pipe(plugin.less())
     .pipe(plugin.autoprefixer(autoprefixerOptions))
     .pipe(renameAsset())
@@ -74,7 +74,7 @@ gulp.task('email-less', function () {
 });
 
 gulp.task('email-sass', function () {
-  return gulp.src(paths.sass, {base: 'modules/*/server/email/html'})
+  return gulp.src(paths.sass, {base: 'src/*/server/email/html'})
     .pipe(plugin.sass())
     .pipe(plugin.autoprefixer(autoprefixerOptions))
     .pipe(renameAsset())
@@ -94,7 +94,7 @@ var index;
 gulp.task('email-index-build', function () {
   index = {};
   return gulp.src([
-      'modules/{',
+      'src/{',
       config.modules.join(','),
       '}/server/email/index.js'].join(''),
     {read: false})

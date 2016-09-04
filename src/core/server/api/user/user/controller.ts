@@ -108,15 +108,13 @@ function controllerFactory(token, mail) {
     };
   }
 
-  function validationError(res, statusCode) {
-    statusCode = statusCode || 422;
+  function validationError(res, statusCode = 422) {
     return function (err) {
       res.status(statusCode).json(err);
     }
   }
 
-  function handleError(res, statusCode) {
-    statusCode = statusCode || 500;
+  function handleError(res, statusCode = 500) {
     return function (err) {
       res.status(statusCode).send(err);
     };

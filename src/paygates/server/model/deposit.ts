@@ -128,7 +128,7 @@ schema.methods.verify = function () {
   return Promise.resolve()
     .then(function () {
       if (deposit.status != 'approved') {
-        throw new Error('bad deposit status', deposit.status);
+        throw new Error('bad deposit status ' + deposit.status);
       }
     });
 };

@@ -81,7 +81,7 @@ schema.post('save', function (doc) {
   emitEvent('save', doc);
 });
 
-function emitEvent(event, doc, params) {
+function emitEvent(event, doc, params?) {
   WithdrawalEvents.emit(event + ':' + doc._id, doc, params);
   WithdrawalEvents.emit(event, doc, params);
 }
@@ -177,7 +177,7 @@ schema.methods.confirm = function () {
   return Promise.resolve()
     .then(function () {
       if (withdrawal.status != 'unconfirmed') {
-        throw new Error('bad withdrawal status', withdrawal.status);
+        throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'confirmed';
       return withdrawal.save();
@@ -192,7 +192,7 @@ schema.methods.approve = function () {
   return Promise.resolve()
     .then(function () {
       if (withdrawal.status != 'confirmed') {
-        throw new Error('bad withdrawal status', withdrawal.status);
+        throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'approved';
       return withdrawal.save();
@@ -207,50 +207,11 @@ schema.methods.cancel = function () {
 
   return Promise.resolve()
     .then(function () {
-      if (withdrawal.status != 'unconfirmed') {
-        throw new Error('bad withdrawal status', withdrawal.status);
+      if (withdrawal.status != 'confirmed') {
+        throw new Error('bad withdrawal status ' + withdrawal.status);
       }
-      return Account.findById(withdrawal.account);
-    })
-    .then(function (account) {
-      if (!account) {
-        throw new Error('account not found');
-      }
-      if (account.owner.toString() != withdrawal.owner) {
-        throw new Error('account not found');
-      }
-      if (account.type != 'user') {
-        throw new Error('account not found');
-      }
-    })
-    .then(function () {
-      return Account.enable({
-        owner: null,
-        type: 'paygate',
-        currency: withdrawal.currency
-      });
-    })
-    .then(function (paygate) {
-      var transaction = new Transaction({
-        currency: withdrawal.currency,
-        to: withdrawal.account,
-        from: paygate._id,
-        amount: amount,
-        category: 'withdrawal',
-        state: 'new'
-      });
-      return transaction.save()
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      return Transaction.process(transaction)
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      withdrawal.transactionCancel = transaction._id;
-      withdrawal.status = 'canceled';
-      return withdrawal.save()
-        .thenReturn(withdrawal);
+      withdrawal.status = 'cancelled';
+      return withdrawal.save();
     })
     .then(function (withdrawal) {
       emitEvent('canceled', withdrawal);
@@ -262,7 +223,7 @@ schema.methods.sign = function () {
   return Promise.resolve()
     .then(function () {
       if (withdrawal.status != 'approved') {
-        throw new Error('bad withdrawal status', withdrawal.status);
+        throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'signed';
       return withdrawal.save()

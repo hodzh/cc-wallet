@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 
 // load tasks
-require('./gulp/client');
+require('./gulp/build');
 require('./gulp/server');
 require('./gulp/email');
 require('./gulp/test');
