@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = {
 
   env: process.env.NODE_ENV || 'development',
-  root: path.normalize(__dirname + '/../..'),
+  root: path.join(__dirname, '../../dist'),
 
   app: require('./app'),
   assets: require('./assets'),

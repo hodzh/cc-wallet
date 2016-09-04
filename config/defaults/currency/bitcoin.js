@@ -1,5 +1,6 @@
 module.exports = {
-  name: "bitcoin",
+  name: 'Bitcoin',
+  code: 'BTC',
   decimal: 8,
-  description: "Bitcoin"
+  fee: '10000'
 };

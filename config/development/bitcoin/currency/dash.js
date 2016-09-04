@@ -4,6 +4,6 @@ module.exports = {
   updateInterval: 60,
 
   client: {
-    uri: "http://localhost:4001/rpc/dash"
+    uri: "http://localhost:4001/rpc/Dash"
   }
 };

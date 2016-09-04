@@ -1,0 +1,29 @@
+<div class="inlineEditWrapper">
+  <a class="btn-link" (click)="edit(value)" [hidden]="editing">{{ value }}</a>
+  <form
+    #inlineEditForm="ngForm"
+    class="inlineEditForm form-inline"
+    (ngSubmit)="onSubmit(value)"
+    [hidden]="!editing">
+    <div class="form-group">
+      <input
+        #inlineEditControl
+        class="form-control"
+        [(ngModel)]="value"
+        name="value"
+        (focusout)="cancel()"/>
+      <span>
+        <button
+          type="submit"
+          class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok"></span>
+        </button>
+        <button
+          class="btn btn-default"
+          (click)="cancel()">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+       </span>
+    </div>
+  </form>
+</div>

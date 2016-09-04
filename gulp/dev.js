@@ -3,9 +3,6 @@
 var gulp = require('gulp');
 
 gulp.task('dev', [
-  'watch'
+  'client-watch',
+  //'server-start'
 ]);
-
-gulp.task('watch', ['client-build', 'server-start'], function () {
-
-});

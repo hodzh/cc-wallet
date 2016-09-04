@@ -1,8 +1,7 @@
-.coverdata
-.coverrun
+/node_modules
+/typings
+npm-debug.log
+
+/dist/
+
 .idea
-node_modules
-bower_components
-public
-public-email
-tests

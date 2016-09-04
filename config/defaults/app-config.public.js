@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  appConfig:{
+  appConfig: {
     // List of user roles
     userRoles: ['user', 'admin']
   }

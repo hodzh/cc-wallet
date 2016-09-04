@@ -30,9 +30,9 @@ function resolveModules(paths, modules) {
   }
 
   function resolvePath(path) {
-    var searchString = 'modules/*/';
+    var searchString = 'src/*/';
     if (path.indexOf(searchString) === 0) {
-      return ['modules/{',
+      return ['src/{',
         modules.join(),
         '}/',
         path.substr(searchString.length)].join('');

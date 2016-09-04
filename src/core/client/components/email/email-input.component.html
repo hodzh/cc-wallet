@@ -1,0 +1,11 @@
+<div class="email-input">
+  <input
+    [name]="name || 'email'"
+    (blur)="onTouched()"
+    (input)="value=$event.target.value"
+    type="email"
+    class="form-control"
+    autofocus>
+  <span class="pic email glyphicon glyphicon-envelope">
+    </span>
+</div>

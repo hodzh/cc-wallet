@@ -1,0 +1,28 @@
+<div class="form-inline account-filter">
+  <div class="hide-zero-balances form-group">
+    <div class="checkbox">
+      <label>
+        <input
+          type="checkbox"
+          [value]="source.hideZeroBalance$ | async"
+          (change)="source.hideZeroBalance = $event.target.checked"
+        >
+        Hide 0 Balances</label>
+    </div>
+  </div>
+  <div class="search-accounts form-group">
+    <span class="search-input">
+      <input
+        type="search"
+        autocomplete="off"
+        class="form-control"
+        [value]="source.search$ | async"
+        (keyup)="source.search = $event.target.value"
+      >
+      <span class="glyphicon glyphicon-search pic"></span>
+    </span>
+    <button type="reset" (click)="source.search = ''">
+      <span class="glyphicon glyphicon-remove"></span>
+    </button>
+  </div>
+</div>

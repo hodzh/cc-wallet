@@ -16,29 +16,29 @@ var paths = require('./path-resolve').server;
 gulp.task('server-start', ['env:development'], function () {
 
   plugins.nodemon({
-      script: 'start.js',
-      ext: 'html js',
-      env: {
-        'NODE_ENV': 'development'
-      },
-      ignore: [
-        'bower_components/',
-        'client',
-        'e2e/',
-        'gulp/',
-        'modules/*/client/',
-        'node_modules/',
-        'public/',
-        'temp/',
-        'tests/',
-        '.bower-*',
-        '.coverdata/',
-        'karma.conf.js'
-      ],
-      nodeArgs: ['--debug'],
-      stdout: false
-    })
-    .on('readable', function() {
+    script: 'start.js',
+    ext: 'html js',
+    env: {
+      'NODE_ENV': 'development'
+    },
+    ignore: [
+      'bower_components/',
+      'client',
+      'e2e/',
+      'gulp/',
+      'modules/*/client/',
+      'node_modules/',
+      'public/',
+      'temp/',
+      'tests/',
+      '.bower-*',
+      '.coverdata/',
+      'karma.conf.js'
+    ],
+    nodeArgs: ['--debug'],
+    stdout: false
+  })
+    .on('readable', function () {
       this.stdout.pipe(process.stdout);
       this.stderr.pipe(process.stderr);
     });
@@ -48,7 +48,7 @@ gulp.task('prodServe', ['env:production'], function () {
   plugins.nodemon({
     script: 'server.js',
     ext: 'html js',
-    env: { 'NODE_ENV': 'production' } ,
+    env: {'NODE_ENV': 'production'},
     ignore: ['./node_modules/**']
   });
 });

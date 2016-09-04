@@ -1,0 +1,68 @@
+<div class="table-holder">
+  <table class="table table-striped table-condensed table-hover table-responsive">
+    <thead>
+    <tr>
+      <th
+        *ngFor="let column of schema"
+        (click)="headerClick(column)"
+      >
+        {{column.title || ''}}
+        <span
+          [class.glyphicon]="column.sortable"
+          [class.glyphicon-sort-by-attributes]="column.sort==='asc'"
+          [class.glyphicon-sort-by-attributes-alt]="column.sort==='desc'"
+        >
+        </span>
+
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of source.documents | async">
+      <td
+        class="table-editable-cell"
+        *ngFor="let column of schema">
+        <div [ngSwitch]="column.type">
+          <template ngSwitchCase="">
+          </template>
+          <template [ngSwitchCase]="'text'">
+            <cc-inline-edit
+              [ngModel]="getCellText(row, column)"
+              (ngModel)="setCellText(row, column, $event)"
+              (onSave)="saveEdit(row, column, $event)"
+            ></cc-inline-edit>
+          </template>
+          <template [ngSwitchCase]="'email'">
+            <cc-inline-edit
+              [ngModel]="getCellText(row, column)"
+              (ngModel)="setCellText(row, column, $event)"
+              (onSave)="saveEdit(row, column, $event)"
+            ></cc-inline-edit>
+          </template>
+          <template [ngSwitchCase]="'select'">
+            <cc-inline-select
+              options="column.options"
+              [ngModel]="getCellText(row, column)"
+              (ngModel)="setCellText(row, column, $event)"
+              (onSave)="saveEdit(row, column, $event)"
+            ></cc-inline-select>
+          </template>
+          <template [ngSwitchCase]="'actions'">
+            <cc-table-row-actions
+              [source]="source"
+              [row]="row"
+              [actions]="column.actions"
+            ></cc-table-row-actions>
+          </template>
+          <template ngSwitchDefault>
+            <div>
+              {{getCellText(row, column)}}
+            </div>
+          </template>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <cc-loading-overlay *ngIf="source.loading"></cc-loading-overlay>
+</div>

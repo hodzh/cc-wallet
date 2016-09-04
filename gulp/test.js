@@ -28,21 +28,21 @@ gulp.task('runMochaCover1', function () {
 gulp.task('runMochaCover2', function () {
   return gulp.src(paths.jsServer)
     .pipe(plugins.istanbul())
-    //.pipe(plugins.istanbul.hookRequire())
+  //.pipe(plugins.istanbul.hookRequire())
 });
 
-gulp.task('startServer', ['runMochaCover'], function(done) {
+gulp.task('startServer', ['runMochaCover'], function (done) {
   var server = require('../modules/core/server');
   var config = require('../config');
   config.setEnv('test');
   server.init(config);
   server.start(
-    function(err){
+    function (err) {
       done();
     });
 });
 
-gulp.task('stopServer', ['runKarma'], function() {
+gulp.task('stopServer', ['runKarma'], function () {
   // todo server.stop
   process.exit();
 });
@@ -56,20 +56,20 @@ gulp.task('runMocha', ['startServer'], function () {
         timeout: 5000
       }
     ))
-      /*
-    .pipe(plugins.istanbul.writeReports(
-      {
-        dir: './tests/server/coverage',
-        reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
-        reportOpts: { dir: './tests/server/coverage' }
-      }
-    ))*/
     /*
-    .pipe(plugins.coverage.gather())
-    .pipe(plugins.coverage.format())
-    .pipe(gulp.dest('tests/server/coverage'))
-    */
-    .on('error', function(error){
+     .pipe(plugins.istanbul.writeReports(
+     {
+     dir: './tests/server/coverage',
+     reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
+     reportOpts: { dir: './tests/server/coverage' }
+     }
+     ))*/
+    /*
+     .pipe(plugins.coverage.gather())
+     .pipe(plugins.coverage.format())
+     .pipe(gulp.dest('tests/server/coverage'))
+     */
+    .on('error', function (error) {
       console.error(error);
       this.emit('end');
     });

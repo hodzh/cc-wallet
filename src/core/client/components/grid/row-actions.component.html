@@ -1,0 +1,28 @@
+<span *ngFor="let action of actions">
+  <span [ngSwitch]="action.type">
+    <template [ngSwitchCase]="'remove'">
+      <button
+        class="btn btn-danger glyphicon glyphicon-trash"
+        (click)="remove()">
+      </button>
+    </template>
+    <template [ngSwitchCase]="'refresh'">
+      <button
+        class="btn glyphicon glyphicon-refresh"
+        (click)="refresh()">
+      </button>
+    </template>
+    <template [ngSwitchCase]="'custom'">
+      <cc-dynamic-block
+        [factory]="action.factory"
+        [bind]="getBind(action)"></cc-dynamic-block>
+    </template>
+    <template ngSwitchDefault>
+      <button
+        class="btn"
+        (click)="broadcast(action)">
+        {{action.text}}
+      </button>
+    </template>
+  </span>
+</span>

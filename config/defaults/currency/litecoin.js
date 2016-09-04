@@ -1,5 +1,6 @@
 module.exports = {
-  name: "litecoin",
+  name: 'Litecoin',
+  code: 'LTC',
   decimal: 8,
-  description: "Litecoin"
+  fee: '10000'
 };

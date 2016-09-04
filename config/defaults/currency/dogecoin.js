@@ -1,5 +1,6 @@
 module.exports = {
-  name: "dogecoin",
+  name: 'Dogecoin',
+  code: 'DOGE',
   decimal: 8,
-  description: "Dogecoin"
+  fee: '100000000'
 };

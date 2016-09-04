@@ -1,5 +1,6 @@
 module.exports = {
-  name: "dash",
+  name: 'Dash',
+  code: 'DASH',
   decimal: 8,
-  description: "Dash"
+  fee: '1000000'
 };

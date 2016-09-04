@@ -30,11 +30,11 @@ var plugin = {
 
 var pngquant = require('imagemin-pngquant');
 
-var paths = require('./path-resolve').client;
+var paths = require('./path-resolve');
 var pathSort = require('./path-sort');
-var cssTempPath = path.join(paths.temp, 'css');
-var cssPublicPath = path.join(paths.public, 'css');
-var fontsPublicPath = path.join(paths.public, 'fonts');
+var cssTempPath = path.join(paths.client.temp, 'css');
+var cssPublicPath = path.join(paths.client.public, 'css');
+var fontsPublicPath = path.join(paths.client.public, 'fonts');
 
 gulp.task('client-build', [
   'compile',
@@ -43,31 +43,35 @@ gulp.task('client-build', [
   'sounds',
   'favicon',
   'html',
-  'images'
+  'images',
+  'sprites'
 ]);
 
 gulp.task('client-clean', function (callback) {
-  return del([paths.public, paths.temp], callback);
+  return del([paths.client.public, paths.client.temp], callback);
 });
 
 gulp.task('tsconfig', function (callback) {
-  var tsconfigPath = path.join(paths.public, '../tsconfig.json');
-  fs.readFile(tsconfigPath, function(err, text) {
+  var tsconfigPath = path.join(paths.client.public, '../tsconfig.json');
+  fs.readFile(tsconfigPath, function (err, text) {
     if (err) {
       return callback(err);
     }
     var tsconfig = JSON.parse(text);
-    tsconfig.files = glob.sync(paths.ts[0]);
+    tsconfig.files = paths.ts.reduce(function(prev, ts) {
+      log(ts);
+      return prev.concat(glob.sync(ts));
+    }, []);
     fs.writeFile(tsconfigPath,
       JSON.stringify(tsconfig, null, 2), callback);
   });
 });
 
 function injectBoot() {
-  var dest = path.dirname(paths.indexTs);
-  return gulp.src(paths.indexTs)
+  var dest = path.dirname(paths.client.indexTs);
+  return gulp.src(paths.client.indexTs)
     .pipe(plugin.inject(
-      gulp.src(paths.boot, {read: false})
+      gulp.src(paths.client.boot, {read: false})
         .pipe(sort(pathSort))
       , {
         starttag: '// inject boot',
@@ -84,7 +88,7 @@ gulp.task('inject-boot', injectBoot);
 
 gulp.task('compile', ['tsconfig', 'inject-boot'], function (callback) {
   var compiler = webpack(webpackOptions);
-  compiler.run(function(err, stats) {
+  compiler.run(function (err, stats) {
     if (err) {
       log(err);
       return callback(err);
@@ -93,45 +97,41 @@ gulp.task('compile', ['tsconfig', 'inject-boot'], function (callback) {
   });
 });
 
-gulp.task('bootstrap', function() {
+gulp.task('bootstrap', function () {
   return gulp.src([
     'node_modules/bootstrap/dist/css/bootstrap.min.css',
     'node_modules/bootstrap/dist/css/bootstrap.min.css.map'])
     .pipe(gulp.dest(cssPublicPath));
 });
 
-gulp.task('bootstrap-fonts', function() {
+gulp.task('bootstrap-fonts', function () {
   return gulp.src([
     'node_modules/bootstrap/fonts/*.*'])
     .pipe(gulp.dest(fontsPublicPath));
 });
 
-gulp.task('html', function() {
+gulp.task('html', function () {
   return gulp.src('modules/core/client/index.html')
-    .pipe(gulp.dest(paths.public));
+    .pipe(gulp.dest(paths.client.public));
 });
 
-gulp.task('sprites', function() {
-  return gulp.src(paths.sprites, {read: false})
+gulp.task('sprites', function () {
+  return gulp.src(paths.client.sprites, {read: false})
     .pipe(plugin.foreach(
-      function(stream, file){
+      function (stream, file) {
         var settings = require(file.path);
         var dir = path.dirname(file.path);
-        var destDir = dir;
-        while(path.basename(destDir) !== 'client') {
-          destDir = path.dirname(destDir);
-        }
-        destDir = path.join(destDir, 'assets/sprites');
-        // console.log(destDir);
+        log(file.path);
         return gulp.src(path.join(dir, settings.src))
           .pipe(plugin.spritesmith(settings.options))
-          .pipe(gulp.dest(destDir));
+          //.pipe(gulp.dest(path.join(paths.client.public, 'images')));
+          .pipe(gulp.dest('./'));
       }
     ));
 });
 
-gulp.task('images', function() {
-  return gulp.src(paths.images)
+gulp.task('images', function () {
+  return gulp.src(paths.client.images)
     .pipe(plugin.imagemin({
       progressive: true,
       svgoPlugins: [{removeViewBox: false}],
@@ -139,24 +139,25 @@ gulp.task('images', function() {
       interlaced: true
     }))
     .pipe(renameAsset())
-    .pipe(gulp.dest(path.join(paths.public, 'images')));
+    .pipe(gulp.dest(path.join(paths.client.public, 'images')));
 });
 
-gulp.task('sounds', function() {
-  return gulp.src(paths.sounds)
+gulp.task('sounds', function () {
+  //log(paths.client.sounds);
+  return gulp.src(paths.client.sounds)
     .pipe(renameAsset())
-    .pipe(gulp.dest(path.join(paths.public, 'sounds')));
+    .pipe(gulp.dest(path.join(paths.client.public, 'sounds')));
 });
 
-gulp.task('fonts', function() {
-  return gulp.src(paths.fonts)
+gulp.task('fonts', function () {
+  return gulp.src(paths.client.fonts)
     .pipe(renameAsset())
-    .pipe(gulp.dest(path.join(paths.public, 'fonts')));
+    .pipe(gulp.dest(path.join(paths.client.public, 'fonts')));
 });
 
-gulp.task('favicon', function() {
-  return gulp.src(paths.favicon)
-    .pipe(gulp.dest(paths.public));
+gulp.task('favicon', function () {
+  return gulp.src(paths.client.favicon)
+    .pipe(gulp.dest(paths.client.public));
 });
 
 /*
@@ -175,33 +176,25 @@ gulp.task('favicon', function() {
  });*/
 
 gulp.task('client-watch', ['client-build'], function () {
-  livereload.listen({interval:500});
-  gulp.watch(path.join(paths.public,'**/*'))
+  livereload.listen({interval: 500});
+  gulp.watch(path.join(paths.client.public, '**/*'))
     .on('change', livereload.changed);
-  
-  gulp.watch(paths.ts, ['tsconfig']);
-  gulp.watch(paths.boot, function(event){
+
+  //gulp.watch(paths.client.ts, ['tsconfig']);
+  gulp.watch(paths.client.boot, function (event) {
     if (event.type === 'changed') {
       return;
     }
     //return injectBoot();
     gulp.run('inject-boot');
   });
-  
-  /*gulp.watch(Array.concat.call(
-   paths.js,
-   paths.ts,
-   paths.css,
-   paths.html,
-   paths.less,
-   paths.sass), ['client-build']);*/
 
-  //gulp.watch(paths.favicon, ['faviconCopy']).on('change', plugins.livereload.changed);
-  //gulp.watch(paths.html, ['htmlCopy']).on('change', plugins.livereload.changed);
+  //gulp.watch(paths.client.favicon, ['faviconCopy']).on('change', plugins.livereload.changed);
+  //gulp.watch(paths.client.html, ['htmlCopy']).on('change', plugins.livereload.changed);
 
-  gulp.watch(paths.images, ['images']);
+  gulp.watch(paths.client.images, ['images']);
 
-  const config = Object.create(webpackOptions);
+  const config = Object.create(webpackOptions[0]);
   config.watch = true;
   //config.cache = true;
   config.debug = true;
@@ -209,23 +202,23 @@ gulp.task('client-watch', ['client-build'], function () {
   //config.entry.app.push('webpack/hot/dev-server');
   //config.entry.app.unshift("webpack-dev-server/client?http://localhost:7002/");
   //config.plugins.push(new webpack.HotModuleReplacementPlugin());
-  
-  webpack(config, function(error, stats) {
-   if (error) {
-   log('[webpack]', error);
-   return;
-   }
-   showWebpackSummary(stats);
-   });
+
+  webpack(config, function (error, stats) {
+    if (error) {
+      log('[webpack]', error);
+      return;
+    }
+    showWebpackSummary(stats);
+  });
 
   var WebpackDevServer = require("webpack-dev-server");
 
   var devServerConfig = {
     port: 7077,
-    contentBase: path.join(__dirname, '../', paths.public),
+    contentBase: path.join(__dirname, '../', paths.client.public),
     historyApiFallback: false,
     hot: true,
-    headers: { "X-Custom-Header": "yes" },
+    headers: {"X-Custom-Header": "yes"},
 
     watchOptions: {
       aggregateTimeout: 300,
@@ -239,26 +232,56 @@ gulp.task('client-watch', ['client-build'], function () {
     proxy: {
       "*": "http://localhost:7002"
     },
-    
+
     /*proxy: {
-      '/api/*': {
-        target: 'http://localhost:7002',
-        secure: false
-      },
-      '/aapi/*': {
-        target: 'http://localhost:7002',
-        secure: false
-      },
-      '/auth/*': {
-        target: 'http://localhost:7002',
-        secure: false
-      }
-    }*/
+     '/api/*': {
+     target: 'http://localhost:7002',
+     secure: false
+     },
+     '/aapi/*': {
+     target: 'http://localhost:7002',
+     secure: false
+     },
+     '/auth/*': {
+     target: 'http://localhost:7002',
+     secure: false
+     }
+     }*/
   };
 
   //var compiler = webpack(config);
   //var server = new WebpackDevServer(compiler, devServerConfig);
   //server.listen(7077);
+});
+
+gulp.task('server-modules', function () {
+  var modules = require('../config').modules;
+  var code = modules.map(function(mod){
+      return 'import * as ' + mod + ' from "./' +
+        path.join('modules', mod, 'server/index')
+          .replace(/\\/g, '/') + '";';
+    }).join('\n') +
+    '\nexport const MODULES = [\n' + modules.join(',\n') + '\n];';
+
+  fs.writeFileSync(
+    path.join(__dirname, '../modules.ts'),
+    code);
+});
+
+gulp.task('server-watch', ['server-modules'], function () {
+  const config = Object.create(webpackOptions[1]);
+  config.watch = true;
+  //config.cache = true;
+  config.debug = true;
+  config.bail = false;
+
+  webpack(config, function (error, stats) {
+    if (error) {
+      log('[webpack]', error);
+      return;
+    }
+    showWebpackSummary(stats);
+  });
 });
 
 function showWebpackSummary(stats) {

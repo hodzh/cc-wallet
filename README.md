@@ -1,2 +1,0 @@
-# walle
-MEAN wallet applicaton

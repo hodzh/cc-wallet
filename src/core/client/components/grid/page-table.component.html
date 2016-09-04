@@ -1,0 +1,29 @@
+<cc-pagination
+  *ngIf="source.options?.paginate"
+  [totalCount]="source.totalCount | async"
+  [pageSize]="source.pageSize | async"
+  [currentPage]="source.currentPage | async"
+  (currentPageChange)="source.setCurrentPage($event)"
+></cc-pagination>
+
+<cc-page-size
+  *ngIf="source.options?.paginate"
+  [size]="source.pageSize | async"
+  (sizeChange)="source.setPageSize($event)"
+></cc-page-size>
+
+<cc-table [schema]="schema" [source]="source"></cc-table>
+
+<cc-pagination
+  *ngIf="source.options?.paginate"
+  [totalCount]="source.totalCount | async"
+  [pageSize]="source.pageSize | async"
+  [currentPage]="source.currentPage | async"
+  (currentPageChange)="source.setCurrentPage($event)"
+></cc-pagination>
+
+<cc-page-size
+  *ngIf="source.options?.paginate"
+  [size]="source.pageSize | async"
+  (sizeChange)="source.setPageSize($event)"
+></cc-page-size>

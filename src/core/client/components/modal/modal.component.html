@@ -1,0 +1,13 @@
+<div
+  bsModal #childModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="mySmallModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" [class.modal-lg]="config.large" [class.modal-lg]="!config.large">
+    <div class="modal-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

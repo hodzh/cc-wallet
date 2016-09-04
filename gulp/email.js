@@ -24,7 +24,7 @@ var log = util.log;
 var browserSync = require('browser-sync').create();
 var through = require('through2');
 
-var swig  = require('swig');
+var swig = require('swig');
 var swigOptions = {
   varControls: ['<{', '}>'],
   tagControls: ['<%', '%>'],
@@ -49,7 +49,7 @@ var config = require('../config');
 
 var tempHtmlPath = path.join(paths.temp, 'html');
 var tempTextPath = path.join(paths.temp, 'text');
-var finalHtml = path.join(tempHtmlPath,'*.inline.html');
+var finalHtml = path.join(tempHtmlPath, '*.inline.html');
 
 function renameAsset() {
   return plugin.rename(function (file) {
@@ -61,11 +61,11 @@ function renameAsset() {
   });
 }
 
-gulp.task('email-clean', function(callback) {
+gulp.task('email-clean', function (callback) {
   return del([paths.temp], callback);
 });
 
-gulp.task('email-less', function() {
+gulp.task('email-less', function () {
   return gulp.src(paths.less, {base: 'modules/*/server/email/html'})
     .pipe(plugin.less())
     .pipe(plugin.autoprefixer(autoprefixerOptions))
@@ -73,7 +73,7 @@ gulp.task('email-less', function() {
     .pipe(gulp.dest(tempHtmlPath));
 });
 
-gulp.task('email-sass', function() {
+gulp.task('email-sass', function () {
   return gulp.src(paths.sass, {base: 'modules/*/server/email/html'})
     .pipe(plugin.sass())
     .pipe(plugin.autoprefixer(autoprefixerOptions))
@@ -81,7 +81,7 @@ gulp.task('email-sass', function() {
     .pipe(gulp.dest(tempHtmlPath));
 });
 
-gulp.task('email-css', function() {
+gulp.task('email-css', function () {
   return gulp.src(paths.css)
     .pipe(plugin.autoprefixer(autoprefixerOptions))
     .pipe(renameAsset())
@@ -91,7 +91,7 @@ gulp.task('email-css', function() {
 // merged email index
 var index;
 
-gulp.task('email-index-build', function() {
+gulp.task('email-index-build', function () {
   index = {};
   return gulp.src([
       'modules/{',
@@ -155,19 +155,19 @@ gulp.task('email-index-build', function() {
   }
 });
 
-gulp.task('email-html', function() {
+gulp.task('email-html', function () {
   return gulp.src(paths.html)
     .pipe(renameAsset())
     .pipe(gulp.dest(tempHtmlPath));
 });
 
-gulp.task('email-text', ['email-index-build'], function() {
+gulp.task('email-text', ['email-index-build'], function () {
   return gulp.src(Object.keys(index).map(function (key) {
-      var mail = index[key];
-      var text = mail.text;
-      mail.text = path.join(tempTextPath, path.basename(text));
-      return text;
-    }))
+    var mail = index[key];
+    var text = mail.text;
+    mail.text = path.join(tempTextPath, path.basename(text));
+    return text;
+  }))
     .pipe(plugin.data(config.public))
     .pipe(plugin.swig(swigOptions))
     .pipe(plugin.extReplace('.txt'))
@@ -176,13 +176,13 @@ gulp.task('email-text', ['email-index-build'], function() {
 
 gulp.task('email-html-inline',
   ['email-html', 'email-css', 'email-sass', 'email-less'],
-  function() {
+  function () {
     return gulp.src(Object.keys(index).map(function (key) {
-        var mail = index[key];
-        var html = mail.html;
-        mail.html = changeExtension(html, '.inline.html');
-        return html;
-      }))
+      var mail = index[key];
+      var html = mail.html;
+      mail.html = changeExtension(html, '.inline.html');
+      return html;
+    }))
       .pipe(plugin.data(config.public))
       .pipe(plugin.swig(swigOptions))
       .pipe(plugin.inlineCss())
@@ -194,7 +194,7 @@ gulp.task('email-html-inline',
       .pipe(gulp.dest(tempHtmlPath));
   });
 
-gulp.task('email-index', ['email-html-inline', 'email-text'], function(callback) {
+gulp.task('email-index', ['email-html-inline', 'email-text'], function (callback) {
   Object.keys(index).forEach(function (key) {
     var mail = index[key];
     mail.html = fs.readFileSync(mail.html, 'utf8');
@@ -228,7 +228,7 @@ gulp.task('email-watch', ['email-build'], function () {
   gulp.watch(everything, ['email-build']);
 });
 
-gulp.task('email-browser-sync', ['email-build'], function() {
+gulp.task('email-browser-sync', ['email-build'], function () {
   // log(finalHtml);
   browserSync.init({
     server: {

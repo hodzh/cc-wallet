@@ -4,64 +4,58 @@ module.exports = {
   js: [
     '*.js',
     'config/**/*.js',
-    'gulp/**/*.js',
-    'tools/**/*.js',
-    'modules/**/*.js'],
+    'src/**/*.js'],
 
   // any ts file
   ts: [
     '*.ts',
     'config/**/*.ts',
-    'gulp/**/*.ts',
-    'tools/**/*.ts',
-    'modules/**/*.ts'],
+    'src/**/!(*.spec|*.mock|*integration).ts'],
 
   // any json file
   json: [
     '*.json',
     'config/**/*.json',
-    'gulp/**/*.json',
-    'tools/**/*.json',
-    'modules/**/*.json'],
+    'src/**/*.json'],
 
   // backend settings
   server: {
     js: [
       'config/**/!(*.spec|*.mock|*integration).js',
-      'modules/*/server/**/!(*.spec|*.mock|*integration).js'],
+      'src/*/server/**/!(*.spec|*.mock|*integration).js'],
     mochaConf: './mocha.conf.js'
   },
 
   // frontend settings
   client: {
-    public: 'public',
+    public: 'dist/client',
     temp: 'temp/client',
-    favicon: 'modules/core/client/favicon.ico',
-    index: 'modules/core/client/index.html',
-    indexTs: 'modules/core/client/index.ts',
+    favicon: 'src/core/client/favicon.ico',
+    index: 'src/core/client/index.html',
+    indexTs: 'src/core/client/index.ts',
     karmaConf: 'karma.conf.js',
 
     js: [
-      'modules/*/client/**/!(*.spec|*.mock|*.sprite).js'],
+      'src/*/client/**/!(*.spec|*.mock|*.sprite).js'],
     ts: [
-      'modules/*/client/**/!(*.spec|*.mock|*.sprite).ts'],
+      'src/*/client/**/!(*.spec|*.mock|*.sprite).ts'],
     css: [
-      'modules/*/client/**/*.css'],
+      'src/*/client/**/*.css'],
     html: [
-      'modules/*/client/**/*.html'],
+      'src/*/client/**/*.html'],
     less: [
-      'modules/*/client/**/*.less'],
+      'src/*/client/**/*.less'],
     sass: [
-      'modules/*/client/**/*.scss'],
+      'src/*/client/**/*.scss'],
     images: [
-      'modules/*/client/images/**/*.{png,jpg}'],
+      'src/*/client/images/**/*.{png,jpg}'],
     sounds: [
-      'modules/*/client/assets/**/*.{mp3,ogg}'],
+      'src/*/client/sounds/**/*.{mp3,ogg}'],
     sprites: [
-      'modules/*/client/sprites/**/*.sprite.js'],
+      'src/*/client/sprites/**/*.sprite.js'],
 
     boot: [
-      'modules/**/client/**/*.boot.ts'],
+      'src/**/client/**/*.boot.ts'],
 
     assets: [
       'node_modules/angular2/bundles/angular2-polyfills.js',
@@ -76,11 +70,11 @@ module.exports = {
   email: {
     public: 'public-email',
     temp: 'temp/email',
-    js: ['modules/*/server/email/index.js'],
-    html: ['modules/*/server/email/**/*.html'],
-    text: ['modules/*/server/email/**/*.txt'],
-    css: ['modules/*/server/email/**/*.css'],
-    less: ['modules/*/server/email/**/*.less'],
-    sass: ['modules/*/server/email/**/*.sass']
+    js: ['src/*/server/email/index.js'],
+    html: ['src/*/server/email/**/*.html'],
+    text: ['src/*/server/email/**/*.txt'],
+    css: ['src/*/server/email/**/*.css'],
+    less: ['src/*/server/email/**/*.less'],
+    sass: ['src/*/server/email/**/*.sass']
   }
 };

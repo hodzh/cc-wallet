@@ -8,11 +8,11 @@ setEnv(defaults.env);
 
 module.exports = config;
 
-function setEnv(env){
+function setEnv(env) {
   update(env);
 }
 
-function clear(){
+function clear() {
   Object.keys(config).forEach(clearKey);
 
   function clearKey(key) {
@@ -20,16 +20,25 @@ function clear(){
   }
 }
 
-function tryRequire(path){
+function tryRequire(mode) {
   try {
-    return require(path);
+    switch(mode) {
+      case 'defaults' : return require('./defaults');
+      case 'development' : return require('./development');
+      case 'production' : return require('./production');
+      case 'test' : return require('./test');
+      default:
+        console.error('unknown environment mode', mode);
+        return;
+    }
   }
-  catch(e){
+  catch (e) {
+    console.error(e);
     return {};
   }
 }
 
-function update(env){
+function update(env) {
   clear();
 
   updateDir(__dirname);
@@ -39,15 +48,15 @@ function update(env){
   config.getAssets = getAssets;
   config.merge = merge;
 
-  function updateDir(dir){
-    var defaults = tryRequire(path.join(dir, 'defaults'));
-    var mode = tryRequire(path.join(dir, env));
+  function updateDir(dir) {
+    var defaults = tryRequire('defaults');
+    var mode = tryRequire(env);
     mergeConfig(config, defaults);
     mergeConfig(config, mode);
   }
 }
 
-function mergeConfig(data, dataToMerge){
+function mergeConfig(data, dataToMerge) {
   Object.keys(dataToMerge).forEach(mergeKey);
 
   function mergeKey(key) {
@@ -68,11 +77,11 @@ function getAssets(ext) {
 
   function addAssets(assets) {
     Object.keys(assets).forEach(
-      function(key){
+      function (key) {
         var asset = assets[key];
         if (key === ext) {
           Object.keys(asset).forEach(
-            function(jsKey){
+            function (jsKey) {
               jsFiles = jsFiles.concat(asset[jsKey]);
             }
           );

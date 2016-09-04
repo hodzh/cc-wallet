@@ -1,6 +1,6 @@
 module.exports = {
-  bitcoin: require('./bitcoin'),
-  dash: require('./dash'),
-  dogecoin: require('./dogecoin'),
-  litecoin: require('./litecoin')
+  Bitcoin: require('./bitcoin'),
+  Dash: require('./dash'),
+  Dogecoin: require('./dogecoin'),
+  Litecoin: require('./litecoin')
 };
