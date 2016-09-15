@@ -3,7 +3,7 @@
 var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var EventEmitter = require('events').EventEmitter;
-var log = require('log4js').getLogger('paygates');
+var log = require('log4js').getLogger('devModule');
 
 var Account = require('../../../wallet/server/model/account');
 var Transaction = require('../../../wallet/server/model/transaction');

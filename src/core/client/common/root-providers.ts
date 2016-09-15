@@ -1,3 +1,3 @@
 import { Type } from '@angular/core';
 
-export const ROOT_PROVIDERS: Type[] = [];
+export const ROOT_PROVIDERS: Type<any>[] = [];

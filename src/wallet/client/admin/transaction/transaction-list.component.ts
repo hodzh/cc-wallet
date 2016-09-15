@@ -9,9 +9,6 @@ import { Transaction } from './transaction';
 const template = require('./transaction-list.component.html');
 
 @Component({
-  directives: [
-    PageTableComponent
-  ],
   template: template,
   //styles: [styles],
   providers: [AdminTransactionResource]

@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 var Account = require('../../../wallet/server/model/account');
 var Transaction = require('../../../wallet/server/model/transaction');
-var log = require('log4js').getLogger('paygates');
+var log = require('log4js').getLogger('devModule');
 
 var schema = new Schema({
   owner: {

@@ -15,6 +15,11 @@ export const DEPOSIT_LIST_SCHEMA = [
     //type: 'text'
   },
   {
+    title: 'amount',
+    field: 'amount',
+    //type: 'text'
+  },
+  {
     title: 'updated',
     field: 'updated',
     //type: 'text'

@@ -1,5 +1,3 @@
-'use strict';
-
 var async = require('async');
 var log = require('log4js').getLogger('core');
 
@@ -8,6 +6,8 @@ var app = {
   db: require('./db'),
   auth: require('./auth'),
   web: require('./web'),
+  mail: null,
+  token: null,
   init: init,
   start: start
 };
@@ -58,7 +58,6 @@ function init(config, modules){
 function start(callback){
   async.series([
       app.db.init.bind(app.db, app.config.db),
-      seed,
       initWeb,
       app.web.start.bind(
         app.web, app.config.web, app.auth)
@@ -71,13 +70,6 @@ function start(callback){
     }
   );
 
-  function seed(callback){
-    if ('development' !== app.config.env &&
-      'test' !== app.config.env) {
-      return callback();
-    }
-    app.db.seed(app.config.seed, callback);
-  }
   function initWeb(callback){
 
     var web = app.web;

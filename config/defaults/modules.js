@@ -1,5 +1,6 @@
 module.exports = [
   'core',
+  'dev',
   'wallet',
   'vp',
   'paygates',

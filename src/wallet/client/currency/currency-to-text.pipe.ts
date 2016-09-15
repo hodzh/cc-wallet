@@ -1,5 +1,5 @@
 import { Pipe } from '@angular/core';
-import { CURRENCY_TEXT_CONVERTER } from '../common/currency-text-converter';
+import { CURRENCY_TEXT_CONVERTER } from '../../common/currency-text-converter';
 
 @Pipe({
   name: 'CurrencyToText'

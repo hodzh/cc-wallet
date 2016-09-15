@@ -1,12 +1,5 @@
-import { Component, Input, forwardRef, Provider } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-
-const EMAIL_INPUT_CONTROL_VALUE_ACCESSOR = new Provider(
-  NG_VALUE_ACCESSOR, {
-    useExisting: forwardRef(() => EmailInputComponent),
-    multi: true
-  });
 
 const styles = require('./email-input.component.scss');
 const template = require('./email-input.component.html');
@@ -15,7 +8,11 @@ const template = require('./email-input.component.html');
   selector: 'cc-email-input',
   styles: [styles],
   template: template,
-  providers: [EMAIL_INPUT_CONTROL_VALUE_ACCESSOR]
+  providers: [{
+    provide : NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => EmailInputComponent),
+    multi: true
+  }]
 })
 export class EmailInputComponent implements ControlValueAccessor {
   @Input() public name: string;

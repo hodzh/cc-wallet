@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 import { MAIN_MENU } from '../../common';
 import { Auth } from '../../auth';
 import { ActiveNavItems } from './active-nav-items.pipe';
@@ -9,13 +8,7 @@ const template = require('./navbar.component.html');
 
 @Component({
   selector: 'cc-navbar',
-  template: template,
-  //styles: [ styles ],
-  directives: [
-    ROUTER_DIRECTIVES
-  ],
-  providers: [],
-  pipes: [ActiveNavItems]
+  template: template
 })
 export class NavbarComponent {
   public menu = MAIN_MENU;

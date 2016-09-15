@@ -2,7 +2,7 @@ import { StatisticsComponent } from '../admin/statistics/statistics.component';
 import { Type } from '@angular/core';
 
 export interface HomePageContent {
-  factory: Type;
+  factory: Type<any>;
   role: string;
 }
 

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router } from '@angular/router';
 import {
-  FORM_DIRECTIVES,
-  REACTIVE_FORM_DIRECTIVES,
   FormBuilder,
   FormGroup,
   Validators,
@@ -16,15 +14,7 @@ import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../..
 const template = require('./settings.component.html');
 
 @Component({
-  directives: [
-    FORM_DIRECTIVES,
-    REACTIVE_FORM_DIRECTIVES,
-    ROUTER_DIRECTIVES,
-    PasswordInputComponent
-  ],
-  template: template,
-  //styles: [styles],
-  providers: []
+  template: template
 })
 export class SettingsComponent {
   public settingsForm: FormGroup;

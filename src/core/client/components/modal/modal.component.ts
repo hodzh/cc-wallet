@@ -9,9 +9,6 @@ const template = require('./modal.component.html');
   selector: 'cc-modal',
   providers: [],
   viewProviders: [{provide: ComponentsHelper, useClass: ComponentsHelper}],
-  directives: [
-    ModalDirective
-  ],
   template: template
 })
 export class ModalComponent {

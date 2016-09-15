@@ -19,7 +19,7 @@ function handleError(res, statusCode = 500) {
 }
 
 export = {
-  index: index,
+  indexPage: index,
   show: show,
   update: update,
   destroy: destroy,

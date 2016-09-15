@@ -27,23 +27,22 @@
           </template>
           <template [ngSwitchCase]="'text'">
             <cc-inline-edit
-              [ngModel]="getCellText(row, column)"
-              (ngModel)="setCellText(row, column, $event)"
+              [value]="getCellText(row, column)"
+              (valueChange)="setCellText(row, column, $event)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-edit>
           </template>
           <template [ngSwitchCase]="'email'">
             <cc-inline-edit
-              [ngModel]="getCellText(row, column)"
-              (ngModel)="setCellText(row, column, $event)"
+              [value]="getCellText(row, column)"
+              (valueChange)="setCellText(row, column, $event)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-edit>
           </template>
           <template [ngSwitchCase]="'select'">
             <cc-inline-select
               options="column.options"
-              [ngModel]="getCellText(row, column)"
-              (ngModel)="setCellText(row, column, $event)"
+              [value]="getCellText(row, column)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-select>
           </template>

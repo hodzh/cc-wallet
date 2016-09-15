@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AdminUsersComponent } from './users';
 import { AdminGuard } from '../auth/admin-guard';
 
-export const ADMIN_ROUTES: RouterConfig = [
+export const ADMIN_ROUTES: Routes = [
   {
     path: 'admin/users',
     component: AdminUsersComponent,

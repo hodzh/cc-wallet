@@ -5,10 +5,10 @@ var Account = require('../../../model/account');
 var Transaction = require('../../../model/transaction');
 var controller = require('../../../../../core/server/web/controller');
 var CollectionController = require('../../../../../core/server/web/collection-controller');
-var accountController = CollectionController(Account);
-export = accountController;
+var collectionController = CollectionController(Account);
+export = collectionController;
 
-accountController.income = function (req, res) {
+collectionController.income = function (req, res) {
   return Promise.resolve()
     .then(function () {
       return Transaction
@@ -19,7 +19,7 @@ accountController.income = function (req, res) {
     .catch(controller.handleError(res));
 };
 
-accountController.outcome = function (req, res) {
+collectionController.outcome = function (req, res) {
   return Promise.resolve()
     .then(function () {
       return Transaction

@@ -32,7 +32,7 @@ module.exports = {
     temp: 'temp/client',
     favicon: 'src/core/client/favicon.ico',
     index: 'src/core/client/index.html',
-    indexTs: 'src/core/client/index.ts',
+    indexTs: 'src/app/client/index.ts',
     karmaConf: 'karma.conf.js',
 
     js: [
@@ -55,7 +55,7 @@ module.exports = {
       'src/*/client/sprites/**/*.sprite.js'],
 
     boot: [
-      'src/**/client/**/*.boot.ts'],
+      'src/*/client/**/*.boot.ts'],
 
     assets: [
       'node_modules/angular2/bundles/angular2-polyfills.js',

@@ -1,3 +1,5 @@
+var util = require('gulp-util');
+var log = util.log;
 module.exports = getPathSettings();
 
 function getPathSettings() {
@@ -32,11 +34,12 @@ function resolveModules(paths, modules) {
   function resolvePath(path) {
     var searchString = 'src/*/';
     if (path.indexOf(searchString) === 0) {
-      return ['src/{',
-        modules.join(),
+      path = ['src/{',
+        modules.join(','),
         '}/',
         path.substr(searchString.length)].join('');
     }
+    log(path);
     return path;
   }
 }

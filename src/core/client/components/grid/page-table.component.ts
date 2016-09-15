@@ -23,14 +23,7 @@ type GridSchema = GridColumn[];
 
 @Component({
   selector: 'cc-page-table',
-  template: template,
-  directives: [
-    PaginationComponent,
-    PageSizeComponent,
-    LoadingOverlayComponent,
-    DynamicBlock,
-    TableComponent
-  ]
+  template: template
 })
 export class PageTableComponent {
   @Input() schema: GridSchema;

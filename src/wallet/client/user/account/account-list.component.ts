@@ -10,17 +10,11 @@ const styles   = require('./account-list.component.scss');
 const template = require('./account-list.component.html');
 
 @Component({
-  directives: [
-    PageTableComponent,
-    AccountFilterComponent
-  ],
   template,
-  styles: [styles],
-  providers: [FilteredAccountDataSource]
+  styles: [styles]
 })
 export class AccountListComponent {
   public schema = ACCOUNT_LIST_SCHEMA;
-  public source: FilteredAccountDataSource;
 
   constructor(private source: FilteredAccountDataSource) {
     source.read();

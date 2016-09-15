@@ -1,73 +1,43 @@
-import {
-  Component, Output, Provider, forwardRef, EventEmitter, ElementRef, ViewChild, Renderer,
-  Input,
-  Type
-} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {Component, Output, EventEmitter, ViewChild, Renderer, Input} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 const template = require('./inline-edit.component.html');
 const styles = require('./inline-edit.component.scss');
 
-const INLINE_EDIT_CONTROL_VALUE_ACCESSOR = new Provider(
-  NG_VALUE_ACCESSOR, {
-    useExisting: forwardRef(() => InlineEditComponent),
-    multi: true
-  });
-
 @Component({
   selector: 'cc-inline-edit',
-  providers: [INLINE_EDIT_CONTROL_VALUE_ACCESSOR],
+  providers: [],
   template,
   styles: [styles]
 })
-export class InlineEditComponent implements ControlValueAccessor{
+export class InlineEditComponent {
   @ViewChild('inlineEditControl') inlineEditControl;
-  @Output() public onSave:EventEmitter<any> = new EventEmitter();
+  @Output() public onSave:EventEmitter<any> = new EventEmitter<any>();
+  @Input() public value: any;
+  @Output() public valueChange:EventEmitter<any> = new EventEmitter<any>();
 
-  private _value:string = '';
-  private preValue:string = '';
-  private editing:boolean = false;
+  private preValue: any;
+  private editing: boolean = false;
 
-  public onChange:any = Function.prototype;
-  public onTouched:any = Function.prototype;
-
-  get value(): any { return this._value; };
-
-  set value(v: any) {
-    if (v !== this._value) {
-      this._value = v;
-      this.onChange(v);
-    }
+  constructor(builder: FormBuilder, private renderer:Renderer,
+  ) {
   }
 
-  constructor(element: ElementRef, private _renderer:Renderer) {}
-
-  // Required for ControlValueAccessor interface
-  writeValue(value: any) {
-    this._value = value;
-  }
-
-  // Required forControlValueAccessor interface
-  public registerOnChange(fn:(_:any) => {}):void {this.onChange = fn;}
-
-  // Required forControlValueAccessor interface
-  public registerOnTouched(fn:() => {}):void {this.onTouched = fn;};
-
-  edit(value){
-    this.preValue = value;
+  edit(){
+    this.preValue = this.value;
     this.editing = true;
 
-    setTimeout( _ => this._renderer.invokeElementMethod(
+    setTimeout( () => this.renderer.invokeElementMethod(
       this.inlineEditControl.nativeElement, 'focus', []));
   }
 
-  onSubmit(value){
-    this.onSave.emit(value);
+  onSubmit(){
+    this.onSave.emit(this.value);
     this.editing = false;
   }
 
   cancel(){
-    this._value = this.preValue;
+    this.valueChange.emit(this.preValue);
     this.editing = false;
   }
 

@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 const template = require('./guest.component.html');
 
 @Component({
-  directives: [],
   template: template,
   //styles: [ styles ]
 })

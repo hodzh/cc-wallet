@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var controller = require('./controller');
 
@@ -8,20 +6,31 @@ export = factory;
 function factory(model) {
   return {
     index: index,
+    indexPage: indexPage,
     show: show,
     create: create,
     update: update,
     destroy: destroy
   };
 
-// Gets a list of object
-  function index(req, res) {
+  // Gets a list of object
+  function indexPage(req, res) {
     return Promise.resolve()
       .then(function () {
         return model.query({}, {
           page: req.query.page,
           limit: req.query.limit
         });
+      })
+      .then(controller.responseWithResult(res))
+      .catch(controller.handleError(res));
+  }
+
+// Gets a list of object
+  function index(req, res) {
+    return Promise.resolve()
+      .then(function () {
+        return model.find({});
       })
       .then(controller.responseWithResult(res))
       .catch(controller.handleError(res));

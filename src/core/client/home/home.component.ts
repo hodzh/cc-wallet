@@ -7,7 +7,6 @@ import { DynamicBlock } from '../components/dynamic-block/dynamic-block.componen
 const template = require('./home.component.html');
 
 @Component({
-  directives: [DynamicBlock],
   template: template,
   //styles: [ styles ]
 })

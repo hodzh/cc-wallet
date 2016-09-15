@@ -1,5 +1,3 @@
-'use strict';
-
 export = route;
 
 function route(router, auth, controller) {

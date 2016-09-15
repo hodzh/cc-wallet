@@ -1,8 +1,8 @@
 import { MODULES } from './modules';
 
 var log = require('log4js').getLogger('core');
-var config = require('../config');
-var server = require('./core/server');
+import config = require('../../../config');
+import server = require('../../core/server');
 server.init(config, MODULES);
 server.start(onStart);
 

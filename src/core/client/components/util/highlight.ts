@@ -1,4 +1,4 @@
-import {Component, Directive, Provider, forwardRef, Input, ElementRef, Renderer} from '@angular/core';
+import {Component, Directive, forwardRef, Input, ElementRef, Renderer} from '@angular/core';
 
 @Directive({
   selector: '[highlight]'

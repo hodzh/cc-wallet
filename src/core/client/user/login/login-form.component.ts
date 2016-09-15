@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
-import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordInputComponent } from '../../components/password/password-input.component.ts';
 import { EmailInputComponent } from '../../components/email/email-input.component.ts';
 import { Auth } from '../../auth';
@@ -10,16 +10,8 @@ const template = require('./login-form.component.html');
 
 @Component({
   selector: 'cc-login-form',
-  directives: [
-    FORM_DIRECTIVES,
-    REACTIVE_FORM_DIRECTIVES,
-    ROUTER_DIRECTIVES,
-    EmailInputComponent,
-    PasswordInputComponent
-  ],
   template: template,
   //styles: [styles],
-  providers: []
 })
 export class LoginFormComponent {
   public errors = '';

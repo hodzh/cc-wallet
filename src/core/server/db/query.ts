@@ -1,7 +1,8 @@
 'use strict';
+import {QueryResult} from '../../common/query-result';
 
 var Promise = require('bluebird');
-\
+
 export = function(schema, pluginOptions) {
   schema.statics.query = query;
 
@@ -74,7 +75,7 @@ export = function(schema, pluginOptions) {
     }
     promises = Object.keys(promises).map((x) => promises[x]);
     return Promise.all(promises).then((data) => {
-      let result = {
+      let result: QueryResult = {
         docs: data[0].map(doc => (doc.sanitize || doc.toObject).call(doc)),
         total: data[1],
         limit: limit

@@ -1,5 +1,3 @@
-'use strict';
-
 var Account = require('../../../model/account');
 
 function handleError(res, statusCode = 500) {

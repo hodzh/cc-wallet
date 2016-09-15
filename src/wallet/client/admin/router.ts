@@ -1,9 +1,9 @@
 import { AdminGuard } from '../../../core/client/auth';
 import { AdminAccountListComponent } from './account/account-list.component';
 import { AdminTransactionListComponent } from './transaction/transaction-list.component';
-import { ADMIN_ROUTES } from '../../../core/client/admin/routes';
+import { RouterModule } from "@angular/router";
 
-ADMIN_ROUTES.push(
+export const Router = RouterModule.forChild([
   {
     path: 'admin/account',
     component: AdminAccountListComponent,
@@ -14,4 +14,4 @@ ADMIN_ROUTES.push(
     component: AdminTransactionListComponent,
     canActivate: [AdminGuard]
   }
-);
+]);

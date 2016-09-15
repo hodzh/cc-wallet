@@ -25,16 +25,14 @@ function controllerFactory(token){
   }
 }
 
-function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
+function handleError(res, statusCode = 500) {
   return function(err) {
     log.error(err);
     res.status(statusCode).send(err);
   };
 }
 
-function responseWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
+function responseWithResult(res, statusCode = 200) {
   return function(entity) {
     if (entity) {
       res.status(statusCode).json(entity);

@@ -11,12 +11,11 @@ var models = {};
 export = {
   models: models,
   init: init,
-  seed: require('./seed').bind(null, models),
   once: events.once.bind(events)
 };
 
 function init(config, callback) {
-
+  let connected = false;
   mongoose.connect(config.host, config.options);
 
   mongoose.connection.on('error', onError);
@@ -24,10 +23,15 @@ function init(config, callback) {
 
   function onError(err) {
     console.error('MongoDB connection error: ' + err);
-    callback(err || 'undefined error');
+    if (!connected) {
+      callback(err || 'undefined error');
+    } else {
+      throw new Error(err);
+    }
   }
 
   function onConnected() {
+    connected = true;
     emit('connect')
       .then(function(){
         callback();

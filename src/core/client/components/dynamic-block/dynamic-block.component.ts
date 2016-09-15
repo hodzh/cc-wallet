@@ -1,6 +1,6 @@
 import {
   Component,
-  ComponentResolver,
+  ComponentFactoryResolver,
   ViewChild,
   ViewContainerRef,
   ComponentRef,
@@ -20,7 +20,6 @@ interface DynamicBlockBind {
 
 @Component({
   selector: 'cc-dynamic-block',
-  directives: [],
   template: template,
   //styles: [ styles ]
 })
@@ -29,7 +28,7 @@ export class DynamicBlock implements AfterViewInit, OnDestroy {
   public content: ViewContainerRef;
   private dynamicBlock: ComponentRef<any>;
 
-  @Input() set factory(type: Type) {
+  @Input() set factory(type: Type<any>) {
     this.buildContent(type);
   }
 
@@ -43,7 +42,7 @@ export class DynamicBlock implements AfterViewInit, OnDestroy {
 
   private bindContext: DynamicBlockBind;
 
-  constructor(private componentResolver: ComponentResolver) {
+  constructor(private componentResolver: ComponentFactoryResolver) {
   }
 
   ngAfterViewInit() {
@@ -61,17 +60,15 @@ export class DynamicBlock implements AfterViewInit, OnDestroy {
     delete this.dynamicBlock;
   }
 
-  private buildContent(type: Type) {
+  private buildContent(type: Type<any>) {
     this.clearContent();
     if (!type) {
       return;
     }
-    this.componentResolver
-      .resolveComponent(type)
-      .then((factory: ComponentFactory<any>) => {
-        this.dynamicBlock = this.content.createComponent(factory);
-        this.bindSetup();
-      });
+    let factory = this.componentResolver
+      .resolveComponentFactory(type);
+    this.dynamicBlock = this.content.createComponent(factory);
+    this.bindSetup();
   }
 
   private bindSetup() {

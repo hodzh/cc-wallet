@@ -7,7 +7,6 @@ module.exports = {
   db: require('./db'),
   email: require('./email'),
   web: require('./web'),
-  seed: require('./seed'),
   token: require('./token'),
   log: require('./log'),
 

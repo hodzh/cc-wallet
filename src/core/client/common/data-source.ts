@@ -3,7 +3,17 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IDocument } from './document';
 
-export class DataSource<TDocument extends IDocument> {
+export interface IDataSource<TDocument extends IDocument> {
+  documents: Observable<TDocument[]>;
+  loading: boolean;
+  remove(document): Observable<boolean>;
+  refresh(document): Observable<TDocument>;
+  create(data): Observable<TDocument>;
+  update(document, data): Observable<TDocument>;
+  read(): Observable<TDocument[]>;
+}
+
+export class DataSource<TDocument extends IDocument> implements IDataSource<TDocument> {
   public get documents(): Observable<TDocument[]> {
     return this.documentsSubject.asObservable();
   }
@@ -102,13 +112,45 @@ export class DataSource<TDocument extends IDocument> {
   }
 
   protected documentsSubject: BehaviorSubject<TDocument[]>;
-  //private loadingSubject: Subject<boolean>;
 
   protected onDocumentChanged(doc) {
     var rows = this.documentsSubject.getValue()
       .map((row: TDocument) => {
-        return row._id === doc._id? doc : row;
+        return row._id === doc._id ? doc : row;
       });
     this.documentsSubject.next(rows);
+  }
+}
+
+export class DataSourceDecorator<TDocument extends IDocument> implements IDataSource<TDocument> {
+  constructor(protected dataSource: IDataSource<TDocument>) {
+  }
+
+  get documents(): Observable<TDocument[]> {
+    return this.dataSource.documents;
+  }
+
+  get loading(): boolean {
+    return this.dataSource.loading;
+  }
+
+  remove(document): Observable<boolean> {
+    return this.dataSource.remove(document);
+  }
+
+  refresh(document): Observable<TDocument> {
+    return this.dataSource.refresh(document);
+  }
+
+  create(data): Observable<TDocument> {
+    return this.dataSource.create(data);
+  }
+
+  update(document, data): Observable<TDocument> {
+    return this.dataSource.update(document, data);
+  }
+
+  read(): Observable<TDocument[]> {
+    return this.dataSource.read();
   }
 }

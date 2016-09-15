@@ -9,9 +9,6 @@ import { AdminDeposit } from './deposit';
 const template = require('./deposit-list.component.html');
 
 @Component({
-  directives: [
-    PageTableComponent
-  ],
   template: template,
   //styles: [styles],
   providers: [AdminDepositResource]

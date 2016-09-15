@@ -20,6 +20,11 @@ export const WITHDRAWAL_LIST_SCHEMA = [
     //type: 'text'
   },
   {
+    title: 'amount',
+    field: 'amount',
+    //type: 'text'
+  },
+  {
     title: 'actions',
     type: 'actions',
     actions: [{type: 'remove'}]

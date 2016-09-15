@@ -14,13 +14,13 @@ export interface QueryResult {
   /**
    * Only if specified or default page/offset values were used
    */
-  page: number,
+  page?: number,
   /**
    * Only if page specified or default page/offset values were used
    */
-  pages: number,
+  pages?: number,
   /**
    * Only if specified or default page/offset values were used
    */
-  offset: number
+  offset?: number
 }

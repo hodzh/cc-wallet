@@ -9,9 +9,6 @@ import { AdminWithdrawal } from './withdrawal';
 const template = require('./withdrawal-list.component.html');
 
 @Component({
-  directives: [
-    PageTableComponent
-  ],
   template: template,
   //styles: [styles],
   providers: [AdminWithdrawalResource]

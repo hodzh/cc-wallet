@@ -6,8 +6,7 @@ const template = require('./loading-overlay.component.html');
 @Component({
   selector: 'cc-loading-overlay',
   template: template,
-  styles: [styles],
-  directives: []
+  styles: [styles]
 })
 export class LoadingOverlayComponent {
   @Input() active: boolean;

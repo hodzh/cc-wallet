@@ -2,12 +2,11 @@ import {
   ApplicationRef,
   ViewContainerRef,
   ComponentRef,
-  ComponentResolver,
+  ComponentFactoryResolver,
   Type,
   ComponentFactory,
   Injectable,
   ReflectiveInjector,
-  Provider,
   Injector
 } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
@@ -21,10 +20,10 @@ import { DOCUMENT } from '@angular/platform-browser';
 export class ComponentsHelper {
 
   private applicationRef: ApplicationRef;
-  private componentResolver: ComponentResolver;
+  private componentResolver: ComponentFactoryResolver;
   private injector: Injector;
 
-  public constructor(applicationRef: ApplicationRef, componentResolver: ComponentResolver, injector: Injector) {
+  public constructor(applicationRef: ApplicationRef, componentResolver: ComponentFactoryResolver, injector: Injector) {
     this.applicationRef = applicationRef;
     this.componentResolver = componentResolver;
     this.injector = injector;
@@ -72,19 +71,17 @@ export class ComponentsHelper {
    * @param _viewContainerRef - optional instance of ViewContainerRef
    * @returns {Promise<ComponentRef<T>>} - returns a promise with ComponentRef<T>
    */
-  public appendNextToRoot<T extends Type,N>(ComponentClass: T, ComponentOptionsClass: N, options: any, _viewContainerRef?: ViewContainerRef): Promise<ComponentRef<any>> {
-    return this.componentResolver
-      .resolveComponent(ComponentClass)
-      .then((componentFactory: ComponentFactory<T>) => {
-        const viewContainerRef = _viewContainerRef || this.getRootViewContainerRef();
-        let bindings = ReflectiveInjector.resolve([
-          new Provider(ComponentOptionsClass, {useValue: options})
-        ]);
-        const ctxInjector = viewContainerRef.parentInjector;
+  public appendNextToRoot<T extends Type<any>,N>(ComponentClass: T, ComponentOptionsClass: N, options: any, _viewContainerRef?: ViewContainerRef): Promise<ComponentRef<any>> {
+    let componentFactory = this.componentResolver
+      .resolveComponentFactory(ComponentClass);
+    const viewContainerRef = _viewContainerRef || this.getRootViewContainerRef();
+    let bindings = ReflectiveInjector.resolve([
+      {provide: ComponentOptionsClass, useValue: options}
+    ]);
+    const ctxInjector = viewContainerRef.parentInjector;
 
-        const childInjector = Array.isArray(bindings) && bindings.length > 0?
-          ReflectiveInjector.fromResolvedProviders(bindings, ctxInjector) : ctxInjector;
-        return viewContainerRef.createComponent(componentFactory, viewContainerRef.length, childInjector);
-      });
+    const childInjector = Array.isArray(bindings) && bindings.length > 0 ?
+      ReflectiveInjector.fromResolvedProviders(bindings, ctxInjector) : ctxInjector;
+    return Promise.resolve(viewContainerRef.createComponent(componentFactory, viewContainerRef.length, childInjector));
   }
 }

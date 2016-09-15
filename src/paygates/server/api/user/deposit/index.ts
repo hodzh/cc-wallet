@@ -4,12 +4,11 @@ export = routeFactory;
 
 function routeFactory() {
 
-  var controllerFactory = require('./controller');
-  var controller = controllerFactory();
+  var controller = require('./controller');
   return route;
 
   function route(router, auth) {
-    router.get('/', auth.hasRole('user'), controller.index);
+    router.get('/', auth.hasRole('user'), controller.indexPage);
     router.get('/:id', auth.hasRole('user'), controller.show);
   }
 }

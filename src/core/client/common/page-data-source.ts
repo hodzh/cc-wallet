@@ -2,7 +2,7 @@ import { Resource } from './resource';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { QueryResult } from './query-result';
+import { QueryResult } from '../../common/query-result';
 import { DataSource } from './data-source';
 import { IDocument } from './document';
 
@@ -111,6 +111,10 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
 
   private onRead(data) {
     if (this.options.paginate) {
+      if (!data.docs) {
+        console.log('data.docs undefined');
+        return;
+      }
       this.documentsSubject.next(data.docs);
       this.totalCountSubject.next(data.total);
     } else {

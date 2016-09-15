@@ -9,7 +9,8 @@
     "lib": [
       "es6",
       "dom"
-    ]
+    ],
+    "types": ["node"]
   },
   "exclude": [
     "node_modules",

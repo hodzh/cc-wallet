@@ -1,20 +1,18 @@
-import { Component, Input, forwardRef, Provider } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const styles = require('./password-input.component.scss');
 const template = require('./password-input.component.html');
 
-const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR = new Provider(
-  NG_VALUE_ACCESSOR, {
-    useExisting: forwardRef(() => PasswordInputComponent),
-    multi: true
-  });
-
 @Component({
   selector: 'cc-password-input',
   template: template,
   styles: [styles],
-  providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
+  providers: [{
+    provide : NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => PasswordInputComponent),
+    multi: true
+  }]
 })
 export class PasswordInputComponent {
   @Input() public name: string;

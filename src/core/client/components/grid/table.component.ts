@@ -11,11 +11,6 @@ const template = require('./table.component.html');
 
 @Component({
   selector: 'cc-table',
-  directives: [
-    LoadingOverlayComponent,
-    RowActionsComponent,
-    InlineEditComponent
-  ],
   template,
   styles: [styles]
 })
@@ -49,16 +44,22 @@ export class TableComponent {
     return value;
   }
 
-  public setCellText(row, column: TableColumn, text): void {
+  public setCellText(row, column: TableColumn, text: string): void {
     this.setCellValue(row, column,
-      column.converter ?
-        column.converter.toValue(text, row) : text);
+      this.textToValue(row, column, text));
   }
 
-  public saveEdit(row, column: TableColumn, value) {
+  public saveEdit(row, column: TableColumn, text: string) {
     let data = {};
+    let value = this.textToValue(row, column, text);
     this.setCellValue(data, column, value);
     this.source.update(row, data);
+  }
+
+  private textToValue(row, column: TableColumn, text: string): any {
+    let value = column.converter ?
+      column.converter.toValue(text, row) : text;
+    return value;
   }
 
   headerClick(column: TableColumn) {

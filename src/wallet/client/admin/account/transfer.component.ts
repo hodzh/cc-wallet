@@ -9,7 +9,6 @@ const template = require('./transfer.component.html');
 
 @Component({
   selector: 'cc-admin-transfer',
-  directives: [],
   template: template,
   //styles: [styles],
 })

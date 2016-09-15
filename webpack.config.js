@@ -39,9 +39,10 @@ var clientConfig = {
       // Other
     ],
     'app': [
-      './src/core/client/index'
+      './src/app/client/index'
     ]
   },
+  devtool: 'source-map',
   output: {
     path: root('dist/client/js'),
     filename: '[name].js',
@@ -55,7 +56,7 @@ var clientConfig = {
     Buffer: false
   },
   module: {
-    preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
+    //preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
     loaders: [
       // .ts files.
       {
@@ -135,7 +136,7 @@ var clientConfig = {
 
 var serverConfig = {
   target: 'node',
-  entry: './src/server',
+  entry: './src/app/server/index',
   devtool: 'source-map',
   output: {
     path: root('dist/server'),
@@ -143,8 +144,8 @@ var serverConfig = {
   },
   module: {
     loaders: [
-      { test: /\.ts$/, loaders: ['ts-loader'] },
-      { test: /\.json$/, loader: 'raw-loader' }
+      {test: /\.ts$/, loaders: ['ts-loader']},
+      {test: /\.json$/, loader: 'raw-loader'}
     ]
   },
   externals: checkNodeImport,
@@ -152,9 +153,18 @@ var serverConfig = {
     global: true,
     __dirname: false,
     __filename: false,
-    process: true,
+    process: false,
     Buffer: true
-  }
+  },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      test: /\.js$/,
+      moduleFilenameTemplate: '[absolute-resource-path]',
+      fallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]',
+      filename: "[file].map",
+      sourceRoot: '/'
+    })
+  ]
 };
 
 // Default config

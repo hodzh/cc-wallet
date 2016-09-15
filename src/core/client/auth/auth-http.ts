@@ -9,31 +9,30 @@ export class AuthHttp {
               private authToken: AuthToken) {
   }
 
-  get(url: string, params?: any) {
+  get(url: string, params?: RequestOptionsArgs): Observable<Response> {
     return this.request(url, Object.assign({
       method: RequestMethod.Get
     }, params));
   }
 
-  post(url: string, data?: any) {
-    return this.request(url, {
-      body: data,
+  post(url: string, body?: any, params?: RequestOptionsArgs): Observable<Response> {
+    return this.request(url, Object.assign({
+      body: body,
       method: RequestMethod.Post
-    });
+    }, params));
   }
 
-  put(url: string, data?: any) {
-    return this.request(url, {
-      body: data,
+  put(url: string, body?: any, options?: RequestOptionsArgs): Observable<Response> {
+    return this.request(url, Object.assign({
+      body: body,
       method: RequestMethod.Put
-    });
+    }, options));
   }
 
-  delete(url: string) {
-    let headers = this.createHeader();
-    return this.request(url, {
+  delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
+    return this.request(url, Object.assign({
       method: RequestMethod.Delete
-    });
+    }, options));
   }
 
   private request(url: string,

@@ -8,10 +8,7 @@ const template = require('./row-actions.component.html');
 
 @Component({
   selector: 'cc-table-row-actions',
-  template: template,
-  directives: [
-    DynamicBlock
-  ]
+  template: template
 })
 export class RowActionsComponent {
   @Input() source: DataSource<any>;
