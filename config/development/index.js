@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = {
-
   app: require('./app'),
   auth: require('./auth'),
   db: require('./db'),
@@ -9,8 +8,6 @@ module.exports = {
   web: require('./web'),
   token: require('./token'),
   log: require('./log'),
-
-  paygates: {
-    bitcoin: require('./bitcoin'),
-  }
+  paygates: require('./paygates'),
+  seed: require('./seed')
 };

@@ -15,6 +15,7 @@ function controllerFactory(token, mail) {
   return {
     create: create,
     changePassword: changePassword,
+    resetPassword: resetPassword,
     me: me
   };
 
@@ -70,6 +71,48 @@ function controllerFactory(token, mail) {
    * Creates a new user
    */
   function create(auth) {
+    return function (req, res, next) {
+      var user;
+      return Promise.resolve()
+        .then(function () {
+          var newUser = new User(req.body);
+          newUser.provider = 'local';
+          newUser.role = 'user';
+          user = newUser;
+          return newUser.save();
+        })
+        .spread(function (user) {
+          var code = auth.signToken(user._id, user.role);
+          res.json({token: code});
+          return user;
+        })
+        .catch(validationError(res))
+        .then(function () {
+          if (!auth.isEmailVerify()) {
+            return;
+          }
+          // create verification code
+          var code = token.create({
+            type: 'confirmEmail',
+            user: user._id
+          });
+          // send email with code
+          return mail.send({
+            to: user.email
+          }, 'confirmEmail', {
+            token: code
+          });
+        })
+        .catch(function (err) {
+          log.error(err);
+        });
+    };
+  }
+
+  /**
+   * Reset a user password
+   */
+  function resetPassword(auth) {
     return function (req, res, next) {
       var user;
       return Promise.resolve()

@@ -1,12 +1,12 @@
-import { Response } from '@angular/http';
-import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AuthToken } from './auth-token';
-import { AuthResource } from './auth.resource';
-import { AccountResource } from './account.resource';
-import { Credentials } from './credentials';
-import { ChangePasswordParams } from './change-password-params';
+import { Response } from "@angular/http";
+import { Router } from "@angular/router";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { AuthToken } from "./auth-token";
+import { AuthResource } from "./auth.resource";
+import { UserResource } from "./user.resource";
+import { Credentials } from "./credentials";
+import { ChangePasswordParams } from "./change-password-params";
 
 const guest: IUserProfile = {
   email: '',
@@ -21,7 +21,7 @@ export class Auth {
   constructor(public router: Router,
               private authToken: AuthToken,
               private authResource: AuthResource,
-              private accountResource: AccountResource) {
+              private accountResource: UserResource) {
     if (this.isLoggedIn) {
       this.updateProfile();
     }
@@ -44,14 +44,13 @@ export class Auth {
   }
 
   public login(params: Credentials): Observable<any> {
-    //console.log('login', params.email, params.password);
     let req = this.authResource.login(params);
     req.subscribe(
       response => {
         this.onLogin(response);
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
       }
     );
     return req;
@@ -62,28 +61,26 @@ export class Auth {
   }
 
   public signup(params: Credentials): Observable<any> {
-    console.log('signup', params.email, params.password);
     let req = this.authResource.signup(params);
     req.subscribe(
       response => {
         this.onLogin(response);
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
       }
     );
     return req;
   }
 
   public changePassword(params: ChangePasswordParams): Observable<any> {
-    //console.log('changePassword', params.password, params.newPassword);
     let req = this.accountResource.changePassword(params);
     req.subscribe(
       response => {
         this.router.navigate(['/home']);
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
       }
     );
     return req;
@@ -91,7 +88,6 @@ export class Auth {
 
   private onLogin(response: Response) {
     let res = response.json();
-    //console.log(res);
     this.authToken.token = res['token'];
     this.currentUser = res['user'];
     this.router.navigate(['/']);
@@ -103,14 +99,13 @@ export class Auth {
   }
 
   private updateProfile() {
-    let auth = this;
     let req = this.accountResource.profile();
     req.subscribe(
       response => {
-        auth.currentUser = response.json();
+        this.currentUser = response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
       }
     );
     return req;

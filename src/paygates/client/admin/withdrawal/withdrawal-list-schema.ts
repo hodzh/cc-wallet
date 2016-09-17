@@ -1,4 +1,6 @@
-export const WITHDRAWAL_LIST_SCHEMA = [
+import { TableSchema } from "../../../../core/client/components/grid/table-scheme";
+
+export const WITHDRAWAL_LIST_SCHEMA: TableSchema = [
   {
     title: 'owner',
     field: 'owner',
@@ -20,8 +22,18 @@ export const WITHDRAWAL_LIST_SCHEMA = [
     //type: 'text'
   },
   {
+    title: 'status',
+    field: 'status',
+    //type: 'text'
+  },
+  {
     title: 'amount',
     field: 'amount',
+    //type: 'text'
+  },
+  {
+    title: 'fee',
+    field: 'fee',
     //type: 'text'
   },
   {

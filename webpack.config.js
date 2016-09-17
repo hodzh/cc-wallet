@@ -157,13 +157,13 @@ var serverConfig = {
     Buffer: true
   },
   plugins: [
-    new webpack.SourceMapDevToolPlugin({
+    /*new webpack.SourceMapDevToolPlugin({
       test: /\.js$/,
       moduleFilenameTemplate: '[absolute-resource-path]',
       fallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]',
       filename: "[file].map",
       sourceRoot: '/'
-    })
+     })*/
   ]
 };
 

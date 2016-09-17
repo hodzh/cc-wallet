@@ -89,7 +89,7 @@ export = mongoose.model('User', UserSchema);
  */
 function sanitize(){
   return {
-    // _id: this._id.toString(),
+    _id: this._id.toString(),
     email: this.email,
     emailValid: this.emailValid,
     role: this.role

@@ -11,7 +11,7 @@ function routeFactory(token, mailer) {
   function route(router, auth) {
     router.get('/', auth.isAuthenticated(), controller.me);
     router.put('/password', auth.hasRole('user'), controller.changePassword);
+    router.put('/reset-password', auth.hasRole('user'), controller.resetPassword);
     router.post('/', controller.create(auth));
-
   }
 }

@@ -1,8 +1,8 @@
-import { Http } from '@angular/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { contentHeaders } from '../common/headers';
-import { Credentials } from './credentials';
+import { Http } from "@angular/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { contentHeaders } from "../common/headers";
+import { Credentials } from "./credentials";
 
 @Injectable()
 export class AuthResource {
@@ -23,7 +23,6 @@ export class AuthResource {
   }
 
   signup(params: Credentials): Observable<any> {
-    console.log('signup', params.email, params.password);
     let body = JSON.stringify({
       email: params.email,
       password: params.password

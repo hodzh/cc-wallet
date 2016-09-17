@@ -1,7 +1,7 @@
-import { MODULES } from './modules';
+import { MODULES } from "./modules";
 
 var log = require('log4js').getLogger('core');
-import config = require('../../../config');
+var config = require('../../../config');
 import server = require('../../core/server');
 server.init(config, MODULES);
 server.start(onStart);

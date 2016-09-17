@@ -1,7 +1,7 @@
-import { Resource } from './resource';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { IDocument } from './document';
+import { Resource } from "./resource";
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { IDocument } from "./document";
 
 export interface IDataSource<TDocument extends IDocument> {
   documents: Observable<TDocument[]>;
@@ -123,6 +123,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 }
 
 export class DataSourceDecorator<TDocument extends IDocument> implements IDataSource<TDocument> {
+
   constructor(protected dataSource: IDataSource<TDocument>) {
   }
 
@@ -153,4 +154,39 @@ export class DataSourceDecorator<TDocument extends IDocument> implements IDataSo
   read(): Observable<TDocument[]> {
     return this.dataSource.read();
   }
+}
+
+export interface FeaturedDataSourceOptions {
+  autoUpdate?: boolean;
+  autoUpdateMs?: number
+}
+
+export class FeaturedDataSource<TDocument extends IDocument>
+extends DataSourceDecorator<IDocument> {
+
+  constructor(protected dataSource: IDataSource<TDocument>,
+              public options: FeaturedDataSourceOptions) {
+    super(dataSource);
+    this.featuredDocuments = this.dataSource.documents;
+  }
+
+  get documents(): Observable<TDocument[]> {
+    return this.featuredDocuments;
+  }
+
+  startAutoUpdate() {
+    const autoUpdateMs = 60000;
+    this.autoUpdateInterval = setInterval(() => this.autoUpdate(), autoUpdateMs);
+  }
+
+  stopAutoUpdate() {
+    clearInterval(this.autoUpdateInterval);
+  }
+
+  autoUpdate() {
+    this.read();
+  }
+
+  private autoUpdateInterval;
+  private featuredDocuments;
 }

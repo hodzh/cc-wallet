@@ -9,7 +9,7 @@ export = devModule;
 function devModule(server, config) {
 
   server.web.route({
-    '/aapi/dev/db': require('./api')
+    '/aapi/dev/db': require('./api')(config.seed)
   });
 
 }

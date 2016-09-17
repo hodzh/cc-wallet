@@ -58,11 +58,6 @@ var schema = new Schema({
   status: {
     type: String,
     require: true
-  },
-  bitcoin: {
-    address: String,
-    txid: String,
-    confirmations: Number
   }
 }, {
   discriminatorKey: 'type',
@@ -86,90 +81,10 @@ function emitEvent(event, doc, params?) {
   WithdrawalEvents.emit(event, doc, params);
 }
 
+schema.statics.emit = WithdrawalEvents.emit.bind(WithdrawalEvents);
 schema.statics.on = WithdrawalEvents.on.bind(WithdrawalEvents);
 schema.statics.off = WithdrawalEvents.removeListener.bind(WithdrawalEvents);
 // schema.statics.once = WithdrawalEvents.once.bind(WithdrawalEvents);
-
-schema.statics.create = function (params) {
-  var Withdrawal = this;
-  var userId = params.user;
-  var accountId = params.account;
-  var currency;
-  var amount = params.amount;
-  var fee = params.fee;
-
-  log.trace('create withdrawal', userId, accountId, amount, fee);
-
-  return Promise.resolve()
-    .then(function () {
-      return Account.findById(accountId);
-    })
-    .then(function (account) {
-      if (!account) {
-        throw new Error('account not found');
-      }
-      if (account.owner.toString() != userId) {
-        throw new Error('account not found');
-      }
-      if (account.type != 'user') {
-        throw new Error('account not found');
-      }
-      if (account.balance < amount) {
-        throw new Error('not enough funds');
-      }
-      currency = account.currency;
-    })
-    .then(function () {
-      return Account.enable({
-        owner: null,
-        type: 'paygate',
-        currency: currency
-      });
-    })
-    .then(function (paygate) {
-      var transaction = new Transaction({
-        currency: currency,
-        to: paygate._id,
-        from: accountId,
-        amount: amount,
-        category: 'withdrawal',
-        state: 'new'
-      });
-      return transaction.save()
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      return Transaction.process(transaction)
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      var withdrawal = new Withdrawal({
-        owner: userId,
-        account: accountId,
-        currency: currency,
-        amount: amount,
-        fee: fee,
-        transaction: transaction._id,
-        status: 'new'
-      });
-      emitEvent('create', withdrawal, params);
-      return withdrawal.save()
-        .thenReturn(withdrawal);
-    })
-    .then(function (withdrawal) {
-      emitEvent('new', withdrawal);
-      return withdrawal;
-    })
-    .then(function (withdrawal) {
-      withdrawal.status = 'unconfirmed';
-      return withdrawal.save()
-        .thenReturn(withdrawal);
-    })
-    .then(function (withdrawal) {
-      emitEvent('unconfirmed', withdrawal);
-      return withdrawal;
-    });
-};
 
 schema.methods.confirm = function () {
   var withdrawal = this;

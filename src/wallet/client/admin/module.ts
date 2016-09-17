@@ -1,6 +1,5 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
-import { FormsModule }    from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { AdminAccountResource } from "./account/account.resource";
 import { AdminAccountDataSource } from "./account/account-data-source";
 import { CoreComponentsModule } from "../../../core/client/components/module";
@@ -25,7 +24,8 @@ import { Router } from "./router";
   ],
   entryComponents: [
     AdminAccountListComponent,
-    AdminTransactionListComponent
+    AdminTransactionListComponent,
+    AdminTransferComponent
   ],
   providers: [
     AdminAccountResource,
