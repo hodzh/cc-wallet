@@ -4,7 +4,7 @@ var passport = require('passport');
 
 export = route;
 
-function route(router, auth){
+function route(router, auth) {
   router.post('/', localAuth);
 
   function localAuth(req, res, next) {

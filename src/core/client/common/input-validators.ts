@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from "@angular/forms";
 
 export const MIN_PASSWORD_LENGTH = 6;
 export const MAX_PASSWORD_LENGTH = 32;

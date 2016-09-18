@@ -6,6 +6,7 @@ import { AccountResource } from "./account.resource";
 @Injectable()
 export class AccountDataSource extends DataSource<Account> {
   private autoUpdateInterval;
+
   constructor(resource: AccountResource) {
     super(resource);
   }

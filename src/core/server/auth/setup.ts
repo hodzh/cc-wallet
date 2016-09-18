@@ -2,7 +2,7 @@
 
 export = setup;
 
-function setup(userModel, config){
+function setup(userModel, config) {
   // Passport Configuration
   require('./local/passport').setup(userModel, config);
   //require('./facebook/passport').setup(userModel, config);

@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from "@angular/router";
 
 export const Router = RouterModule.forChild([
   /*{

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from "@angular/core";
 
 const DEFAULT_PAGINATION_SIZE = 16;
 const DEFAULT_PAGE_SIZE = 50;

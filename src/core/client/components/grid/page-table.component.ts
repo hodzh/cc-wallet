@@ -1,10 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { PaginationComponent } from './pagination.component';
-import { PageSizeComponent } from './page-size.component';
-import { LoadingOverlayComponent } from './loading-overlay.component';
-import { PageDataSource } from '../../common/page-data-source';
-import { DynamicBlock } from '../dynamic-block/dynamic-block.component';
-import { TableComponent } from './table.component';
+import { Component, Input } from "@angular/core";
+import { PageDataSource } from "../../common/page-data-source";
 
 const PAGE_SIZES = [20, 50, 100];
 const DEFAULT_PAGE_SIZE = 50;

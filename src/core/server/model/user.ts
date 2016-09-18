@@ -87,7 +87,7 @@ export = mongoose.model('User', UserSchema);
 /**
  * returns only non secret data
  */
-function sanitize(){
+function sanitize() {
   return {
     _id: this._id.toString(),
     email: this.email,
@@ -119,8 +119,8 @@ function validatePassword(password) {
 
 function validateEmailAlreadyInUse(value, respond) {
   var self = this;
-  return this.constructor.findOne({ email: value })
-    .then(function(user) {
+  return this.constructor.findOne({email: value})
+    .then(function (user) {
       if (user) {
         if (self.id === user.id) {
           return respond(true);
@@ -129,7 +129,7 @@ function validateEmailAlreadyInUse(value, respond) {
       }
       return respond(true);
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 }
@@ -234,7 +234,7 @@ function makeSalt(byteSize, callback) {
     return crypto.randomBytes(byteSize).toString('base64');
   }
 
-  return crypto.randomBytes(byteSize, function(err, salt) {
+  return crypto.randomBytes(byteSize, function (err, salt) {
     if (err) {
       callback(err);
     }

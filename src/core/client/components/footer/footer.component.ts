@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 //const styles = require('./styles.scss');
 const template = require('./footer.component.html');

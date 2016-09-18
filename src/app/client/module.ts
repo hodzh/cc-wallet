@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { AppComponent } from "../../core/client/app.component";
+import { NgModule } from "@angular/core";
+import { AppComponent } from "../../core/client/layout/app.component";
 import { RouterModule } from "@angular/router";
 import { CoreModule } from "../../core/client/module";
 import { DevModule } from "../../dev/client/module";
@@ -18,9 +18,8 @@ import { PaygatesBitcoinModule } from "../../paygates-bitcoin/client/module";
     PaygatesModule,
     PaygatesBitcoinModule,
 
-    RouterModule.forRoot([
-
-    ])
+    RouterModule.forRoot([])
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

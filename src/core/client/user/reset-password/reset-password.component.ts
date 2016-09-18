@@ -1,6 +1,5 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Input } from "@angular/core";
+import { Component, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { FormBuilder } from "@angular/forms";
 import { Auth } from "../../auth";
 import { Observable } from "rxjs";
 import { UserResource } from "../../auth/user.resource";
@@ -16,10 +15,8 @@ export class ResetPasswordComponent implements AfterViewInit {
   public submitPending: boolean = false;
   private resetPassword$;
   errors;
-  @Input() email;
 
-  constructor(builder: FormBuilder,
-              public router: Router,
+  constructor(public router: Router,
               public auth: Auth,
               private userResource: UserResource) {
   }
@@ -33,7 +30,8 @@ export class ResetPasswordComponent implements AfterViewInit {
       .do(() => {
         this.submitPending = true;
       })
-      .flatMap(() => this.userResource.resetPassword({email: this.email}))
+      .flatMap(() =>
+        this.userResource.resetPassword({email: this.auth.currentUser.email}))
       .subscribe(
         (res) => {
           if (res.error) {
@@ -56,5 +54,9 @@ export class ResetPasswordComponent implements AfterViewInit {
     } else {
       this.errors = `${error.reasonPhrase} (${error.code})`;
     }
+  }
+
+  login() {
+    this.router.navigate(['/login']);
   }
 }

@@ -1,10 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { LoadingOverlayComponent } from './loading-overlay.component';
-import { DataSource } from '../../common/data-source';
-import { RowActionsComponent } from './row-actions.component';
-import { InlineEditComponent } from './inline-edit.component';
-import { ValueConverter } from './value-converter';
-import { TableSchema, TableColumn } from './table-scheme';
+import { Component, Input } from "@angular/core";
+import { DataSource } from "../../common/data-source";
+import { TableSchema, TableColumn } from "./table-scheme";
 
 const styles = require('./table.component.scss');
 const template = require('./table.component.html');
@@ -31,7 +27,7 @@ export class TableComponent {
     let lastField = fields.pop();
     return fields.reduce(
       (prev, field) =>
-        prev[field] || (prev[field] = {}),
+      prev[field] || (prev[field] = {}),
       row)[lastField] = value;
   }
 

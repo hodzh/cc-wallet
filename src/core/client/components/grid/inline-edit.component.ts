@@ -1,5 +1,5 @@
-import {Component, Output, EventEmitter, ViewChild, Renderer, Input} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, Output, EventEmitter, ViewChild, Renderer, Input } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 
 const template = require('./inline-edit.component.html');
 const styles = require('./inline-edit.component.scss');
@@ -12,31 +12,30 @@ const styles = require('./inline-edit.component.scss');
 })
 export class InlineEditComponent {
   @ViewChild('inlineEditControl') inlineEditControl;
-  @Output() public onSave:EventEmitter<any> = new EventEmitter<any>();
+  @Output() public onSave: EventEmitter<any> = new EventEmitter<any>();
   @Input() public value: any;
-  @Output() public valueChange:EventEmitter<any> = new EventEmitter<any>();
+  @Output() public valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   private preValue: any;
   private editing: boolean = false;
 
-  constructor(builder: FormBuilder, private renderer:Renderer,
-  ) {
+  constructor(builder: FormBuilder, private renderer: Renderer,) {
   }
 
-  edit(){
+  edit() {
     this.preValue = this.value;
     this.editing = true;
 
-    setTimeout( () => this.renderer.invokeElementMethod(
+    setTimeout(() => this.renderer.invokeElementMethod(
       this.inlineEditControl.nativeElement, 'focus', []));
   }
 
-  onSubmit(){
+  onSubmit() {
     this.onSave.emit(this.value);
     this.editing = false;
   }
 
-  cancel(){
+  cancel() {
     this.valueChange.emit(this.preValue);
     this.editing = false;
   }

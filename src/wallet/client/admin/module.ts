@@ -8,6 +8,7 @@ import { AdminTransactionListComponent } from "./transaction/transaction-list.co
 import { AdminTransferComponent } from "./account/transfer.component";
 import { WalletCurrencyModule } from "../currency/module";
 import { Router } from "./router";
+import { LayoutModule } from "../../../core/client/layout/module";
 
 
 @NgModule({
@@ -34,4 +35,19 @@ import { Router } from "./router";
     //AdminTransactionDataSource,
   ]
 })
-export class WalletAdminModule {}
+export class WalletAdminModule {
+  constructor() {
+    LayoutModule.MainMenu.push(
+      {
+        title: 'Admin Accounts',
+        state: '/admin/account',
+        role: 'admin'
+      },
+      {
+        title: 'Admin Transactions',
+        state: '/admin/transaction',
+        role: 'admin'
+      }
+    );
+  }
+}

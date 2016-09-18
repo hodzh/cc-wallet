@@ -1,11 +1,17 @@
-import { Routes } from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { LoginComponent } from "./login";
 import { SignupComponent } from "./signup";
 import { AuthGuard, NoAuthGuard } from "../auth";
 import { SettingsComponent } from "./settings";
 import { ResetPasswordComponent } from "./reset-password";
+import { HomeComponent } from "../layout/home/home.component";
 
-export const USER_ROUTES: Routes = [
+export const ROUTER = RouterModule.forChild([
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -26,4 +32,4 @@ export const USER_ROUTES: Routes = [
     component: SettingsComponent,
     canActivate: [AuthGuard]
   }
-];
+]);

@@ -1,5 +1,5 @@
-import { AdminTransferComponent } from './transfer.component';
-import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
+import { AdminTransferComponent } from "./transfer.component";
+import { CURRENCY_TEXT_CONVERTER } from "../../../common/currency-text-converter";
 export const ADMIN_ACCOUNT_LIST_ACTIONS = [
   {type: 'remove'},
   {type: 'refresh'},

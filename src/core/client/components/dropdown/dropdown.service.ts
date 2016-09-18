@@ -3,15 +3,15 @@ export const DISABLED = 'disabled';
 export const OUTSIDECLICK = 'outsideClick';
 export const NONINPUT = 'nonInput';
 
-import {DropdownDirective} from './dropdown.directive';
+import { DropdownDirective } from "./dropdown.directive";
 
 export class DropdownService {
-  private openScope:DropdownDirective;
+  private openScope: DropdownDirective;
 
-  private closeDropdownBind:EventListener = this.closeDropdown.bind(this);
-  private keybindFilterBind:EventListener = this.keybindFilter.bind(this);
+  private closeDropdownBind: EventListener = this.closeDropdown.bind(this);
+  private keybindFilterBind: EventListener = this.keybindFilter.bind(this);
 
-  public open(dropdownScope:DropdownDirective):void {
+  public open(dropdownScope: DropdownDirective): void {
     if (!this.openScope) {
       window.document.addEventListener('click', this.closeDropdownBind, true);
       window.document.addEventListener('keydown', this.keybindFilterBind);
@@ -24,7 +24,7 @@ export class DropdownService {
     this.openScope = dropdownScope;
   }
 
-  public close(dropdownScope:DropdownDirective):void {
+  public close(dropdownScope: DropdownDirective): void {
     if (this.openScope !== dropdownScope) {
       return;
     }
@@ -34,7 +34,7 @@ export class DropdownService {
     window.document.removeEventListener('keydown', this.keybindFilterBind);
   }
 
-  private closeDropdown(event:MouseEvent):void {
+  private closeDropdown(event: MouseEvent): void {
     if (!this.openScope) {
       return;
     }
@@ -64,7 +64,7 @@ export class DropdownService {
     this.openScope.isOpen = false;
   }
 
-  private keybindFilter(event:KeyboardEvent):void {
+  private keybindFilter(event: KeyboardEvent): void {
     if (event.which === 27) {
       this.openScope.focusToggleElement();
       this.closeDropdown(void 0);

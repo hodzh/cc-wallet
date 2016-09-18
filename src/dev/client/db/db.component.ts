@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from "@angular/core";
 import { DbResource } from "./db.resource";
 
 const template = require('./db.component.html');
@@ -17,11 +16,13 @@ export class DevDbComponent {
 
   clearAll() {
     this.dbResource.clearAll()
-      .subscribe(()=>{});
+      .subscribe(()=> {
+      });
   }
 
   addUsers() {
     this.dbResource.addUsers()
-      .subscribe(()=>{});
+      .subscribe(()=> {
+      });
   }
 }

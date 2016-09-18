@@ -1,12 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Resource } from '../../../../core/client/common/resource';
-import { AuthHttp } from '../../../../core/client/auth/auth-http';
-import { AdminAccount } from './account';
-import { PageDataSource } from '../../../../core/client/common/page-data-source';
-import { AdminAccountResource } from './account.resource';
-import { CurrencyDataSource } from '../../currency/currency-data-source';
-import { Observable } from 'rxjs';
-import { Currency } from '../../currency/currency';
+import { Injectable } from "@angular/core";
+import { AdminAccount } from "./account";
+import { PageDataSource } from "../../../../core/client/common/page-data-source";
+import { AdminAccountResource } from "./account.resource";
+import { CurrencyDataSource } from "../../currency/currency-data-source";
+import { Observable } from "rxjs";
+import { Currency } from "../../currency/currency";
 
 export interface TransactionParams {
   amount: string;
@@ -42,15 +40,14 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
       );
   }
 
-  private updateAccountCurrency(
-    accounts: AdminAccount[],
-    currencies: Currency[]): AdminAccount[] {
+  private updateAccountCurrency(accounts: AdminAccount[],
+                                currencies: Currency[]): AdminAccount[] {
     if (!accounts || !currencies) {
       return [];
     }
     accounts.forEach(account => {
       let currency = currencies.find(currency =>
-        account.currency === currency.name);
+      account.currency === currency.name);
       if (currency) {
         account.decimal = currency.decimal;
         account.code = currency.code;

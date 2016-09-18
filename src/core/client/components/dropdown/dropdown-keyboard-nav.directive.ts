@@ -1,14 +1,14 @@
-import {Directive, ElementRef, HostListener} from '@angular/core';
-import {DropdownDirective} from './dropdown.directive';
+import { Directive, ElementRef, HostListener } from "@angular/core";
+import { DropdownDirective } from "./dropdown.directive";
 
 @Directive({
   selector: '[dropdown][dropdownKeyboardNav]'
 })
 export class KeyboardNavDirective {
-  private dd:DropdownDirective;
-  private el:ElementRef;
+  private dd: DropdownDirective;
+  private el: ElementRef;
 
-  public constructor(dd:DropdownDirective, el:ElementRef) {
+  public constructor(dd: DropdownDirective, el: ElementRef) {
     this.dd = dd;
     this.el = el;
     console.warn('keyboard-nav deprecated');
@@ -16,7 +16,7 @@ export class KeyboardNavDirective {
   }
 
   @HostListener('keydown', ['$event'])
-  public onKeydown(event:KeyboardEvent):void {
+  public onKeydown(event: KeyboardEvent): void {
     if (event.which !== 40 && event.which !== 38) {
       return;
     }
@@ -51,7 +51,8 @@ export class KeyboardNavDirective {
 
         this.dd.selectedOption--;
         break;
-      default: break;
+      default:
+        break;
     }
     elems[this.dd.selectedOption].nativeElement.focus();
   }

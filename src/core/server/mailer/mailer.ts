@@ -4,7 +4,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('log4js').getLogger('email');
 var mails = require('../../../../public-email');
 
-export = function(config){
+export = function (config) {
   var transport = mailer.createTransport(
     smtpTransport(config.mailer));
 

@@ -1,8 +1,15 @@
 import {
-  Directive, OnInit, OnDestroy, Input, Output, HostBinding, EventEmitter,
-  ElementRef, ChangeDetectorRef
-} from '@angular/core';
-import {dropdownService, NONINPUT} from './dropdown.service';
+  Directive,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  HostBinding,
+  EventEmitter,
+  ElementRef,
+  ChangeDetectorRef
+} from "@angular/core";
+import { dropdownService, NONINPUT } from "./dropdown.service";
 
 @Directive({
   selector: '[dropdown]',
@@ -11,31 +18,31 @@ import {dropdownService, NONINPUT} from './dropdown.service';
 export class DropdownDirective implements OnInit, OnDestroy {
   @HostBinding('class.open')
   @Input()
-  public get isOpen():boolean {
+  public get isOpen(): boolean {
     return this._isOpen;
   }
 
-  @Input() public autoClose:string;
-  @Input() public keyboardNav:boolean;
+  @Input() public autoClose: string;
+  @Input() public keyboardNav: boolean;
   // enum string: ['always', 'outsideClick', 'disabled']
-  @Input() public appendToBody:boolean;
+  @Input() public appendToBody: boolean;
 
-  @Output() public onToggle:EventEmitter<boolean> = new EventEmitter<boolean>(false);
-  @Output() public isOpenChange:EventEmitter<boolean> = new EventEmitter<boolean>(false);
-  @HostBinding('class.dropdown') public addClass:boolean = true;
+  @Output() public onToggle: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+  @Output() public isOpenChange: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+  @HostBinding('class.dropdown') public addClass: boolean = true;
 
   // index of selected element
-  public selectedOption:number;
+  public selectedOption: number;
   // drop menu html
-  public menuEl:ElementRef;
+  public menuEl: ElementRef;
   // drop down toggle element
-  public toggleEl:ElementRef;
-  public el:ElementRef;
-  private _isOpen:boolean;
+  public toggleEl: ElementRef;
+  public el: ElementRef;
+  private _isOpen: boolean;
 
   private _changeDetector: ChangeDetectorRef;
 
-  public constructor(el:ElementRef, ref:ChangeDetectorRef) {
+  public constructor(el: ElementRef, ref: ChangeDetectorRef) {
     // @Query('dropdownMenu', {descendants: false})
     // dropdownMenuList:QueryList<ElementRef>) {
     this.el = el;
@@ -43,7 +50,7 @@ export class DropdownDirective implements OnInit, OnDestroy {
     // todo: bind to route change event
   }
 
-  public set isOpen(value:boolean) {
+  public set isOpen(value: boolean) {
     this._isOpen = !!value;
 
     // todo: implement after porting position
@@ -66,20 +73,20 @@ export class DropdownDirective implements OnInit, OnDestroy {
     // todo: implement call to setIsOpen if set and function
   }
 
-  public ngOnInit():void {
+  public ngOnInit(): void {
     this.autoClose = this.autoClose || NONINPUT;
     if (this.isOpen) {
       // todo: watch for event get-isOpen?
     }
   }
 
-  public ngOnDestroy():void {
+  public ngOnDestroy(): void {
     if (this.appendToBody && this.menuEl) {
       this.menuEl.nativeElement.remove();
     }
   }
 
-  public set dropDownMenu(dropdownMenu:{el:ElementRef}) {
+  public set dropDownMenu(dropdownMenu: {el: ElementRef}) {
     // init drop down menu
     this.menuEl = dropdownMenu.el;
 
@@ -88,16 +95,16 @@ export class DropdownDirective implements OnInit, OnDestroy {
     }
   }
 
-  public set dropDownToggle(dropdownToggle:{el:ElementRef}) {
+  public set dropDownToggle(dropdownToggle: {el: ElementRef}) {
     // init toggle element
     this.toggleEl = dropdownToggle.el;
   }
 
-  public toggle(open?:boolean):boolean {
+  public toggle(open?: boolean): boolean {
     return this.isOpen = arguments.length ? !!open : !this.isOpen;
   }
 
-  public focusDropdownEntry(keyCode:number):void {
+  public focusDropdownEntry(keyCode: number): void {
     // If append to body is used.
     let hostEl = this.menuEl ?
       this.menuEl.nativeElement :
@@ -148,7 +155,7 @@ export class DropdownDirective implements OnInit, OnDestroy {
     elems[this.selectedOption].focus();
   }
 
-  public focusToggleElement():void {
+  public focusToggleElement(): void {
     if (this.toggleEl) {
       this.toggleEl.nativeElement.focus();
     }

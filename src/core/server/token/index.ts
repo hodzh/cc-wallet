@@ -1,6 +1,6 @@
 'use strict';
 
-export = function(config){
+export = function (config) {
 
   var Promise = require('bluebird');
   var events = new (require('events').EventEmitter)();
@@ -43,10 +43,10 @@ export = function(config){
    */
   function verify(code) {
     return Promise.resolve()
-      .then(function(){
+      .then(function () {
         return token.verify(code);
       })
-      .then(function(token){
+      .then(function (token) {
         events.emit(token.type, token);
       });
   }

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptionsArgs, RequestMethod, Response } from '@angular/http';
-import { AuthToken } from './auth-token';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { Http, Headers, RequestOptionsArgs, RequestMethod, Response } from "@angular/http";
+import { AuthToken } from "./auth-token";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class AuthHttp {

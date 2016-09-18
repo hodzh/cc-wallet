@@ -51,42 +51,7 @@ gulp.task('client-clean', function (callback) {
   return del([paths.client.public, paths.client.temp], callback);
 });
 
-gulp.task('tsconfig', function (callback) {
-  var tsconfigPath = path.join(paths.client.public, '../tsconfig.json');
-  fs.readFile(tsconfigPath, function (err, text) {
-    if (err) {
-      return callback(err);
-    }
-    var tsconfig = JSON.parse(text);
-    tsconfig.files = paths.ts.reduce(function(prev, ts) {
-      log(ts);
-      return prev.concat(glob.sync(ts));
-    }, []);
-    fs.writeFile(tsconfigPath,
-      JSON.stringify(tsconfig, null, 2), callback);
-  });
-});
-
-function injectBoot() {
-  var dest = path.dirname(paths.client.indexTs);
-  return gulp.src(paths.client.indexTs)
-    .pipe(plugin.inject(
-      gulp.src(paths.client.boot, {read: false})
-        .pipe(sort(pathSort))
-      , {
-        starttag: '// inject boot',
-        endtag: '// end inject',
-        transform: function (filepath) {
-          var importPath = '../../..' + filepath;
-          return ['import \'', importPath, '\';'].join('');
-        }
-      }))
-    .pipe(gulp.dest(dest));
-}
-
-gulp.task('inject-boot', injectBoot);
-
-gulp.task('compile', ['inject-boot'], function (callback) {
+gulp.task('compile', function (callback) {
   var compiler = webpack(webpackOptions);
   compiler.run(function (err, stats) {
     if (err) {
@@ -255,7 +220,7 @@ gulp.task('watch', ['client-build'], function () {
 
 gulp.task('server-modules', function () {
   var modules = require('../config').modules;
-  var code = modules.map(function(mod){
+  var code = modules.map(function (mod) {
       return 'import * as ' + mod + ' from "./' +
         path.join('modules', mod, 'server/index')
           .replace(/\\/g, '/') + '";';

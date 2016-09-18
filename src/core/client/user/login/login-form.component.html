@@ -10,6 +10,7 @@
     [class.has-error]="!loginForm.controls.email.valid && submitted">
     <label>Email</label>
     <cc-email-input
+      [(ngModel)]="auth.currentUser.email"
       [formControl]="loginForm.controls.email"
     ></cc-email-input>
     <p

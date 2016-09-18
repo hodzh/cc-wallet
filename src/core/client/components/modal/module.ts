@@ -1,5 +1,5 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { ModalDirective } from "./modal.directive";
 import { ModalFooterComponent } from "./modal-footer";
 import { ModalBodyComponent } from "./modal-body";
@@ -30,7 +30,7 @@ import { ModalBackdropComponent } from "./modal-backdrop.component";
     ModalDirective
   ],
 
-  providers: [
-  ]
+  providers: []
 })
-export class CoreModalModule {}
+export class CoreModalModule {
+}

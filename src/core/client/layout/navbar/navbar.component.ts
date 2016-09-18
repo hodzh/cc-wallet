@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
-import { MAIN_MENU } from '../../common';
-import { Auth } from '../../auth';
-import { ActiveNavItems } from './active-nav-items.pipe';
+import { Component } from "@angular/core";
+import { Auth } from "../../auth";
+import { LayoutModule } from "../module";
 
-//const styles = require('./navbar.component.scss');
 const template = require('./navbar.component.html');
 
 @Component({
@@ -11,7 +9,7 @@ const template = require('./navbar.component.html');
   template: template
 })
 export class NavbarComponent {
-  public menu = MAIN_MENU;
+  public menu = LayoutModule.MainMenu;
   public isCollapsed: boolean = true;
 
   constructor(private auth: Auth) {

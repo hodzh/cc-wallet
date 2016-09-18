@@ -1,4 +1,4 @@
-import { NgModule }       from '@angular/core';
+import { NgModule } from "@angular/core";
 import { PaygatesAdminModule } from "./admin/module";
 import { PaygatesUserModule } from "./user/module";
 
@@ -9,4 +9,5 @@ import { PaygatesUserModule } from "./user/module";
     PaygatesUserModule
   ]
 })
-export class PaygatesModule {}
+export class PaygatesModule {
+}

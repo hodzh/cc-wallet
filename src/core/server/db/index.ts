@@ -1,4 +1,3 @@
-
 var Promise = require("bluebird");
 var mongoose = require('mongoose');
 mongoose.Promise = Promise;
@@ -33,10 +32,10 @@ function init(config, callback) {
   function onConnected() {
     connected = true;
     emit('connect')
-      .then(function(){
+      .then(function () {
         callback();
       })
-      .catch(function(error){
+      .catch(function (error) {
         callback(error);
       });
   }

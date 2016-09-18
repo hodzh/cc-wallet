@@ -1,4 +1,4 @@
-import { IDocument } from '../../common/document';
+import { IDocument } from "../../common/document";
 /**
  * user model for admin access
  */

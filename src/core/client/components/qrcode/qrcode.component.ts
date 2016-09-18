@@ -20,9 +20,8 @@ export class QRCodeComponent implements OnChanges, OnInit {
 
   private qrcode: any;
 
-  constructor(
-    private el: ElementRef
-  ) { }
+  constructor(private el: ElementRef) {
+  }
 
   ngOnInit() {
     try {

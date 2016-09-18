@@ -1,8 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { AdminAccount } from './account';
-import { AdminAccountResource } from './account.resource';
-import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
-import { AdminAccountDataSource } from './account-data-source';
+import { Component, Input } from "@angular/core";
+import { AdminAccount } from "./account";
+import { CURRENCY_TEXT_CONVERTER } from "../../../common/currency-text-converter";
+import { AdminAccountDataSource } from "./account-data-source";
 
 //const styles   = require('./deposit.css');
 const template = require('./transfer.component.html');

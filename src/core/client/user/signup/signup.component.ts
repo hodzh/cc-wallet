@@ -1,15 +1,8 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl
-} from '@angular/forms';
-import { PasswordInputComponent } from '../../components/password/password-input.component.ts';
-import { EmailInputComponent } from '../../components/email/email-input.component.ts';
-import { Auth } from '../../auth';
-import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../../common/input-validators';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
+import { Auth } from "../../auth";
+import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from "../../common/input-validators";
 
 //const styles   = require('./signup.component.scss');
 const template = require('./signup.component.html');

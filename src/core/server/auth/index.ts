@@ -10,9 +10,9 @@ var validateJwt;
 
 export = {
   init: init,
-  isAuthenticated : isAuthenticated,
-  hasRole : hasRole,
-  signToken : signToken,
+  isAuthenticated: isAuthenticated,
+  hasRole: hasRole,
+  signToken: signToken,
   isEmailVerify: isEmailVerify
 };
 
@@ -33,7 +33,7 @@ function init(userModel, appConfig) {
 function isAuthenticated() {
   return compose()
   // Validate jwt
-    .use(function(req, res, next) {
+    .use(function (req, res, next) {
       // allow access_token to be passed through query parameter as well
       if (req.query && req.query.hasOwnProperty('access_token')) {
         req.headers.authorization = 'Bearer ' + req.query.access_token;
@@ -41,16 +41,16 @@ function isAuthenticated() {
       validateJwt(req, res, next);
     })
     // Attach user to request
-    .use(function(req, res, next) {
+    .use(function (req, res, next) {
       User.findById(req.user._id)
-        .then(function(user) {
+        .then(function (user) {
           if (!user) {
             return res.status(401).end();
           }
           req.user = user;
           next();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           return next(err);
         });
     });
@@ -85,9 +85,8 @@ function hasRole(roleRequired) {
 
     // user email should be valid
     if (config.auth.local.verify &&
-        req.user.role == 'user' &&
-        req.user.provider == 'local' &&
-        !req.user.emailValid) {
+      req.user.role == 'user' &&
+      req.user.provider == 'local' && !req.user.emailValid) {
       return forbidden();
     }
 
@@ -118,6 +117,6 @@ function signToken(id, role) {
     });
 }
 
-function isEmailVerify(){
+function isEmailVerify() {
   return config.auth.local.verify;
 }

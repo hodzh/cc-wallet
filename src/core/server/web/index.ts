@@ -58,8 +58,8 @@ function startServer(config, auth, callback) {
 
   beforeStart(auth);
 
-  server.listen(config.http.port, function(err) {
-    if (err){
+  server.listen(config.http.port, function (err) {
+    if (err) {
       return callback(err);
     }
 
@@ -70,16 +70,16 @@ function startServer(config, auth, callback) {
   });
 }
 
-function beforeStart(auth){
+function beforeStart(auth) {
 
   // use api
 
   registerApi(web.routers, web, '');
 
-  function registerApi(routers, router, routePath){
+  function registerApi(routers, router, routePath) {
     Object.keys(routers).forEach(registerApiKey);
 
-    function registerApiKey(apiKey){
+    function registerApiKey(apiKey) {
       var api = routers[apiKey];
       var apiRouter = express.Router();
       var apiPath = [routePath, apiKey].join('');
@@ -121,7 +121,7 @@ function beforeStart(auth){
 
   function onError(err, req, res, next) {
     var code = 500;
-    var msg = { message: "Internal Server Error" };
+    var msg = {message: "Internal Server Error"};
 
     switch (err.name) {
       case "UnauthorizedError":
@@ -152,9 +152,9 @@ function renderRoot(req, res) {
   res.sendFile(indexPath);
 }
 
-function route(routers){
+function route(routers) {
   Object.keys(routers).forEach(
-    function(key){
+    function (key) {
       web.routers[key] = routers[key];
     }
   );

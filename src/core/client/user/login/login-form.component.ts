@@ -1,17 +1,13 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasswordInputComponent } from '../../components/password/password-input.component.ts';
-import { EmailInputComponent } from '../../components/email/email-input.component.ts';
-import { Auth } from '../../auth';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Auth } from "../../auth";
 
-//const styles   = require('./login.scss');
 const template = require('./login-form.component.html');
 
 @Component({
   selector: 'cc-login-form',
-  template: template,
-  //styles: [styles],
+  template
 })
 export class LoginFormComponent {
   public errors = '';

@@ -1,10 +1,10 @@
-import { Resource } from './resource';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { QueryResult } from '../../common/query-result';
-import { DataSource } from './data-source';
-import { IDocument } from './document';
+import { Resource } from "./resource";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { QueryResult } from "../../common/query-result";
+import { DataSource } from "./data-source";
+import { IDocument } from "./document";
 
 export interface DataSourceOptions {
   paginate?: boolean;

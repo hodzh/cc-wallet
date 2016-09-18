@@ -7,13 +7,13 @@ var jwt = require('jsonwebtoken');
 var User = require('../../../model/user');
 
 function validationError(res, statusCode = 422) {
-  return function(err) {
+  return function (err) {
     res.status(statusCode).json(err);
   }
 }
 
 function handleError(res, statusCode = 500) {
-  return function(err) {
+  return function (err) {
     res.status(statusCode).send(err);
   };
 }
@@ -54,13 +54,13 @@ function show(req, res, next) {
     .then(function () {
       return User.findById(userId);
     })
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.status(404).end();
       }
       res.json(user.sanitize());
     })
-    .catch(function(err) {
+    .catch(function (err) {
       return next(err);
     });
 }
@@ -74,7 +74,7 @@ function update(req, res, next) {
     .then(function () {
       return User.findById(userId);
     })
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.status(404).end();
       }
@@ -92,10 +92,10 @@ function update(req, res, next) {
       }
       return user.save();
     })
-    .then(function(user){
+    .then(function (user) {
       res.json(user.profile);
     })
-    .catch(function(err) {
+    .catch(function (err) {
       return next(err);
     });
 }
@@ -108,7 +108,7 @@ function destroy(req, res) {
     .then(function () {
       return User.findByIdAndRemove(req.params.id);
     })
-    .then(function() {
+    .then(function () {
       res.status(204).end();
     })
     .catch(handleError(res));
@@ -122,7 +122,7 @@ function create(req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.save()
-    .spread(function(user) {
+    .spread(function (user) {
       res.json(user);
     })
     .catch(validationError(res));

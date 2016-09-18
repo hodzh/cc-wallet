@@ -2,7 +2,7 @@
 
 var jwt = require('jsonwebtoken');
 
-export = function(config){
+export = function (config) {
   return {
     create: create,
     verify: verify
@@ -17,7 +17,7 @@ export = function(config){
     return jwt.sign(data,
       config.secret, {
         expiresIn: config.expiresIn,
-        algorithm:config.algorithm
+        algorithm: config.algorithm
       });
   }
 
@@ -29,7 +29,7 @@ export = function(config){
   function verify(code) {
     return jwt.verify(code,
       config.secret, {
-        algorithms:config.algorithm
+        algorithms: config.algorithm
       });
   }
 };

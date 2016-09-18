@@ -1,8 +1,8 @@
-import {Http, URLSearchParams, Response} from '@angular/http';
-import { AuthHttp } from '../auth/auth-http';
-import { Observable } from 'rxjs/Observable';
-import { QueryResult } from '../../common/query-result';
-import { IDocument } from './document';
+import { Http, URLSearchParams, Response } from "@angular/http";
+import { AuthHttp } from "../auth/auth-http";
+import { Observable } from "rxjs/Observable";
+import { QueryResult } from "../../common/query-result";
+import { IDocument } from "./document";
 
 export class Resource<TDocument extends IDocument> {
   public URL: string;

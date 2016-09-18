@@ -9,4 +9,5 @@ import { WalletUserModule } from "./user/module";
     WalletAdminModule
   ]
 })
-export class WalletModule {}
+export class WalletModule {
+}

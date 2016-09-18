@@ -27,7 +27,7 @@ export class CurrencyTextConverter {
         text].join('');
     }
     return [sign,
-      text.substr(0, text.length-decimal),
+      text.substr(0, text.length - decimal),
       '.',
       text.substr(-decimal)].join('');
   }

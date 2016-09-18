@@ -20,7 +20,7 @@ var commonConfig = {
 
 var clientConfig = {
   target: 'web',
-  entry:  {
+  entry: {
     'vendor': [
       // Polyfills
       'core-js/es6',
@@ -158,11 +158,11 @@ var serverConfig = {
   },
   plugins: [
     /*new webpack.SourceMapDevToolPlugin({
-      test: /\.js$/,
-      moduleFilenameTemplate: '[absolute-resource-path]',
-      fallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]',
-      filename: "[file].map",
-      sourceRoot: '/'
+     test: /\.js$/,
+     moduleFilenameTemplate: '[absolute-resource-path]',
+     fallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]',
+     filename: "[file].map",
+     sourceRoot: '/'
      })*/
   ]
 };
@@ -189,7 +189,8 @@ module.exports = [
 
 function checkNodeImport(context, request, cb) {
   if (!path.isAbsolute(request) && request.charAt(0) !== '.') {
-    cb(null, 'commonjs ' + request); return;
+    cb(null, 'commonjs ' + request);
+    return;
   }
   cb();
 }

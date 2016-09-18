@@ -7,25 +7,31 @@ a {
   margin-right: 5px;
   margin-left: 5px;
 }
-.inlineEditForm{
+
+.inlineEditForm {
   display: inline-block;
   white-space: nowrap;
   margin: 0;
 }
-.inlineEditWrapper{
+
+.inlineEditWrapper {
   display: inline-block;
 }
-.inlineEditForm input, select{
+
+.inlineEditForm input, select {
   width: auto;
   display: inline;
 }
-.editInvalid{
+
+.editInvalid {
   color: #a94442;
   margin-bottom: 0;
 }
-.error{
+
+.error {
   border-color: #a94442;
 }
+
 [hidden] {
   display: none;
 }

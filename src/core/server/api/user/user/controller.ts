@@ -24,7 +24,7 @@ function controllerFactory(token, mail) {
    */
   function changePassword(req, res, next) {
     return Promise.resolve()
-      .then(function(){
+      .then(function () {
         var userId = req.user._id;
         return User.findById(userId);
       })
@@ -51,7 +51,7 @@ function controllerFactory(token, mail) {
   function me(req, res, next) {
 
     return Promise.resolve()
-      .then(function(){
+      .then(function () {
         var userId = req.user._id;
         return User.findOne({_id: userId}, '-salt -password');
       })
@@ -116,7 +116,7 @@ function controllerFactory(token, mail) {
     return function (req, res, next) {
       var user;
       return Promise.resolve()
-        .then(function(){
+        .then(function () {
           var newUser = new User(req.body);
           newUser.provider = 'local';
           newUser.role = 'user';
@@ -145,7 +145,7 @@ function controllerFactory(token, mail) {
             token: code
           });
         })
-        .catch(function(err) {
+        .catch(function (err) {
           log.error(err);
         });
     };
@@ -163,9 +163,9 @@ function controllerFactory(token, mail) {
     };
   }
 
-  function confirmEmail(token){
+  function confirmEmail(token) {
     return Promise.resolve()
-      .then(function() {
+      .then(function () {
         return User.update({
           _id: token.user
         }, {

@@ -1,4 +1,4 @@
-import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
+import { CURRENCY_TEXT_CONVERTER } from "../../../common/currency-text-converter";
 export const ACCOUNT_LIST_ACTIONS = [];
 
 export const ACCOUNT_LIST_SCHEMA = [

@@ -1,9 +1,9 @@
 'use strict';
-import {QueryResult} from '../../common/query-result';
+import { QueryResult } from "../../common/query-result";
 
 var Promise = require('bluebird');
 
-export = function(schema, pluginOptions) {
+export = function (schema, pluginOptions) {
   schema.statics.query = query;
 
   /**

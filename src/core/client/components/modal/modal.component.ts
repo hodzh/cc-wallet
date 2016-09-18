@@ -1,7 +1,7 @@
-import { Component, ViewChild, Input } from '@angular/core';
-import { ModalOptions, modalConfigDefaults } from './modal-options';
-import { ModalDirective } from './modal.directive';
-import { ComponentsHelper } from './helper';
+import { Component, ViewChild, Input } from "@angular/core";
+import { ModalOptions, modalConfigDefaults } from "./modal-options";
+import { ModalDirective } from "./modal.directive";
+import { ComponentsHelper } from "./helper";
 
 const template = require('./modal.component.html');
 

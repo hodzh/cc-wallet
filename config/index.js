@@ -22,11 +22,15 @@ function clear() {
 
 function tryRequire(mode) {
   try {
-    switch(mode) {
-      case 'defaults' : return require('./defaults');
-      case 'development' : return require('./development');
-      case 'production' : return require('./production');
-      case 'test' : return require('./test');
+    switch (mode) {
+      case 'defaults' :
+        return require('./defaults');
+      case 'development' :
+        return require('./development');
+      case 'production' :
+        return require('./production');
+      case 'test' :
+        return require('./test');
       default:
         console.error('unknown environment mode', mode);
         return;

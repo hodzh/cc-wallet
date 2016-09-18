@@ -1,3 +1,4 @@
+import "../../core/server/setup";
 import { MODULES } from "./modules";
 
 var log = require('log4js').getLogger('core');

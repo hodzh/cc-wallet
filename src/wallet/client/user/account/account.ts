@@ -1,4 +1,4 @@
-import { IDocument } from '../../../../core/client/common/document';
+import { IDocument } from "../../../../core/client/common/document";
 
 export interface Account extends IDocument {
   fee: string;

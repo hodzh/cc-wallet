@@ -1,5 +1,5 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
 const styles = require('./password-input.component.scss');
 const template = require('./password-input.component.html');
@@ -9,7 +9,7 @@ const template = require('./password-input.component.html');
   template: template,
   styles: [styles],
   providers: [{
-    provide : NG_VALUE_ACCESSOR,
+    provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => PasswordInputComponent),
     multi: true
   }]
@@ -90,7 +90,7 @@ export class PasswordInputComponent {
   }
 
   togglePasswordVisible() {
-    this.inputState = this.states.hidden === this.inputState?
+    this.inputState = this.states.hidden === this.inputState ?
       this.states.visible : this.states.hidden;
   }
 }

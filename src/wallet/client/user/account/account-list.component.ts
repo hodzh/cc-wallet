@@ -3,7 +3,7 @@ import { ACCOUNT_LIST_SCHEMA } from "./account-list-schema";
 import { FilteredAccountDataSource } from "./filtered-account.data-source";
 import { AccountDataSource } from "./account.data-source";
 
-const styles   = require('./account-list.component.scss');
+const styles = require('./account-list.component.scss');
 const template = require('./account-list.component.html');
 
 @Component({

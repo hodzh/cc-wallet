@@ -4,12 +4,11 @@ import {
   ViewChild,
   ViewContainerRef,
   ComponentRef,
-  ComponentFactory,
   AfterViewInit,
   OnDestroy,
   Input,
   Type
-} from '@angular/core';
+} from "@angular/core";
 
 //const styles = require('./block.component.scss');
 const template = require('./dynamic-block.component.html');

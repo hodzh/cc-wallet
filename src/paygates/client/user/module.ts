@@ -1,14 +1,10 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
-import { FormsModule }    from '@angular/forms';
+import { NgModule } from "@angular/core";
 
 
 @NgModule({
-  imports: [
-  ],
-  declarations: [
-  ],
-  providers: [
-  ]
+  imports: [],
+  declarations: [],
+  providers: []
 })
-export class PaygatesUserModule {}
+export class PaygatesUserModule {
+}

@@ -27,8 +27,8 @@ collectionController.outcome = function (req, res) {
     })
     .then(controller.handleEntityNotFound(res))
     /*.then(function (result) {
-      return result.accountFrom.toObject();
-    })*/
+     return result.accountFrom.toObject();
+     })*/
     .then(controller.responseWithResult(res))
     .catch(controller.handleError(res));
 };

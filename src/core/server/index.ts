@@ -14,7 +14,7 @@ var app = {
 
 export = app;
 
-function init(config, modules){
+function init(config, modules) {
   app.config = config;
   initModels();
   initAuth();
@@ -23,46 +23,51 @@ function init(config, modules){
   //addModules(config.modules.slice(1));
   addModules(modules.slice(1));
 
-  function initModels(){
+  function initModels() {
     app.db.models.user = require('./model/user');
   }
-  function initAuth(){
+
+  function initAuth() {
     var userModel = require('./model/user');
     app.auth.init(userModel, app.config);
   }
-  function initMailer(){
+
+  function initMailer() {
     var mail = require('./mailer')(config.email);
     app.mail = mail;
   }
-  function initToken(){
+
+  function initToken() {
     var token = require('./token')(config.token);
     app.token = token;
   }
+
   function addModules(modules) {
     modules.forEach(initModule);
   }
+
   function initModule(moduleServer) {
     /*var path = require('path');
-    var fs = require('fs');
-    var modulePath = path.join(
-      __dirname, '../../../modules',
-      name, 'server');
-    if (!fs.existsSync(modulePath)) {
-      return;
-    }
-    var moduleServer = require(modulePath);*/
+     var fs = require('fs');
+     var modulePath = path.join(
+     __dirname, '../../../modules',
+     name, 'server');
+     if (!fs.existsSync(modulePath)) {
+     return;
+     }
+     var moduleServer = require(modulePath);*/
     moduleServer(app, app.config);
   }
 }
 
-function start(callback){
+function start(callback) {
   async.series([
       app.db.init.bind(app.db, app.config.db),
       initWeb,
       app.web.start.bind(
         app.web, app.config.web, app.auth)
     ],
-    function(err) {
+    function (err) {
       if (err) {
         return callback(err);
       }
@@ -70,7 +75,7 @@ function start(callback){
     }
   );
 
-  function initWeb(callback){
+  function initWeb(callback) {
 
     var web = app.web;
     var auth = app.auth;

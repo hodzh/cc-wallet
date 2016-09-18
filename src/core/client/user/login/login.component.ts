@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 //const styles   = require('./login.scss');
 const template = require('./login.component.html');

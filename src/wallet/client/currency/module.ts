@@ -5,8 +5,7 @@ import { CurrencyToTextPipe } from "./currency-to-text.pipe";
 import { CurrencyFromTextPipe } from "./currency-from-text.pipe";
 
 @NgModule({
-  imports: [
-  ],
+  imports: [],
   declarations: [
     CurrencyToTextPipe,
     CurrencyFromTextPipe
@@ -20,4 +19,5 @@ import { CurrencyFromTextPipe } from "./currency-from-text.pipe";
     CurrencyDataSource
   ]
 })
-export class WalletCurrencyModule {}
+export class WalletCurrencyModule {
+}

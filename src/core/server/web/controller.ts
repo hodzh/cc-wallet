@@ -1,4 +1,3 @@
-
 export = {
   handleError: handleError,
   responseWithResult: responseWithResult,
@@ -7,13 +6,13 @@ export = {
 };
 
 function handleError(res, statusCode = 500) {
-  return function(err) {
+  return function (err) {
     res.status(statusCode).send(err);
   };
 }
 
 function responseWithResult(res, statusCode = 200) {
-  return function(entity) {
+  return function (entity) {
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -21,7 +20,7 @@ function responseWithResult(res, statusCode = 200) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
+  return function (entity) {
     if (!entity) {
       res.status(404).end();
       return null;

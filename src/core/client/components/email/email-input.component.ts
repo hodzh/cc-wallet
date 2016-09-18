@@ -1,5 +1,5 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 const styles = require('./email-input.component.scss');
 const template = require('./email-input.component.html');
@@ -9,7 +9,7 @@ const template = require('./email-input.component.html');
   styles: [styles],
   template: template,
   providers: [{
-    provide : NG_VALUE_ACCESSOR,
+    provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => EmailInputComponent),
     multi: true
   }]

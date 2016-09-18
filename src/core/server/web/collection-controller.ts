@@ -86,20 +86,20 @@ function factory(model) {
 }
 
 function saveUpdates(updates) {
-  return function(entity) {
+  return function (entity) {
     var updated = Object.merge(entity, updates);
     return updated.save()
-      .spread(function(updated) {
+      .spread(function (updated) {
         return updated;
       });
   };
 }
 
 function removeEntity(res) {
-  return function(entity) {
+  return function (entity) {
     if (entity) {
       return entity.remove()
-        .then(function() {
+        .then(function () {
           res.status(204).end();
         });
     }

@@ -4,12 +4,11 @@ import {
   ComponentRef,
   ComponentFactoryResolver,
   Type,
-  ComponentFactory,
   Injectable,
   ReflectiveInjector,
   Injector
-} from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+} from "@angular/core";
+import { DOCUMENT } from "@angular/platform-browser";
 
 /**
  * Components helper class to easily work with

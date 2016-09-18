@@ -13,19 +13,19 @@ var errorMessage = 'Incorrect email or password.';
  */
 function localAuthenticate(User, email, password, done) {
   return Promise.resolve()
-    .then(function() {
+    .then(function () {
       return User.findOne({
         email: email.trim().toLowerCase()
       });
     })
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         // This email is not registered.
         return done(null, false, {
           message: errorMessage
         });
       }
-      user.authenticate(password, function(authError, authenticated) {
+      user.authenticate(password, function (authError, authenticated) {
         if (authError) {
           return done(authError);
         }
@@ -39,18 +39,18 @@ function localAuthenticate(User, email, password, done) {
         }
       });
     })
-    .catch(function(err) {
+    .catch(function (err) {
       return done(err);
     });
 }
 
-export = { setup: setup };
+export = {setup: setup};
 
 function setup(User, config) {
   passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
-  }, function(email, password, done) {
+  }, function (email, password, done) {
     return localAuthenticate(User, email, password, done);
   }));
 }
