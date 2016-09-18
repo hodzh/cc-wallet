@@ -9,6 +9,7 @@ import { MenuItem } from "./main-menu";
 import { HomePageContent } from "./home-page";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { ActiveNavItems } from "./navbar/active-nav-items.pipe";
+import { FooterComponent } from "./footer/footer.component";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ActiveNavItems } from "./navbar/active-nav-items.pipe";
     HomeComponent,
     GuestHome,
     NavbarComponent,
+    FooterComponent,
     ActiveNavItems
   ],
   entryComponents: [

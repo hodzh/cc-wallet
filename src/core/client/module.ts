@@ -15,7 +15,7 @@ import { CoreAuthModule } from "./auth/module";
     BrowserModule,
     HttpModule,
     CoreAuthModule,
-    //ROUTER,
+    ROUTER,
     CoreComponentsModule,
     LayoutModule,
     CoreAdminModule,

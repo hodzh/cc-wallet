@@ -5,7 +5,7 @@ const template = require('./oauth-buttons.component.html');
 
 @Component({
   selector: 'cc-oauth-buttons',
-  template: template,
+  template,
   styles: [styles]
 })
 
@@ -16,6 +16,5 @@ export class OauthButtonsComponent {
   }
 
   loginOauth(provider) {
-    //$window.location.href = '/auth/' + provider;
   }
 }

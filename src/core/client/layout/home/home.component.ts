@@ -9,7 +9,7 @@ const template = require('./home.component.html');
   template
 })
 export class HomeComponent {
-  public content: HomePageContent[] = [];//LayoutModule.HomePage;
+  public content: HomePageContent[] = LayoutModule.HomePage;
 
   constructor(private auth: Auth) {
   }

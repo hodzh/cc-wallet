@@ -25,7 +25,7 @@ var plugin = {
   //sourcemaps: require('gulp-sourcemaps'),
   //concat: require('gulp-concat'),
   rename: require('gulp-rename'),
-  inject: require('gulp-inject')
+  //inject: require('gulp-inject')
 };
 
 var pngquant = require('imagemin-pngquant');
@@ -150,7 +150,7 @@ gulp.task('watch', ['client-build'], function () {
       return;
     }
     //return injectBoot();
-    gulp.run('inject-boot');
+    //gulp.run('inject-boot');
   });
 
   //gulp.watch(paths.client.favicon, ['faviconCopy']).on('change', plugins.livereload.changed);
