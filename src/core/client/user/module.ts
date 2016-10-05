@@ -7,7 +7,6 @@ import { LoginFormComponent } from "./login/login-form.component";
 import { LoginModalComponent } from "./login/login-modal.component";
 import { ResetPasswordComponent } from "./reset-password/reset-password.component";
 import { CoreComponentsModule } from "../components/module";
-import { LayoutModule } from "../layout/module";
 import { CoreAuthModule } from "../auth/module";
 
 @NgModule({

@@ -1,4 +1,5 @@
-export = {
+export
+= {
   confirmEmail: {
     subject: 'Confirm e-mail address',
     html: 'confirm-email',

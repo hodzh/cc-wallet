@@ -9,8 +9,6 @@ import { CoreUserModule } from "./user/module";
 import { CoreAuthModule } from "./auth/module";
 
 @NgModule({
-  declarations: [],
-  entryComponents: [],
   imports: [
     BrowserModule,
     HttpModule,
@@ -20,8 +18,7 @@ import { CoreAuthModule } from "./auth/module";
     LayoutModule,
     CoreAdminModule,
     CoreUserModule
-  ],
-  providers: []
+  ]
 })
 export class CoreModule {
 }

@@ -6,9 +6,12 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/share";
+import "rxjs/add/operator/filter";
 import "rxjs/add/operator/throttle";
 import "rxjs/add/observable/throw";
 import "rxjs/add/observable/of";
+import "rxjs/add/observable/timer";
+import "rxjs/add/observable/from";
 import "rxjs/add/observable/interval";
 declare var require: any;
 

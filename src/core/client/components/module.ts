@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DROPDOWN_DIRECTIVES } from "./dropdown/index";
 import { DynamicBlock } from "./dynamic-block/dynamic-block.component";
 import { EmailInputComponent } from "./email/email-input.component";
-import { FooterComponent } from "../layout/footer/footer.component";
 import { TableComponent } from "./grid/table.component";
 import { PageTableComponent } from "./grid/page-table.component";
 import { PasswordInputComponent } from "./password/password-input.component";
@@ -52,6 +51,7 @@ import { CoreModalModule } from "./modal/module";
     ReactiveFormsModule,
     CoreModalModule,
 
+    ...DROPDOWN_DIRECTIVES,
     DynamicBlock,
     EmailInputComponent,
     TableComponent,
