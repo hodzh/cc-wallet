@@ -39,7 +39,7 @@ export class Auth {
     return Boolean(this.authToken.token);
   }
 
-  public hasRole(role: string) {
+  public hasRole(role: string): boolean {
     return this.currentUser.role === role;
   }
 
@@ -56,7 +56,7 @@ export class Auth {
     return req;
   }
 
-  public logout() {
+  public logout(): void {
     this.authToken.reset();
   }
 
@@ -76,8 +76,8 @@ export class Auth {
   public changePassword(params: ChangePasswordParams): Observable<any> {
     let req = this.accountResource.changePassword(params);
     req.subscribe(
-      response => {
-        this.router.navigate(['/home']);
+      () => {
+        this.router.navigate(['/']);
       },
       error => {
         console.error(error.text());
@@ -86,19 +86,19 @@ export class Auth {
     return req;
   }
 
-  private onLogin(response: Response) {
+  private onLogin(response: Response): void {
     let res = response.json();
     this.authToken.token = res['token'];
     this.currentUser = res['user'];
     this.router.navigate(['/']);
   }
 
-  private onLogout() {
+  private onLogout(): void {
     this.currentUser = guest;
     this.router.navigate(['/login']);
   }
 
-  private updateProfile() {
+  private updateProfile(): void {
     let req = this.accountResource.profile();
     req.subscribe(
       response => {
@@ -108,6 +108,5 @@ export class Auth {
         console.error(error.text());
       }
     );
-    return req;
   }
 }

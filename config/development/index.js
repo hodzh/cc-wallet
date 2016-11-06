@@ -9,5 +9,6 @@ module.exports = {
   token: require('./token'),
   log: require('./log'),
   paygates: require('./paygates'),
-  seed: require('./seed')
+  seed: require('./seed'),
+  recaptcha: require('./recaptcha')
 };

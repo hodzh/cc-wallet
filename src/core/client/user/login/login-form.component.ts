@@ -21,6 +21,7 @@ export class LoginFormComponent {
     this.loginForm = builder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
+      captcha: ['', Validators.required]
     });
   }
 
@@ -34,7 +35,8 @@ export class LoginFormComponent {
       return;
     }
     this.submitPending = true;
-    this.auth.login(this.loginForm.value)
+    var params = this.loginForm.value;
+    this.auth.login(params)
       .subscribe(
         () => {
           this.submitPending = false;
@@ -83,5 +85,13 @@ export class LoginFormComponent {
     } else {
       this.errors = `${error.reasonPhrase} (${error.code})`;
     }
+  }
+
+  captchaResponse(captcha) {
+    this.loginForm.patchValue({captcha: captcha});
+  }
+
+  captchaExpired() {
+    this.loginForm.patchValue({captcha: null});
   }
 }

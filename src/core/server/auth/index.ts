@@ -3,6 +3,7 @@
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
+var authSetup = require('./setup');
 
 var config;
 var User;
@@ -22,7 +23,6 @@ function init(userModel, appConfig) {
   validateJwt = expressJwt({
     secret: config.auth.jwt.secret
   });
-  var authSetup = require('./setup');
   authSetup(userModel, config);
 }
 
@@ -80,13 +80,6 @@ function hasRole(roleRequired) {
 
     // check user role
     if (req.user.role != roleRequired) {
-      return forbidden();
-    }
-
-    // user email should be valid
-    if (config.auth.local.verify &&
-      req.user.role == 'user' &&
-      req.user.provider == 'local' && !req.user.emailValid) {
       return forbidden();
     }
 

@@ -38,7 +38,8 @@ export class SignupComponent {
         confirmPassword: ['', Validators.required]
       }, {
         validator: InputValidators.areEqual
-      })
+      }),
+      captcha: ['', Validators.required]
     });
 
     this.password = (<FormGroup>this.signupForm
@@ -61,7 +62,8 @@ export class SignupComponent {
     this.submitPending = true;
     this.auth.signup({
       email: this.signupForm.controls['email'].value,
-      password: this.password.value
+      password: this.password.value,
+      captcha: this.signupForm.value.captcha
     })
       .subscribe(
         () => {
@@ -86,5 +88,13 @@ export class SignupComponent {
     } else {
       this.errors = `${error.reasonPhrase} (${error.code})`;
     }
+  }
+
+  captchaResponse(captcha) {
+    this.signupForm.patchValue({captcha: captcha});
+  }
+
+  captchaExpired() {
+    this.signupForm.patchValue({captcha: null});
   }
 }

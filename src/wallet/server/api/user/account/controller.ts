@@ -1,34 +1,11 @@
 var Account = require('../../../model/account');
-
-function handleError(res, statusCode = 500) {
-  return function (err) {
-    res.status(statusCode).send(err);
-  };
-}
-
-function responseWithResult(res, statusCode = 200) {
-  return function (entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
-}
+var controller = require('../../../../../core/server/web/controller');
 
 function responseWithUserResult(res, statusCode = 200) {
   return function (entity) {
     if (entity) {
       res.status(statusCode).json(entity.sanitize());
     }
-  };
-}
-
-function handleEntityNotFound(res) {
-  return function (entity) {
-    if (!entity) {
-      res.status(404).end();
-      return null;
-    }
-    return entity;
   };
 }
 
@@ -41,26 +18,31 @@ export = {
 // Gets a list of Accounts
 function index(req, res) {
   Account.getAccounts('user', req.user._id)
-    .then(function (accounts) {
+    .then((accounts) => {
       return accounts.map(function (account) {
-        return account.getUserData();
+        return account.sanitize();
       });
     })
-    .then(responseWithResult(res))
-    .catch(handleError(res));
+    .then(controller.responseWithResult(res, 200))
+    .catch(controller.handleError(res));
 }
 
 // Gets a single Account from the DB
 function show(req, res) {
   Account.findById(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(function (entity) {
-      if (entity) {
-        return entity.getUserData();
+    .then(controller.checkOwner(req))
+    .then((entity) => {
+      if (!entity) {
+        return null;
       }
+      if (entity.type != 'user') {
+        return null;
+      }
+      return entity;
     })
+    .then(controller.handleEntityNotFound(res))
     .then(responseWithUserResult(res))
-    .catch(handleError(res));
+    .catch(controller.handleError(res));
 }
 
 function create(req, res) {
@@ -69,7 +51,8 @@ function create(req, res) {
     currency: req.body.currency,
     type: 'user'
   }, true)
-    .then(handleEntityNotFound(res))
+    .then(controller.handleEntityNotFound(res))
     .then(responseWithUserResult(res))
-    .catch(handleError(res));
+    .then(controller.handleEntityNotFound(res))
+    .catch(controller.handleError(res));
 }

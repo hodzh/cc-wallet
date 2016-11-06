@@ -76,6 +76,22 @@
           Passwords must match.
         </p>
       </div>
+      <div
+        class="form-group"
+        [class.has-success]="signupForm.controls.captcha.valid && submitted"
+        [class.has-error]="!signupForm.controls.captcha.valid && submitted">
+        <label>Please complete this CAPTCHA.</label>
+        <re-captcha
+          site_key="6LdKlwgUAAAAANiQwucCM5Gstqlv11UrYKnOAPuh"
+          (captchaResponse)="captchaResponse($event)"
+          (captchaExpired)="captchaExpired()"
+        ></re-captcha>
+        <p
+          class="help-block"
+          *ngIf="submitted && signupForm.controls.captcha?.errors?.required">
+          You also need to complete this CAPTCHA (JavaScript required).
+        </p>
+      </div>
       <div>
         <button class="btn btn-inverse btn-lg btn-register" type="submit">
           Sign up

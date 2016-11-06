@@ -2,7 +2,7 @@
 
 var Promise = require('bluebird');
 var log = require('log4js').getLogger('token');
-
+var controller = require('../../../web/controller');
 export = controllerFactory;
 
 function controllerFactory(token) {
@@ -15,27 +15,11 @@ function controllerFactory(token) {
       .then(function () {
         return token.verify(req.params.token);
       })
-      //.then(responseWithResult(res))
       .then(redirect())
-      .catch(handleError(res));
+      .catch(controller.handleError(res));
 
     function redirect() {
       res.redirect('/');
     }
   }
-}
-
-function handleError(res, statusCode = 500) {
-  return function (err) {
-    log.error(err);
-    res.status(statusCode).send(err);
-  };
-}
-
-function responseWithResult(res, statusCode = 200) {
-  return function (entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
 }

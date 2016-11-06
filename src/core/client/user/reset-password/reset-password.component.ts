@@ -1,7 +1,7 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Auth } from "../../auth";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { UserResource } from "../../auth/user.resource";
 
 const template = require('./reset-password.component.html');
@@ -10,10 +10,10 @@ const template = require('./reset-password.component.html');
   template,
   providers: []
 })
-export class ResetPasswordComponent implements AfterViewInit {
+export class ResetPasswordComponent implements AfterViewInit, OnDestroy {
   @ViewChild('resetButton') resetButton: ElementRef;
   public submitPending: boolean = false;
-  private resetPassword$;
+  private resetPasswordSubscription: Subscription;
   errors;
 
   constructor(public router: Router,
@@ -22,16 +22,19 @@ export class ResetPasswordComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const throttleIntervalMin: number = 1;
-    this.resetPassword$ = Observable
+    const throttleIntervalMin: number = 60;
+    this.resetPasswordSubscription = Observable
       .fromEvent(this.resetButton.nativeElement, 'click')
-      .merge(Observable.of(true))
-      .throttle(() => Observable.timer(throttleIntervalMin * 60 * 1000))
+      .throttle(() =>
+        Observable.timer(throttleIntervalMin * 60 * 1000))
       .do(() => {
         this.submitPending = true;
       })
       .flatMap(() =>
-        this.userResource.resetPassword({email: this.auth.currentUser.email}))
+        this.userResource.resetPassword({
+          email: this.auth.currentUser.email
+        })
+      )
       .subscribe(
         (res) => {
           if (res.error) {
@@ -44,6 +47,10 @@ export class ResetPasswordComponent implements AfterViewInit {
         () => {
           this.submitPending = false;
         });
+  }
+
+  ngOnDestroy() {
+    this.resetPasswordSubscription.unsubscribe();
   }
 
   displayErrors(error) {

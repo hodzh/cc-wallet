@@ -15,7 +15,7 @@ var commonConfig = {
       '.css',
       '.scss'
     ]
-  }
+  },
 };
 
 var clientConfig = {
@@ -47,13 +47,6 @@ var clientConfig = {
     path: root('dist/client/js'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map'
-  },
-  node: {
-    global: true,
-    __dirname: true,
-    __filename: true,
-    process: true,
-    Buffer: false
   },
   module: {
     //preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],

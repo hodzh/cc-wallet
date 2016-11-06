@@ -4,7 +4,7 @@ module.exports = {
   /**
    * user roles supported by application
    */
-  role: ['user', 'admin', 'paygate'],
+  role: ['applicant', 'user', 'admin', 'paygate'],
 
   /**
    * json web token settings

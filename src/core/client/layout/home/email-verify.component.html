@@ -1,4 +1,29 @@
-<h1>Email Verify</h1>
-<p class="lead">
-
-</p>
+<div class="center clearfix">
+  <div class="clearfix"></div>
+  <div class="col-xs-6 col-xs-push-3">
+    <h2>
+      <i class="glyphicon glyphicon-ok"></i>
+      Registration is successful
+    </h2>
+    <p class="text">
+      Email confirmation has been sent to
+      <strong>{{auth.currentUser.email}}</strong>.
+    </p>
+    <p class="text lead">
+      Please check your mailbox and follow confirmation link.
+    </p>
+    <p class="text">
+      If you do not receive an email, please make sure you have entered
+      the address you registered with, and check your spam folder.
+    </p>
+    <p class="text">
+      <button
+        #sendButton
+        class="btn btn-primary"
+        tooltip="click to send confirmation email"
+      >
+        Send confirmation email
+      </button>
+    </p>
+  </div>
+</div>

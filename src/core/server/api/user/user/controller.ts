@@ -1,10 +1,11 @@
 'use strict';
+import Recaptcha = require("../../../captcha/recaptcha");
 
-var Promise = require('bluebird');
+import * as Promise from 'bluebird';
 var log = require('log4js').getLogger('token');
-var jwt = require('jsonwebtoken');
-
-var User = require('../../../model/user');
+import * as jwt from 'jsonwebtoken';
+import controller = require('../../../web/controller');
+import User = require('../../../model/user');
 
 export = controllerFactory;
 
@@ -16,7 +17,8 @@ function controllerFactory(token, mail) {
     create: create,
     changePassword: changePassword,
     resetPassword: resetPassword,
-    me: me
+    me: me,
+    emailVerify: emailVerify
   };
 
   /**
@@ -42,7 +44,7 @@ function controllerFactory(token, mail) {
           return res.status(403).end();
         }
       })
-      .catch(handleError(res));
+      .catch(controller.handleError(res));
   }
 
   /**
@@ -74,37 +76,38 @@ function controllerFactory(token, mail) {
     return function (req, res, next) {
       var user;
       return Promise.resolve()
+        .then(() => {
+          return Recaptcha.RecaptchaService.verify(req);
+        })
         .then(function () {
-          var newUser = new User(req.body);
-          newUser.provider = 'local';
-          newUser.role = 'user';
+          var newUser = new User({
+            email: req.body.email,
+            password: req.body.password,
+            provider: 'local',
+            role: auth.isEmailVerify() ? 'applicant' : 'user',
+            emailVerify: new Date(),
+            resetPassword: new Date()
+          });
           user = newUser;
           return newUser.save();
         })
-        .spread(function (user) {
+        .then(function (user) {
           var code = auth.signToken(user._id, user.role);
-          res.json({token: code});
+          res.json({
+            token: code,
+            user: user.sanitize()
+          });
           return user;
         })
-        .catch(validationError(res))
-        .then(function () {
-          if (!auth.isEmailVerify()) {
-            return;
-          }
-          // create verification code
-          var code = token.create({
-            type: 'confirmEmail',
-            user: user._id
-          });
-          // send email with code
-          return mail.send({
-            to: user.email
-          }, 'confirmEmail', {
-            token: code
-          });
+        .then(function (user) {
+          sendConfirmEmail(auth, user, true)
+            .catch((err) => {
+              log.error(err);
+            });
         })
         .catch(function (err) {
           log.error(err);
+          validationError(res);
         });
     };
   }
@@ -116,39 +119,55 @@ function controllerFactory(token, mail) {
     return function (req, res, next) {
       var user;
       return Promise.resolve()
-        .then(function () {
-          var newUser = new User(req.body);
-          newUser.provider = 'local';
-          newUser.role = 'user';
-          user = newUser;
-          return newUser.save();
+        .then(() => {
+          return Recaptcha.RecaptchaService.verify(req);
         })
-        .spread(function (user) {
-          var code = auth.signToken(user._id, user.role);
-          res.json({token: code});
-          return user;
-        })
-        .catch(validationError(res))
         .then(function () {
-          if (!auth.isEmailVerify()) {
-            return;
+          return User.find({
+            email: req.body.email
+          });
+        })
+        .then(function () {
+          if (user.resetPassword) {
+            const resetPasswordInterval = 60 /*min*/;
+            var nextTime = user.resetPassword.getTime() +
+              resetPasswordInterval * 60 * 1000;
+            if (nextTime > Date.now()) {
+              return;
+            }
           }
+
           // create verification code
           var code = token.create({
-            type: 'confirmEmail',
+            type: 'resetPassword',
             user: user._id
           });
+
           // send email with code
           return mail.send({
             to: user.email
-          }, 'confirmEmail', {
+          }, 'resetPassword', {
             token: code
           });
         })
-        .catch(function (err) {
-          log.error(err);
-        });
+        .catch(controller.handleError(res));
     };
+  }
+
+  function emailVerify(auth) {
+    return function (req, res, next) {
+      return Promise.resolve()
+        .then(function () {
+          return sendConfirmEmail(auth, req.user, false);
+        })
+        .then(function (user) {
+          res.json({
+            emailVerify: req.user.emailVerify
+          });
+          return user;
+        })
+        .catch(controller.handleError(res));
+    }
   }
 
   function validationError(res, statusCode = 422) {
@@ -157,20 +176,57 @@ function controllerFactory(token, mail) {
     }
   }
 
-  function handleError(res, statusCode = 500) {
-    return function (err) {
-      res.status(statusCode).send(err);
-    };
+  function sendConfirmEmail(auth, user, firstTime) {
+    if (!auth.isEmailVerify()) {
+      return;
+    }
+    if (user.role != 'applicant') {
+      return;
+    }
+    if (!user.emailVerify) {
+      return;
+    }
+    if (!firstTime) {
+      const emailVerifyInterval = 10 /*min*/;
+      var nextTime = user.emailVerify.getTime() +
+        emailVerifyInterval * 60 * 1000;
+      if (nextTime > Date.now()) {
+        return;
+      }
+    }
+
+    return Promise.resolve()
+      .then(() => {
+        if (firstTime) {
+          return;
+        }
+        user.emailVerify = new Date();
+        return user.save();
+      })
+      .then(() => {
+        // create verification code
+        var code = token.create({
+          type: 'confirmEmail',
+          user: user._id
+        });
+        // send email with code
+        return mail.send({
+          to: user.email
+        }, 'confirmEmail', {
+          token: code
+        });
+      });
   }
 
   function confirmEmail(token) {
     return Promise.resolve()
       .then(function () {
         return User.update({
-          _id: token.user
+          _id: token.user,
+          role: 'applicant'
         }, {
           $set: {
-            emailValid: true
+            role: 'user'
           }
         });
       })
@@ -180,7 +236,7 @@ function controllerFactory(token, mail) {
         }
       })
       .catch(function (err) {
-        log.error('fail to confirm email');
+        log.error(err);
       });
   }
 }

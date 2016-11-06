@@ -1,10 +1,11 @@
 'use strict';
 
+import controllerFactory = require('./controller');
+
 export = routeFactory;
 
 function routeFactory(token, mailer) {
 
-  var controllerFactory = require('./controller');
   var controller = controllerFactory(token, mailer);
   return route;
 
@@ -12,6 +13,7 @@ function routeFactory(token, mailer) {
     router.get('/', auth.isAuthenticated(), controller.me);
     router.put('/password', auth.hasRole('user'), controller.changePassword);
     router.put('/reset-password', auth.hasRole('user'), controller.resetPassword);
+    router.put('/email-verify', auth.hasRole('applicant'), controller.emailVerify(auth));
     router.post('/', controller.create(auth));
   }
 }

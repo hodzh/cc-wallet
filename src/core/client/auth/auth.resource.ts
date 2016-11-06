@@ -10,28 +10,22 @@ export class AuthResource {
   }
 
   login(params: Credentials): Observable<any> {
-    let body = JSON.stringify({
-      email: params.email,
-      password: params.password
-    });
+    let body = JSON.stringify(params);
     let req = this.http.post(
       '/auth/local',
       body, {
         headers: contentHeaders
-      });
+      }).share();
     return req;
   }
 
   signup(params: Credentials): Observable<any> {
-    let body = JSON.stringify({
-      email: params.email,
-      password: params.password
-    });
+    let body = JSON.stringify(params);
     let req = this.http.post(
-      '/auth/local',
+      '/api/me',
       body, {
         headers: contentHeaders
-      });
+      }).share();
     return req;
   }
 }

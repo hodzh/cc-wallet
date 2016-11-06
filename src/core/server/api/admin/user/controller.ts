@@ -1,10 +1,8 @@
 'use strict';
 
-var Promise = require('bluebird');
-var passport = require('passport');
-var jwt = require('jsonwebtoken');
+import * as Promise from 'bluebird';
 
-var User = require('../../../model/user');
+import User = require('../../../model/user');
 
 function validationError(res, statusCode = 422) {
   return function (err) {

@@ -10,6 +10,7 @@ import { HomePageContent } from "./home-page";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { ActiveNavItems } from "./navbar/active-nav-items.pipe";
 import { FooterComponent } from "./footer/footer.component";
+import { EmailVerifyComponent } from "./home/email-verify.component";
 
 @NgModule({
   declarations: [
@@ -18,10 +19,12 @@ import { FooterComponent } from "./footer/footer.component";
     GuestHome,
     NavbarComponent,
     FooterComponent,
-    ActiveNavItems
+    ActiveNavItems,
+    EmailVerifyComponent
   ],
   entryComponents: [
-    GuestHome
+    GuestHome,
+    EmailVerifyComponent
   ],
   imports: [
     RouterModule,
@@ -33,7 +36,10 @@ import { FooterComponent } from "./footer/footer.component";
   providers: []
 })
 export class LayoutModule {
-  public static HomePage: HomePageContent[] = [];
+  public static HomePage: HomePageContent[] = [{
+    factory: EmailVerifyComponent,
+    role: 'applicant'
+  }];
   public static MainMenu: MenuItem[] = [];
   public static SideBar: SideBarItem[] = [];
 }

@@ -1,4 +1,4 @@
-export
+module.exports
 = {
   confirmEmail: {
     subject: 'Confirm e-mail address',

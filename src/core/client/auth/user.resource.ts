@@ -36,7 +36,14 @@ export class UserResource {
     });
     let req = this.http.post(
       '/api/me/reset-password',
-      body);
+      body).share();
+    return req;
+  }
+
+  emailVerify(): Observable<any> {
+    let req = this.authHttp.put(
+      '/api/me/email-verify',
+      {});
     return req;
   }
 }

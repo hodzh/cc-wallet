@@ -17,6 +17,8 @@ import { RowActionsComponent } from "./grid/row-actions.component";
 import { RouterModule } from "@angular/router";
 import { OauthButtonsComponent } from "./oauth-buttons/oauth-buttons.component";
 import { CoreModalModule } from "./modal/module";
+import { ReCaptchaComponent } from "./recaptcha/recaptcha.component";
+import { ReCaptchaService } from "./recaptcha/recaptcha-service";
 
 @NgModule({
   imports: [
@@ -42,7 +44,9 @@ import { CoreModalModule } from "./modal/module";
     InlineSelectComponent,
     RowActionsComponent,
 
-    OauthButtonsComponent
+    OauthButtonsComponent,
+
+    ReCaptchaComponent
   ],
 
   exports: [
@@ -58,10 +62,11 @@ import { CoreModalModule } from "./modal/module";
     PageTableComponent,
     PasswordInputComponent,
     QRCodeComponent,
-    OauthButtonsComponent
+    OauthButtonsComponent,
+    ReCaptchaComponent
   ],
 
-  providers: []
+  providers: [ReCaptchaService]
 })
 export class CoreComponentsModule {
 }

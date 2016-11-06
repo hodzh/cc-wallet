@@ -14,13 +14,10 @@ var UserSchema = new Schema({
     unique: true,
     require: true
   },
-  emailValid: {
-    type: Boolean,
-    default: false
-  },
+  emailVerify: Date,
+  resetPassword: Date,
   role: {
     type: String,
-    default: 'user',
     require: true
   },
   password: String,
@@ -91,7 +88,6 @@ function sanitize() {
   return {
     _id: this._id.toString(),
     email: this.email,
-    emailValid: this.emailValid,
     role: this.role
   };
 }

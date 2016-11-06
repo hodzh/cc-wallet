@@ -1,0 +1,6 @@
+<div *ngIf="let contentBlock of content">
+  <cc-dynamic-block
+    *ngIf="hasRole(contentBlock.role)"
+    [factory]="contentBlock.factory"
+  ></cc-dynamic-block>
+</div>

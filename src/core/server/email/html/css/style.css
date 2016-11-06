@@ -219,34 +219,6 @@ a {
 }
 
 /* -------------------------------------
-    INVOICE
-    Styles for the billing table
-------------------------------------- */
-.invoice {
-  margin: 40px auto;
-  text-align: left;
-  width: 80%;
-}
-
-.invoice td {
-  padding: 5px 0;
-}
-
-.invoice .invoice-items {
-  width: 100%;
-}
-
-.invoice .invoice-items td {
-  border-top: #eee 1px solid;
-}
-
-.invoice .invoice-items .total td {
-  border-top: 2px solid #333;
-  border-bottom: 2px solid #333;
-  font-weight: 700;
-}
-
-/* -------------------------------------
     RESPONSIVE AND MOBILE FRIENDLY STYLES
 ------------------------------------- */
 @media only screen and (max-width: 640px) {

@@ -12,8 +12,9 @@ import "rxjs/add/observable/throw";
 import "rxjs/add/observable/of";
 import "rxjs/add/observable/timer";
 import "rxjs/add/observable/from";
+import "rxjs/add/observable/fromEvent";
 import "rxjs/add/observable/interval";
-declare var require: any;
+//declare var require: any;
 
 //require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css');
 //require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css.map');

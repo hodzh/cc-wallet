@@ -220,6 +220,10 @@ gulp.task('email-dev', [
   'email-watch'
 ]);
 
+gulp.task('email', [
+  'email-build'
+]);
+
 gulp.task('email-watch', ['email-build'], function () {
   var everything = Array.prototype.concat.call(
     paths.js, paths.html, paths.text,
