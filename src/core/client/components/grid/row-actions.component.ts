@@ -1,7 +1,7 @@
-import { Component, Input } from "@angular/core";
-import { Broadcast } from "../../common/broadcast";
-import { DataSource } from "../../common/data-source";
-import { TableRowAction } from "./table-row-action";
+import { Component, Input } from '@angular/core';
+import { Broadcast } from '../../common/broadcast';
+import { DataSource } from '../../common/data-source';
+import { TableRowAction } from './table-row-action';
 
 const template = require('./row-actions.component.html');
 

@@ -1,12 +1,12 @@
-import { Response } from "@angular/http";
-import { Router } from "@angular/router";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { AuthToken } from "./auth-token";
-import { AuthResource } from "./auth.resource";
-import { UserResource } from "./user.resource";
-import { Credentials } from "./credentials";
-import { ChangePasswordParams } from "./change-password-params";
+import { Response } from '@angular/http';
+import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AuthToken } from './auth-token';
+import { AuthResource } from './auth.resource';
+import { UserResource } from './user.resource';
+import { Credentials } from './credentials';
+import { ChangePasswordParams } from './change-password-params';
 
 const guest: IUserProfile = {
   email: '',
@@ -95,7 +95,7 @@ export class Auth {
 
   private onLogout(): void {
     this.currentUser = guest;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/signin']);
   }
 
   private updateProfile(): void {

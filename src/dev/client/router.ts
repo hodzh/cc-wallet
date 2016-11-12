@@ -1,5 +1,5 @@
-import { DevDbComponent } from "./db/db.component";
-import { RouterModule } from "@angular/router";
+import { DevDbComponent } from './db/db.component';
+import { RouterModule } from '@angular/router';
 
 export const Router = RouterModule.forChild([
   {

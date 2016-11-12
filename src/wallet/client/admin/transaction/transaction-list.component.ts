@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { TRANSACTION_LIST_SCHEMA } from "./transaction-list-schema";
-import { PageDataSource } from "../../../../core/client/common/page-data-source";
-import { AdminTransactionResource } from "./transaction.resource";
-import { Transaction } from "./transaction";
+import { Component } from '@angular/core';
+import { TRANSACTION_LIST_SCHEMA } from './transaction-list-schema';
+import { PageDataSource } from '../../../../core/client/common/page-data-source';
+import { AdminTransactionResource } from './transaction.resource';
+import { Transaction } from './transaction';
 
 //const styles   = require('./transaction-list.component.scss');
 const template = require('./transaction-list.component.html');

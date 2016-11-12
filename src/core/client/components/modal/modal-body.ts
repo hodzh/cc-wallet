@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { ModalComponent } from "./modal.component";
+import { Component } from '@angular/core';
+import { ModalComponent } from './modal.component';
 
 @Component({
   selector: 'modal-body',

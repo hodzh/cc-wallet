@@ -1,7 +1,7 @@
-import { Resource } from "./resource";
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { IDocument } from "./document";
+import { Resource } from './resource';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IDocument } from './document';
 
 export interface IDataSource<TDocument extends IDocument> {
   documents: Observable<TDocument[]>;
@@ -31,7 +31,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
       (res) => {
         if (res) {
           var rows = this.documentsSubject.getValue()
-            .filter(item => item !== document);
+                         .filter(item => item !== document);
           this.documentsSubject.next(rows);
         }
         this.loading = false;
@@ -115,9 +115,9 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   protected onDocumentChanged(doc) {
     var rows = this.documentsSubject.getValue()
-      .map((row: TDocument) => {
-        return row._id === doc._id ? doc : row;
-      });
+                   .map((row: TDocument) => {
+                     return row._id === doc._id ? doc : row;
+                   });
     this.documentsSubject.next(rows);
   }
 }

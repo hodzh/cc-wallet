@@ -1,5 +1,5 @@
-import { Component, ElementRef, Renderer } from "@angular/core";
-import { ClassName } from "./modal-options";
+import { Component, ElementRef, Renderer } from '@angular/core';
+import { ClassName } from './modal-options';
 
 export class ModalBackdropOptions {
   public animate: boolean = true;

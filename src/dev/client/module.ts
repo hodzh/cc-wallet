@@ -1,7 +1,7 @@
-import { NgModule } from "@angular/core";
-import { Router } from "./router";
-import { DevDbComponent } from "./db/db.component";
-import { LayoutModule } from "../../core/client/layout/module";
+import { NgModule } from '@angular/core';
+import { Router } from './router';
+import { DevDbComponent } from './db/db.component';
+import { LayoutModule } from '../../core/client/layout/module';
 
 @NgModule({
   imports: [

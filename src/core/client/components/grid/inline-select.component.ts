@@ -1,5 +1,5 @@
-import { Component, Output, EventEmitter, ViewChild, Renderer, Input } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { Component, Output, EventEmitter, ViewChild, Renderer, Input } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 
 const template = require('./inline-select.component.html');
 const styles = require('./inline-select.component.scss');

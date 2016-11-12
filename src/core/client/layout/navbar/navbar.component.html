@@ -9,7 +9,7 @@
       </button>
       <a [routerLink]="['/']" class="navbar-brand">Walle</a>
     </div>
-    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+    <div collapse="isCollapsed" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li *ngFor="let item of menu | ActiveNavItems:currentUser?.role">
           <a [routerLink]="[item.state]">{{item.title}}</a>
@@ -18,19 +18,17 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="!isLoggedIn">
-          <a [routerLink]="['/signup']">Sign up</a>
+          <a [routerLink]="['/signin']">Sign in</a>
         </li>
+        <li *ngIf="!isLoggedIn"><a>or</a></li>
         <li *ngIf="!isLoggedIn">
-          <a [routerLink]="['/login']">Login</a>
-        </li>
-        <li *ngIf="isLoggedIn">
-          <p class="navbar-text">Hello {{ currentUser.name }}</p>
+          <a [routerLink]="['/signup']">Create an account</a>
         </li>
         <li *ngIf="isLoggedIn">
           <a [routerLink]="['/settings']"><span class="glyphicon glyphicon-cog"></span></a>
         </li>
         <li *ngIf="isLoggedIn">
-          <a href="#" (click)="logout($event)">Logout</a>
+          <a href="#" (click)="logout($event)">Sign out</a>
         </li>
       </ul>
     </div>

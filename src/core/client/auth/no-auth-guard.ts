@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { Router, CanActivate } from "@angular/router";
-import { Auth } from "./auth";
+import { Injectable } from '@angular/core';
+import { Router, CanActivate } from '@angular/router';
+import { Auth } from './auth';
 
 @Injectable()
 export class NoAuthGuard implements CanActivate {

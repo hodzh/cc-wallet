@@ -119,7 +119,7 @@ function adminTransaction(Transaction, type, adminId, accountId, data) {
   log.trace(type, adminId, accountId, JSON.stringify(data));
 
   return Account.findById(accountId)
-    .then(enableAdminAccount);
+                .then(enableAdminAccount);
 
   function enableAdminAccount(userAccount) {
     if (!userAccount) {
@@ -130,7 +130,7 @@ function adminTransaction(Transaction, type, adminId, accountId, data) {
       owner: adminId,
       currency: userAccount.currency
     }, true)
-      .then(createTransaction);
+                  .then(createTransaction);
 
     function createTransaction(adminAccount) {
       if (!adminAccount) {

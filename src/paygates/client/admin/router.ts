@@ -1,7 +1,7 @@
-import { AdminGuard } from "../../../core/client/auth";
-import { AdminDepositListComponent } from "./deposit/deposit-list.component";
-import { AdminWithdrawalListComponent } from "./withdrawal/withdrawal-list.component";
-import { RouterModule } from "@angular/router";
+import { AdminGuard } from '../../../core/client/auth';
+import { AdminDepositListComponent } from './deposit/deposit-list.component';
+import { AdminWithdrawalListComponent } from './withdrawal/withdrawal-list.component';
+import { RouterModule } from '@angular/router';
 
 export const Router = RouterModule.forChild([
   {

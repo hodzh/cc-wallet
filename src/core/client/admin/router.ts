@@ -1,6 +1,6 @@
-import { RouterModule } from "@angular/router";
-import { AdminUsersComponent } from "./users";
-import { AdminGuard } from "../auth/admin-guard";
+import { RouterModule } from '@angular/router';
+import { AdminUsersComponent } from './users';
+import { AdminGuard } from '../auth/admin-guard';
 
 export const ROUTER = RouterModule.forChild([
   {

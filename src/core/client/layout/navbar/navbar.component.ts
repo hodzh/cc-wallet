@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
-import { Auth } from "../../auth";
-import { LayoutModule } from "../module";
+import { Component } from '@angular/core';
+import { Auth } from '../../auth';
+import { LayoutModule } from '../module';
 
 const template = require('./navbar.component.html');
 

@@ -43,11 +43,11 @@ export = function (config) {
    */
   function verify(code) {
     return Promise.resolve()
-      .then(function () {
-        return token.verify(code);
-      })
-      .then(function (token) {
-        events.emit(token.type, token);
-      });
+                  .then(function () {
+                    return token.verify(code);
+                  })
+                  .then(function (token) {
+                    events.emit(token.type, token);
+                  });
   }
 };

@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { Auth } from "../../auth/auth";
+import { Component } from '@angular/core';
+import { Auth } from '../../auth/auth';
 
 const template = require('./main.component.html');
 

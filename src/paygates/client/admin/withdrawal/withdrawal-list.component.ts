@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
-import { PageDataSource } from "../../../../core/client/common/page-data-source";
-import { AdminWithdrawalResource } from "./withdrawal.resource.ts";
-import { WITHDRAWAL_LIST_SCHEMA } from "./withdrawal-list-schema";
-import { AdminWithdrawal } from "./withdrawal";
-import { TableSchema } from "../../../../core/client/components/grid/table-scheme";
+import { Component } from '@angular/core';
+import { PageDataSource } from '../../../../core/client/common/page-data-source';
+import { AdminWithdrawalResource } from './withdrawal.resource.ts';
+import { WITHDRAWAL_LIST_SCHEMA } from './withdrawal-list-schema';
+import { AdminWithdrawal } from './withdrawal';
+import { TableSchema } from '../../../../core/client/components/grid/table-scheme';
 
 //const styles   = require('./withdrawal-list.component.scss');
 const template = require('./withdrawal-list.component.html');

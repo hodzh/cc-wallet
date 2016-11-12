@@ -13,35 +13,35 @@ var errorMessage = 'Incorrect email or password.';
  */
 function localAuthenticate(User, email, password, done) {
   return Promise.resolve()
-    .then(function () {
-      return User.findOne({
-        email: email.trim().toLowerCase()
-      });
-    })
-    .then(function (user) {
-      if (!user) {
-        // This email is not registered.
-        return done(null, false, {
-          message: errorMessage
-        });
-      }
-      user.authenticate(password, function (authError, authenticated) {
-        if (authError) {
-          return done(authError);
-        }
-        if (!authenticated) {
-          // This password is not correct.
-          return done(null, false, {
-            message: errorMessage
-          });
-        } else {
-          return done(null, user);
-        }
-      });
-    })
-    .catch(function (err) {
-      return done(err);
-    });
+                .then(function () {
+                  return User.findOne({
+                    email: email.trim().toLowerCase()
+                  });
+                })
+                .then(function (user) {
+                  if (!user) {
+                    // This email is not registered.
+                    return done(null, false, {
+                      message: errorMessage
+                    });
+                  }
+                  user.authenticate(password, function (authError, authenticated) {
+                    if (authError) {
+                      return done(authError);
+                    }
+                    if (!authenticated) {
+                      // This password is not correct.
+                      return done(null, false, {
+                        message: errorMessage
+                      });
+                    } else {
+                      return done(null, user);
+                    }
+                  });
+                })
+                .catch(function (err) {
+                  return done(err);
+                });
 }
 
 export = {setup: setup};

@@ -1,10 +1,10 @@
-import { RouterModule } from "@angular/router";
-import { LoginComponent } from "./login";
-import { SignupComponent } from "./signup";
-import { AuthGuard, NoAuthGuard } from "../auth";
-import { SettingsComponent } from "./settings";
-import { ResetPasswordComponent } from "./reset-password";
-import { HomeComponent } from "../layout/home/home.component";
+import { RouterModule } from '@angular/router';
+import { LoginComponent } from './login';
+import { SignupComponent } from './signup';
+import { AuthGuard, NoAuthGuard } from '../auth';
+import { SettingsComponent } from './settings';
+import { ResetPasswordComponent } from './reset-password';
+import { HomeComponent } from '../layout/home/home.component';
 
 export const ROUTER = RouterModule.forChild([
   {
@@ -13,7 +13,7 @@ export const ROUTER = RouterModule.forChild([
     canActivate: [AuthGuard]
   },
   {
-    path: 'login',
+    path: 'signin',
     component: LoginComponent,
     canActivate: [NoAuthGuard]
   },

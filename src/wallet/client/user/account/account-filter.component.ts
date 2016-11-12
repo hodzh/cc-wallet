@@ -1,5 +1,5 @@
-import { Component, Input } from "@angular/core";
-import { FilteredAccountDataSource } from "./filtered-account.data-source";
+import { Component, Input } from '@angular/core';
+import { FilteredAccountDataSource } from './filtered-account.data-source';
 
 const styles = require('./account-filter.component.scss');
 const template = require('./account-filter.component.html');

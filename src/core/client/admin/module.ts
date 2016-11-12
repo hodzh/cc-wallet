@@ -1,10 +1,10 @@
-import { NgModule } from "@angular/core";
-import { StatisticsComponent } from "./statistics/statistics.component";
-import { AdminUsersComponent } from "./users/user-list.component";
-import { ROUTER } from "./router";
-import { CoreComponentsModule } from "../components/module";
-import { LayoutModule } from "../layout/module";
-import { CoreAuthModule } from "../auth/module";
+import { NgModule } from '@angular/core';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { AdminUsersComponent } from './users/user-list.component';
+import { ROUTER } from './router';
+import { CoreComponentsModule } from '../components/module';
+import { LayoutModule } from '../layout/module';
+import { CoreAuthModule } from '../auth/module';
 
 @NgModule({
   declarations: [

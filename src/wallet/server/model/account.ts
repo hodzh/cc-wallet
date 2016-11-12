@@ -81,19 +81,19 @@ schema.statics.enable = function (index, value) {
       returnNewDocument: true,
       new: true
     })
-    .then(
-      function (account) {
-        if (!account) {
-          throw new Error('fail upsert account');
-        }
-        return account;
-      }
-    )
-    .catch(
-      function (error) {
-        log.error('failed', 'enable', 'account', JSON.stringify(index), 'due', JSON.stringify(error));
-      }
-    );
+             .then(
+               function (account) {
+                 if (!account) {
+                   throw new Error('fail upsert account');
+                 }
+                 return account;
+               }
+             )
+             .catch(
+               function (error) {
+                 log.error('failed', 'enable', 'account', JSON.stringify(index), 'due', JSON.stringify(error));
+               }
+             );
 };
 
 schema.statics.getAccounts = function (type, userId) {

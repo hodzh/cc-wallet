@@ -116,18 +116,18 @@ function validatePassword(password) {
 function validateEmailAlreadyInUse(value, respond) {
   var self = this;
   return this.constructor.findOne({email: value})
-    .then(function (user) {
-      if (user) {
-        if (self.id === user.id) {
-          return respond(true);
-        }
-        return respond(false);
-      }
-      return respond(true);
-    })
-    .catch(function (err) {
-      throw err;
-    });
+             .then(function (user) {
+               if (user) {
+                 if (self.id === user.id) {
+                   return respond(true);
+                 }
+                 return respond(false);
+               }
+               return respond(true);
+             })
+             .catch(function (err) {
+               throw err;
+             });
 }
 
 function validatePresenceOf(value) {
@@ -261,7 +261,7 @@ function encryptPassword(password, callback) {
       salt,
       defaultIterations,
       defaultKeyLength)
-      .toString('base64');
+                 .toString('base64');
   }
 
   return crypto.pbkdf2(

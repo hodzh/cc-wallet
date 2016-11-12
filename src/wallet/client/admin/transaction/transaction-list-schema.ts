@@ -1,4 +1,4 @@
-import { CURRENCY_TEXT_CONVERTER } from "../../../common/currency-text-converter";
+import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
 export const TRANSACTION_LIST_SCHEMA = [
   {
     title: 'create date',

@@ -36,11 +36,11 @@ function transactionProcess(schema, Account) {
       .catch(function (err) {
         console.log('transaction failed', err);
         return Transaction.rollback(transaction)
-          .then(
-            function () {
-              throw new Error(err);
-            }
-          );
+                          .then(
+                            function () {
+                              throw new Error(err);
+                            }
+                          );
       })
       .then(function () {
         return [
@@ -60,16 +60,16 @@ function transactionProcess(schema, Account) {
             returnNewDocument: true,
             new: true
           })
-          .then(function (transactionNew) {
-            return Transaction.emit('done', transaction)
-              .then(function () {
-                return {
-                  accountFrom: accountFrom,
-                  accountTo: accountTo,
-                  transaction: transactionNew
-                };
-              });
-          });
+                          .then(function (transactionNew) {
+                            return Transaction.emit('done', transaction)
+                                              .then(function () {
+                                                return {
+                                                  accountFrom: accountFrom,
+                                                  accountTo: accountTo,
+                                                  transaction: transactionNew
+                                                };
+                                              });
+                          });
       });
   }
 
@@ -111,14 +111,14 @@ function transactionProcess(schema, Account) {
         },
         $pull: {pendingTransactions: transaction._id}
       })
-      .then(
-        function (result) {
-          if (result.nModified !== 1 &&
-            result.nModified !== 0) {
-            return Promise.reject(Error('failed rollback to'));
-          }
-        }
-      );
+                  .then(
+                    function (result) {
+                      if (result.nModified !== 1 &&
+                        result.nModified !== 0) {
+                        return Promise.reject(Error('failed rollback to'));
+                      }
+                    }
+                  );
   }
 
   function rollbackFrom(transaction) {
@@ -133,14 +133,14 @@ function transactionProcess(schema, Account) {
         },
         $pull: {pendingTransactions: transaction._id}
       })
-      .then(
-        function (result) {
-          if (result.nModified !== 1 &&
-            result.nModified !== 0) {
-            throw new Error('failed rollback from');
-          }
-        }
-      );
+                  .then(
+                    function (result) {
+                      if (result.nModified !== 1 &&
+                        result.nModified !== 0) {
+                        throw new Error('failed rollback from');
+                      }
+                    }
+                  );
   }
 
   function transactionTo(transaction) {
@@ -159,11 +159,11 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(function (result) {
-        if (result.nModified !== 1) {
-          throw new Error('failed process to');
-        }
-      });
+                  .then(function (result) {
+                    if (result.nModified !== 1) {
+                      throw new Error('failed process to');
+                    }
+                  });
   }
 
   function transactionFrom(transaction) {
@@ -179,11 +179,11 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(function (result) {
-        if (result.nModified !== 1) {
-          throw new Error('failed process from');
-        }
-      });
+                  .then(function (result) {
+                    if (result.nModified !== 1) {
+                      throw new Error('failed process from');
+                    }
+                  });
   }
 
   function transactionCommitTo(transaction) {
@@ -200,14 +200,14 @@ function transactionProcess(schema, Account) {
         returnNewDocument: true,
         new: true
       })
-      .then(
-        function (result) {
-          if (!result) {
-            throw new Error('failed commit to');
-          }
-          return result;
-        }
-      );
+                  .then(
+                    function (result) {
+                      if (!result) {
+                        throw new Error('failed commit to');
+                      }
+                      return result;
+                    }
+                  );
   }
 
   function transactionCommitFrom(transaction) {
@@ -224,14 +224,14 @@ function transactionProcess(schema, Account) {
         returnNewDocument: true,
         new: true
       })
-      .then(
-        function (result) {
-          if (!result) {
-            throw new Error('failed commit from');
-          }
-          return result;
-        }
-      );
+                  .then(
+                    function (result) {
+                      if (!result) {
+                        throw new Error('failed commit from');
+                      }
+                      return result;
+                    }
+                  );
   }
 
 }

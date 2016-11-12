@@ -1,5 +1,5 @@
 module.exports
-= {
+  = {
   confirmEmail: {
     subject: 'Confirm e-mail address',
     html: 'confirm-email',
@@ -11,7 +11,7 @@ module.exports
     text: 'reset-password'
   },
   newIpLogin: {
-    subject: 'Successful Login from New IP',
+    subject: 'Successful Sign-in from New IP',
     html: 'new-ip-login',
     text: 'new-ip-login'
   }

@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { CurrencyResource } from "./currency.resource";
-import { Currency } from "./currency";
-import { DataSource } from "../../../core/client/common/data-source";
+import { Injectable } from '@angular/core';
+import { CurrencyResource } from './currency.resource';
+import { Currency } from './currency';
+import { DataSource } from '../../../core/client/common/data-source';
 
 @Injectable()
 export class CurrencyDataSource extends DataSource<Currency> {

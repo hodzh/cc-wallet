@@ -10,12 +10,12 @@ import {
   Input,
   OnDestroy,
   Output
-} from "@angular/core";
-import { global } from "@angular/core/src/facade/lang";
-import { ModalBackdropComponent, ModalBackdropOptions } from "./modal-backdrop.component";
-import { modalConfigDefaults, ClassName, ModalOptions, Selector } from "./modal-options";
-import { ComponentsHelper } from "./helper";
-import { Utils } from "./util";
+} from '@angular/core';
+import { global } from '@angular/core/src/facade/lang';
+import { ModalBackdropComponent, ModalBackdropOptions } from './modal-backdrop.component';
+import { modalConfigDefaults, ClassName, ModalOptions, Selector } from './modal-options';
+import { ComponentsHelper } from './helper';
+import { Utils } from './util';
 
 const TRANSITION_DURATION = 300;
 const BACKDROP_TRANSITION_DURATION = 150;
@@ -225,10 +225,10 @@ export class ModalDirective implements AfterViewInit, OnDestroy {
   private showBackdrop(callback?: Function): void {
     if (this._isShown && this.config.backdrop) {
       this.backdrop = this.componentsHelper
-        .appendNextToRoot(
-          ModalBackdropComponent,
-          ModalBackdropOptions,
-          new ModalBackdropOptions({animate: false}));
+                          .appendNextToRoot(
+                            ModalBackdropComponent,
+                            ModalBackdropOptions,
+                            new ModalBackdropOptions({animate: false}));
 
       this.backdrop.then((backdrop: ComponentRef<ModalBackdropComponent>) => {
         if (this.isAnimated) {

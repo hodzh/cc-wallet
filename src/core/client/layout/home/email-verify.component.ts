@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
-import { UserResource } from "../../auth/user.resource";
-import { Auth } from "../../auth/auth";
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { UserResource } from '../../auth/user.resource';
+import { Auth } from '../../auth/auth';
 
 //const styles = require('./email-verify.component.scss');
 const template = require('./email-verify.component.html');
@@ -17,10 +17,9 @@ export class EmailVerifyComponent {
   private submitPending: boolean;
   private error;
 
-  constructor(
-    public router: Router,
-    public auth: Auth,
-    private userResource: UserResource) {
+  constructor(public router: Router,
+              public auth: Auth,
+              private userResource: UserResource) {
   }
 
   ngAfterViewInit() {
@@ -34,9 +33,9 @@ export class EmailVerifyComponent {
       })
       .flatMap(() =>
         this.userResource.emailVerify()
-          .retryWhen(function(errors) {
-            return errors.delay(2000);
-          }))
+            .retryWhen(function (errors) {
+              return errors.delay(2000);
+            }))
       .subscribe(
         (res) => {
           if (res.error) {

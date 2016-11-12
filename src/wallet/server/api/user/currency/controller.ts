@@ -5,6 +5,6 @@ export = function (config) {
 
   function index(req, res) {
     res.json(Object.keys(config.currency)
-      .map(key => config.currency[key]));
+                   .map(key => config.currency[key]));
   }
 };

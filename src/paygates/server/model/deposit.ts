@@ -74,63 +74,63 @@ schema.methods.confirm = function () {
   var deposit = this;
   log.trace('confirm deposit');
   return Promise.resolve()
-    .then(function () {
-      if (deposit.status != 'unconfirmed') {
-        throw new Error('bad deposit status');
-      }
-      deposit.status = 'confirmed';
-      return deposit.save();
-    })
-    .then(function () {
-      return Account.enable({
-        owner: null,
-        type: 'paygate',
-        currency: deposit.currency
-      });
-    })
-    .then(function (account) {
-      var transaction = new Transaction({
-        currency: deposit.currency,
-        amount: deposit.amount,
-        to: deposit.account,
-        from: account._id,
-        category: 'deposit',
-        state: 'new'
-      });
-      return transaction.save()
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      deposit.transaction = transaction._id;
-      deposit.status = 'process';
-      return deposit.save()
-        .thenReturn(transaction);
-    })
-    .then(function (transaction) {
-      return Transaction
-        .process(transaction);
-    })
-    .then(function (result) {
-      deposit.status = 'done';
-      return deposit.save()
-        .thenReturn(result.transaction);
-    })
-    .then(function (transaction) {
-      log.trace('deposit processed', transaction._id);
-    })
-    .catch(function (error) {
-      log.error(error);
-    });
+                .then(function () {
+                  if (deposit.status != 'unconfirmed') {
+                    throw new Error('bad deposit status');
+                  }
+                  deposit.status = 'confirmed';
+                  return deposit.save();
+                })
+                .then(function () {
+                  return Account.enable({
+                    owner: null,
+                    type: 'paygate',
+                    currency: deposit.currency
+                  });
+                })
+                .then(function (account) {
+                  var transaction = new Transaction({
+                    currency: deposit.currency,
+                    amount: deposit.amount,
+                    to: deposit.account,
+                    from: account._id,
+                    category: 'deposit',
+                    state: 'new'
+                  });
+                  return transaction.save()
+                                    .thenReturn(transaction);
+                })
+                .then(function (transaction) {
+                  deposit.transaction = transaction._id;
+                  deposit.status = 'process';
+                  return deposit.save()
+                                .thenReturn(transaction);
+                })
+                .then(function (transaction) {
+                  return Transaction
+                    .process(transaction);
+                })
+                .then(function (result) {
+                  deposit.status = 'done';
+                  return deposit.save()
+                                .thenReturn(result.transaction);
+                })
+                .then(function (transaction) {
+                  log.trace('deposit processed', transaction._id);
+                })
+                .catch(function (error) {
+                  log.error(error);
+                });
 };
 
 schema.methods.verify = function () {
   var deposit = this;
   return Promise.resolve()
-    .then(function () {
-      if (deposit.status != 'approved') {
-        throw new Error('bad deposit status ' + deposit.status);
-      }
-    });
+                .then(function () {
+                  if (deposit.status != 'approved') {
+                    throw new Error('bad deposit status ' + deposit.status);
+                  }
+                });
 };
 
 schema.statics.on = DepositEvents.on.bind(DepositEvents);

@@ -1,5 +1,5 @@
-import { Component, Input, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, Input, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const styles = require('./password-input.component.scss');
 const template = require('./password-input.component.html');

@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
-import { Auth } from "../../auth";
-import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from "../../common/input-validators";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Auth } from '../../auth';
+import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../../common/input-validators';
 
 //const styles   = require('./signup.component.scss');
 const template = require('./signup.component.html');
@@ -65,15 +65,15 @@ export class SignupComponent {
       password: this.password.value,
       captcha: this.signupForm.value.captcha
     })
-      .subscribe(
-        () => {
-          this.submitPending = false;
-        },
-        (error) => {
-          this.displayErrors(error);
-          this.submitPending = false;
-        }
-      );
+        .subscribe(
+          () => {
+            this.submitPending = false;
+          },
+          (error) => {
+            this.displayErrors(error);
+            this.submitPending = false;
+          }
+        );
   }
 
   displayErrors(error) {

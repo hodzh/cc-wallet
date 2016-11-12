@@ -1,5 +1,5 @@
-import { Directive, ElementRef, HostListener } from "@angular/core";
-import { DropdownDirective } from "./dropdown.directive";
+import { Directive, ElementRef, HostListener } from '@angular/core';
+import { DropdownDirective } from './dropdown.directive';
 
 @Directive({
   selector: '[dropdown][dropdownKeyboardNav]'

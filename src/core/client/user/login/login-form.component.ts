@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Auth } from "../../auth";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Auth } from '../../auth';
 
 const template = require('./login-form.component.html');
 
@@ -37,15 +37,15 @@ export class LoginFormComponent {
     this.submitPending = true;
     var params = this.loginForm.value;
     this.auth.login(params)
-      .subscribe(
-        () => {
-          this.submitPending = false;
-        },
-        (error) => {
-          this.displayErrors(error);
-          this.submitPending = false;
-        }
-      );
+        .subscribe(
+          () => {
+            this.submitPending = false;
+          },
+          (error) => {
+            this.displayErrors(error);
+            this.submitPending = false;
+          }
+        );
   }
 
   signup(event) {

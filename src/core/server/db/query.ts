@@ -1,5 +1,5 @@
 'use strict';
-import { QueryResult } from "../../common/query-result";
+import { QueryResult } from '../../common/query-result';
 
 var Promise = require('bluebird');
 
@@ -50,11 +50,11 @@ export = function (schema, pluginOptions) {
     }
     if (limit) {
       let docsQuery = this.find(query)
-        .select(select)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .lean(lean);
+                          .select(select)
+                          .sort(sort)
+                          .skip(skip)
+                          .limit(limit)
+                          .lean(lean);
       if (populate) {
         [].concat(populate).forEach((item) => {
           docsQuery.populate(item);

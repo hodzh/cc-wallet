@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { AuthHttp } from "./auth-http";
-import { ChangePasswordParams } from "./change-password-params";
-import { Http } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AuthHttp } from './auth-http';
+import { ChangePasswordParams } from './change-password-params';
+import { Http } from '@angular/http';
 
 export interface ResetPasswordParams {
   email: string;

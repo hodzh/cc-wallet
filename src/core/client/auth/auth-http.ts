@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Http, Headers, RequestOptionsArgs, RequestMethod, Response } from "@angular/http";
-import { AuthToken } from "./auth-token";
-import { Observable } from "rxjs/Observable";
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptionsArgs, RequestMethod, Response } from '@angular/http';
+import { AuthToken } from './auth-token';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthHttp {
@@ -51,14 +51,14 @@ export class AuthHttp {
       options.body = JSON.stringify(options.body);
     }
     request = this.http.request(url, options)
-      .catch(
-        (error: any, caught: Observable<Response>) => {
-          if (error.status === 401) {
-            this.authToken.reset();
-          }
-          return Observable.throw(error);
-        }
-      );
+                  .catch(
+                    (error: any, caught: Observable<Response>) => {
+                      if (error.status === 401) {
+                        this.authToken.reset();
+                      }
+                      return Observable.throw(error);
+                    }
+                  );
 
     return request;
   }

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 
 const styles = require('./loading-overlay.component.scss');
 const template = require('./loading-overlay.component.html');

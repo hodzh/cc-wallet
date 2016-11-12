@@ -12,11 +12,11 @@ function controllerFactory(token) {
 
   function tokenVerify(req, res) {
     return Promise.resolve()
-      .then(function () {
-        return token.verify(req.params.token);
-      })
-      .then(redirect())
-      .catch(controller.handleError(res));
+                  .then(function () {
+                    return token.verify(req.params.token);
+                  })
+                  .then(redirect())
+                  .catch(controller.handleError(res));
 
     function redirect() {
       res.redirect('/');

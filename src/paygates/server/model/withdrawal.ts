@@ -90,60 +90,60 @@ schema.methods.confirm = function () {
   var withdrawal = this;
   log.trace('confirm withdrawal');
   return Promise.resolve()
-    .then(function () {
-      if (withdrawal.status != 'unconfirmed') {
-        throw new Error('bad withdrawal status ' + withdrawal.status);
-      }
-      withdrawal.status = 'confirmed';
-      return withdrawal.save();
-    })
-    .then(function () {
-      emitEvent('confirmed', withdrawal);
-    });
+                .then(function () {
+                  if (withdrawal.status != 'unconfirmed') {
+                    throw new Error('bad withdrawal status ' + withdrawal.status);
+                  }
+                  withdrawal.status = 'confirmed';
+                  return withdrawal.save();
+                })
+                .then(function () {
+                  emitEvent('confirmed', withdrawal);
+                });
 };
 schema.methods.approve = function () {
   var withdrawal = this;
   log.trace('approve withdrawal');
   return Promise.resolve()
-    .then(function () {
-      if (withdrawal.status != 'confirmed') {
-        throw new Error('bad withdrawal status ' + withdrawal.status);
-      }
-      withdrawal.status = 'approved';
-      return withdrawal.save();
-    })
-    .then(function () {
-      emitEvent('approved', withdrawal);
-    });
+                .then(function () {
+                  if (withdrawal.status != 'confirmed') {
+                    throw new Error('bad withdrawal status ' + withdrawal.status);
+                  }
+                  withdrawal.status = 'approved';
+                  return withdrawal.save();
+                })
+                .then(function () {
+                  emitEvent('approved', withdrawal);
+                });
 };
 schema.methods.cancel = function () {
   var withdrawal = this;
   log.trace('cancel withdrawal', withdrawal._id);
 
   return Promise.resolve()
-    .then(function () {
-      if (withdrawal.status != 'confirmed') {
-        throw new Error('bad withdrawal status ' + withdrawal.status);
-      }
-      withdrawal.status = 'cancelled';
-      return withdrawal.save();
-    })
-    .then(function (withdrawal) {
-      emitEvent('canceled', withdrawal);
-      return withdrawal;
-    });
+                .then(function () {
+                  if (withdrawal.status != 'confirmed') {
+                    throw new Error('bad withdrawal status ' + withdrawal.status);
+                  }
+                  withdrawal.status = 'cancelled';
+                  return withdrawal.save();
+                })
+                .then(function (withdrawal) {
+                  emitEvent('canceled', withdrawal);
+                  return withdrawal;
+                });
 };
 schema.methods.sign = function () {
   var withdrawal = this;
   return Promise.resolve()
-    .then(function () {
-      if (withdrawal.status != 'approved') {
-        throw new Error('bad withdrawal status ' + withdrawal.status);
-      }
-      withdrawal.status = 'signed';
-      return withdrawal.save()
-        .thenReturn(withdrawal);
-    });
+                .then(function () {
+                  if (withdrawal.status != 'approved') {
+                    throw new Error('bad withdrawal status ' + withdrawal.status);
+                  }
+                  withdrawal.status = 'signed';
+                  return withdrawal.save()
+                                   .thenReturn(withdrawal);
+                });
 };
 
 schema.plugin(require('../../../core/server/db/query'));

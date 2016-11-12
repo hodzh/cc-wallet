@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
-import { Auth } from "../../auth";
-import { Observable, Subscription } from "rxjs";
-import { UserResource } from "../../auth/user.resource";
+import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { Auth } from '../../auth';
+import { Observable, Subscription } from 'rxjs';
+import { UserResource } from '../../auth/user.resource';
 
 const template = require('./reset-password.component.html');
 
@@ -64,6 +64,6 @@ export class ResetPasswordComponent implements AfterViewInit, OnDestroy {
   }
 
   login() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/signin']);
   }
 }

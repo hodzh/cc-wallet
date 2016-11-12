@@ -1,8 +1,8 @@
-import { Http } from "@angular/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { contentHeaders } from "../common/headers";
-import { Credentials } from "./credentials";
+import { Http } from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { contentHeaders } from '../common/headers';
+import { Credentials } from './credentials';
 
 @Injectable()
 export class AuthResource {

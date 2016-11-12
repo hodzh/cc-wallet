@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { PageDataSource } from "../../../../core/client/common/page-data-source";
-import { AdminDepositResource } from "./deposit.resource.ts";
-import { DEPOSIT_LIST_SCHEMA } from "./deposit-list-schema";
-import { AdminDeposit } from "./deposit";
+import { Component } from '@angular/core';
+import { PageDataSource } from '../../../../core/client/common/page-data-source';
+import { AdminDepositResource } from './deposit.resource.ts';
+import { DEPOSIT_LIST_SCHEMA } from './deposit-list-schema';
+import { AdminDeposit } from './deposit';
 
 //const styles   = require('./deposit-list.component.scss');
 const template = require('./deposit-list.component.html');

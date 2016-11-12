@@ -57,21 +57,22 @@
       [disabled]="shouldDisableSubmitButton()"
       class="btn btn-inverse btn-lg btn-login"
       type="submit">
-      Login
+      Sign in
       <span
         *ngIf="shouldDisplaySubmitProgress()"
         class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
       </span>
     </button>
-    <a [routerLink]="['/signup']">Click here to Signup</a>
   </div>
-
+  <hr/>
   <div>
     <a [routerLink]="['/reset-password']">Forgot password?</a>
   </div>
-
+  <div>
+    Don't have an account? <a [routerLink]="['/signup']">Click here to Sign up</a>
+  </div>
   <hr/>
-  <div class="row">
+  <div class="row" *ngIf="false">
     <div class="col-sm-4 col-md-3">
       <cc-oauth-buttons classes="btn-block"></cc-oauth-buttons>
     </div>

@@ -8,8 +8,8 @@ import {
   EventEmitter,
   ElementRef,
   ChangeDetectorRef
-} from "@angular/core";
-import { dropdownService, NONINPUT } from "./dropdown.service";
+} from '@angular/core';
+import { dropdownService, NONINPUT } from './dropdown.service';
 
 @Directive({
   selector: '[dropdown]',

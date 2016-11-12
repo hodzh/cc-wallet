@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable, EventEmitter } from '@angular/core';
 //import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
 
 const TOKEN_KEY = 'id_token';

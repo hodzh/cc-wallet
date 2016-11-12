@@ -8,7 +8,7 @@ import {
   OnDestroy,
   Input,
   Type
-} from "@angular/core";
+} from '@angular/core';
 
 //const styles = require('./block.component.scss');
 const template = require('./dynamic-block.component.html');
@@ -65,7 +65,7 @@ export class DynamicBlock implements AfterViewInit, OnDestroy {
       return;
     }
     let factory = this.componentResolver
-      .resolveComponentFactory(type);
+                      .resolveComponentFactory(type);
     this.dynamicBlock = this.content.createComponent(factory);
     this.bindSetup();
   }

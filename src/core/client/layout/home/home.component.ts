@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Auth } from "../../auth/auth";
-import { LayoutModule } from "../module";
-import { HomePageContent } from "../home-page";
+import { Component } from '@angular/core';
+import { Auth } from '../../auth/auth';
+import { LayoutModule } from '../module';
+import { HomePageContent } from '../home-page';
 
 const template = require('./home.component.html');
 

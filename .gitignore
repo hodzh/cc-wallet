@@ -5,3 +5,5 @@ npm-debug.log
 /dist/
 
 .idea
+public-email
+temp

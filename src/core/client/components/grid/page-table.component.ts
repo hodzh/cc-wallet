@@ -1,5 +1,5 @@
-import { Component, Input } from "@angular/core";
-import { PageDataSource } from "../../common/page-data-source";
+import { Component, Input } from '@angular/core';
+import { PageDataSource } from '../../common/page-data-source';
 
 const PAGE_SIZES = [20, 50, 100];
 const DEFAULT_PAGE_SIZE = 50;

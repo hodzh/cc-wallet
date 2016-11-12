@@ -1,13 +1,5 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  NgZone,
-  ViewChild, ElementRef
-} from '@angular/core';
-import { ReCaptchaService } from "./recaptcha-service";
+import { Component, OnInit, Input, Output, EventEmitter, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { ReCaptchaService } from './recaptcha-service';
 
 @Component({
   selector: 're-captcha',
@@ -38,27 +30,26 @@ export class ReCaptchaComponent implements OnInit {
   @ViewChild('target') targetRef: ElementRef;
   widgetId: any = null;
 
-  constructor(
-    private _zone: NgZone,
-    private _captchaService: ReCaptchaService) {
+  constructor(private _zone: NgZone,
+              private _captchaService: ReCaptchaService) {
   }
 
   ngOnInit() {
     this._captchaService.getReady(this.language)
-      .subscribe((ready) => {
-        if (!ready)
-          return;
-        //noinspection TypeScriptUnresolvedVariable,TypeScriptUnresolvedFunction
-        this.widgetId = (<any>window).grecaptcha.render(this.targetRef.nativeElement, {
-          'sitekey': this.site_key,
-          'theme': this.theme,
-          'type': this.type,
-          'size': this.size,
-          'tabindex': this.tabindex,
-          'callback': <any>((response: any) => this._zone.run(this.recaptchaCallback.bind(this, response))),
-          'expired-callback': <any>(() => this._zone.run(this.recaptchaExpiredCallback.bind(this)))
+        .subscribe((ready) => {
+          if (!ready)
+            return;
+          //noinspection TypeScriptUnresolvedVariable,TypeScriptUnresolvedFunction
+          this.widgetId = (<any>window).grecaptcha.render(this.targetRef.nativeElement, {
+            'sitekey': this.site_key,
+            'theme': this.theme,
+            'type': this.type,
+            'size': this.size,
+            'tabindex': this.tabindex,
+            'callback': <any>((response: any) => this._zone.run(this.recaptchaCallback.bind(this, response))),
+            'expired-callback': <any>(() => this._zone.run(this.recaptchaExpiredCallback.bind(this)))
+          });
         });
-      });
   }
 
   public reset() {

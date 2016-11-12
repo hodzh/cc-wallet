@@ -1,4 +1,4 @@
-import { TableSchema } from "../../../../core/client/components/grid/table-scheme";
+import { TableSchema } from '../../../../core/client/components/grid/table-scheme';
 
 export const WITHDRAWAL_LIST_SCHEMA: TableSchema = [
   {

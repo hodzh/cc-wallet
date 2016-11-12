@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Account } from "./account";
-import { DataSourceDecorator } from "../../../../core/client/common/data-source";
-import { AccountDataSource } from "./account.data-source";
-import { CurrencyDataSource } from "../../currency/currency-data-source";
-import { Observable } from "rxjs/Observable";
-import { Currency } from "../../currency/currency";
+import { Injectable } from '@angular/core';
+import { Account } from './account';
+import { DataSourceDecorator } from '../../../../core/client/common/data-source';
+import { AccountDataSource } from './account.data-source';
+import { CurrencyDataSource } from '../../currency/currency-data-source';
+import { Observable } from 'rxjs/Observable';
+import { Currency } from '../../currency/currency';
 
 @Injectable()
 export class AllAccountDataSource extends DataSourceDecorator<Account> {
@@ -19,12 +19,12 @@ export class AllAccountDataSource extends DataSourceDecorator<Account> {
               private currencyDataSource: CurrencyDataSource) {
     super(account);
     this.allAccounts = this.account.documents
-      .combineLatest(
-        this.currencyDataSource.documents,
-        (accounts: Account[],
-         currencies: Currency[]): Account[] =>
-          this.updateAccountCurrency(accounts, currencies)
-      );
+                           .combineLatest(
+                             this.currencyDataSource.documents,
+                             (accounts: Account[],
+                              currencies: Currency[]): Account[] =>
+                               this.updateAccountCurrency(accounts, currencies)
+                           );
   }
 
   private updateAccountCurrency(accounts: Account[],

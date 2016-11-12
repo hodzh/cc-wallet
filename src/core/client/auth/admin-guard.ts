@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { Router, CanActivate } from "@angular/router";
-import { Auth } from "./auth";
+import { Injectable } from '@angular/core';
+import { Router, CanActivate } from '@angular/router';
+import { Auth } from './auth';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -10,7 +10,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate() {
     if (!this.auth.isLoggedIn) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/signin']);
       return false;
     }
     if (this.auth.hasRole('admin')) {

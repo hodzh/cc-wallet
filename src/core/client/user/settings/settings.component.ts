@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
-import { Auth } from "../../auth";
-import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from "../../common/input-validators";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Auth } from '../../auth';
+import { InputValidators, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../../common/input-validators';
 
 //const styles   = require('./settings.component.scss');
 const template = require('./settings.component.html');
@@ -61,14 +61,14 @@ export class SettingsComponent {
       password: this.settingsForm.controls['password'].value,
       newPassword: this.newPassword.value
     })
-      .subscribe(
-        () => {
-          this.submitPending = false;
-        },
-        (error) => {
-          //this.settingsForm(error);
-          this.submitPending = false;
-        }
-      );
+        .subscribe(
+          () => {
+            this.submitPending = false;
+          },
+          (error) => {
+            //this.settingsForm(error);
+            this.submitPending = false;
+          }
+        );
   }
 }

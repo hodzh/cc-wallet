@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
-import { DataSource } from "../../common/data-source";
-import { TableSchema, TableColumn } from "./table-scheme";
+import { Component, Input } from '@angular/core';
+import { DataSource } from '../../common/data-source';
+import { TableSchema, TableColumn } from './table-scheme';
 
 const styles = require('./table.component.scss');
 const template = require('./table.component.html');

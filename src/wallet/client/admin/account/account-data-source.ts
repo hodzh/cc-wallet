@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { AdminAccount } from "./account";
-import { PageDataSource } from "../../../../core/client/common/page-data-source";
-import { AdminAccountResource } from "./account.resource";
-import { CurrencyDataSource } from "../../currency/currency-data-source";
-import { Observable } from "rxjs";
-import { Currency } from "../../currency/currency";
+import { Injectable } from '@angular/core';
+import { AdminAccount } from './account';
+import { PageDataSource } from '../../../../core/client/common/page-data-source';
+import { AdminAccountResource } from './account.resource';
+import { CurrencyDataSource } from '../../currency/currency-data-source';
+import { Observable } from 'rxjs';
+import { Currency } from '../../currency/currency';
 
 export interface TransactionParams {
   amount: string;
@@ -32,12 +32,12 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
     });
 
     this.mergeAccounts = this.documentsSubject.asObservable()
-      .combineLatest(
-        this.currencyDataSource.documents,
-        (accounts: AdminAccount[],
-         currencies: Currency[]): AdminAccount[] =>
-          this.updateAccountCurrency(accounts, currencies)
-      );
+                             .combineLatest(
+                               this.currencyDataSource.documents,
+                               (accounts: AdminAccount[],
+                                currencies: Currency[]): AdminAccount[] =>
+                                 this.updateAccountCurrency(accounts, currencies)
+                             );
   }
 
   private updateAccountCurrency(accounts: AdminAccount[],

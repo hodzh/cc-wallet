@@ -1,6 +1,6 @@
-import { NgModule } from "@angular/core";
-import { PaygatesAdminModule } from "./admin/module";
-import { PaygatesUserModule } from "./user/module";
+import { NgModule } from '@angular/core';
+import { PaygatesAdminModule } from './admin/module';
+import { PaygatesUserModule } from './user/module';
 
 
 @NgModule({
