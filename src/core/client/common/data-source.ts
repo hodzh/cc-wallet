@@ -31,7 +31,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
       (res) => {
         if (res) {
           var rows = this.documentsSubject.getValue()
-                         .filter(item => item !== document);
+            .filter(item => item !== document);
           this.documentsSubject.next(rows);
         }
         this.loading = false;
@@ -115,9 +115,9 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   protected onDocumentChanged(doc) {
     var rows = this.documentsSubject.getValue()
-                   .map((row: TDocument) => {
-                     return row._id === doc._id ? doc : row;
-                   });
+      .map((row: TDocument) => {
+        return row._id === doc._id ? doc : row;
+      });
     this.documentsSubject.next(rows);
   }
 }

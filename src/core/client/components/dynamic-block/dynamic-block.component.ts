@@ -65,7 +65,7 @@ export class DynamicBlock implements AfterViewInit, OnDestroy {
       return;
     }
     let factory = this.componentResolver
-                      .resolveComponentFactory(type);
+      .resolveComponentFactory(type);
     this.dynamicBlock = this.content.createComponent(factory);
     this.bindSetup();
   }

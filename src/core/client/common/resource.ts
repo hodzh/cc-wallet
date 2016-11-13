@@ -34,26 +34,26 @@ export class Resource<TDocument extends IDocument> {
 
   get(id): Observable<TDocument> {
     return this.http.get(`${this.URL}/${id}`)
-               .map((res: Response) => <TDocument>res.json()).share();
+      .map((res: Response) => <TDocument>res.json()).share();
   }
 
   create(data): Observable<TDocument> {
     return this.http.post(this.URL, data)
-               .map((res: Response) => <TDocument>res.json()).share();
+      .map((res: Response) => <TDocument>res.json()).share();
   }
 
   update(id, data): Observable<TDocument> {
     return this.http.put(`${this.URL}/${id}`, data)
-               .map((res: Response) => <TDocument>res.json()).share();
+      .map((res: Response) => <TDocument>res.json()).share();
   }
 
   action(id, action, params): Observable<any> {
     return this.http.put(`${this.URL}/${id}/${action}`, params)
-               .map((res: Response) => res.json()).share();
+      .map((res: Response) => res.json()).share();
   }
 
   remove(id): Observable<boolean> {
     return this.http.delete(`${this.URL}/${id}`)
-               .map((res: Response) => true).share();
+      .map((res: Response) => true).share();
   }
 }

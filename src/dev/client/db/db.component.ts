@@ -16,13 +16,13 @@ export class DevDbComponent {
 
   clearAll() {
     this.dbResource.clearAll()
-        .subscribe(()=> {
-        });
+      .subscribe(()=> {
+      });
   }
 
   addUsers() {
     this.dbResource.addUsers()
-        .subscribe(()=> {
-        });
+      .subscribe(()=> {
+      });
   }
 }

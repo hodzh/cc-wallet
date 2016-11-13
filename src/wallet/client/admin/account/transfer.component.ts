@@ -22,26 +22,26 @@ export class AdminTransferComponent {
     this.accountDataSource.income(this.account._id, {
       amount: this.getAmount()
     })
-        .subscribe(
-          () => {
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+      .subscribe(
+        () => {
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 
   public outcome() {
     this.accountDataSource.outcome(this.account._id, {
       amount: this.getAmount()
     })
-        .subscribe(
-          () => {
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+      .subscribe(
+        () => {
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 
   private getAmount() {

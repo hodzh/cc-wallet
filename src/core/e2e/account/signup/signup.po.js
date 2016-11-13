@@ -1,6 +1,6 @@
 'use strict';
 
-var SignupPage = function() {
+var SignupPage = function () {
   var form = this.form = element(by.css('.form'));
   form.name = form.element(by.model('vm.user.name'));
   form.email = form.element(by.model('vm.user.email'));
@@ -9,7 +9,7 @@ var SignupPage = function() {
   form.submit = form.element(by.css('.btn-register'));
   form.oauthButtons = require('../../components/oauth-buttons/oauth-buttons.po').oauthButtons;
 
-  this.signup = function(data) {
+  this.signup = function (data) {
     for (var prop in data) {
       var formElem = form[prop];
       if (data.hasOwnProperty(prop) && formElem && typeof formElem.sendKeys === 'function') {

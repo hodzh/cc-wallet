@@ -225,10 +225,10 @@ export class ModalDirective implements AfterViewInit, OnDestroy {
   private showBackdrop(callback?: Function): void {
     if (this._isShown && this.config.backdrop) {
       this.backdrop = this.componentsHelper
-                          .appendNextToRoot(
-                            ModalBackdropComponent,
-                            ModalBackdropOptions,
-                            new ModalBackdropOptions({animate: false}));
+        .appendNextToRoot(
+          ModalBackdropComponent,
+          ModalBackdropOptions,
+          new ModalBackdropOptions({animate: false}));
 
       this.backdrop.then((backdrop: ComponentRef<ModalBackdropComponent>) => {
         if (this.isAnimated) {

@@ -3,11 +3,11 @@
 var config = browser.params;
 var UserModel = require(config.serverConfig.root + '/server/model/user');
 
-describe('Logout View', function() {
+describe('Logout View', function () {
 
   var page;
 
-  var loadPage = function() {
+  var loadPage = function () {
     var url = config.baseUrl + '/login';
     console.log('navigate to', url);
     page = require('../login/login.po');
@@ -20,24 +20,24 @@ describe('Logout View', function() {
     password: 'test'
   };
 
-  var login = function() {
+  var login = function () {
     page.login(testUser);
   };
 
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     UserModel.remove()
-      .then(function() {
+      .then(function () {
         return UserModel.create(testUser);
       })
-      .then(function() {
+      .then(function () {
         return loadPage();
       })
       .finally(done);
   });
 
-  describe('with local auth', function() {
+  describe('with local auth', function () {
 
-    it('should logout a user and redirecting to "/"', function() {
+    it('should logout a user and redirecting to "/"', function () {
 
       login();
 

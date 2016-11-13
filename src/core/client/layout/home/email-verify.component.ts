@@ -33,9 +33,9 @@ export class EmailVerifyComponent {
       })
       .flatMap(() =>
         this.userResource.emailVerify()
-            .retryWhen(function (errors) {
-              return errors.delay(2000);
-            }))
+          .retryWhen(function (errors) {
+            return errors.delay(2000);
+          }))
       .subscribe(
         (res) => {
           if (res.error) {

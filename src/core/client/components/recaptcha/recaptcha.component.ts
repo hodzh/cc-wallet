@@ -36,32 +36,35 @@ export class ReCaptchaComponent implements OnInit {
 
   ngOnInit() {
     this._captchaService.getReady(this.language)
-        .subscribe((ready) => {
-          if (!ready)
-            return;
-          //noinspection TypeScriptUnresolvedVariable,TypeScriptUnresolvedFunction
-          this.widgetId = (<any>window).grecaptcha.render(this.targetRef.nativeElement, {
-            'sitekey': this.site_key,
-            'theme': this.theme,
-            'type': this.type,
-            'size': this.size,
-            'tabindex': this.tabindex,
-            'callback': <any>((response: any) => this._zone.run(this.recaptchaCallback.bind(this, response))),
-            'expired-callback': <any>(() => this._zone.run(this.recaptchaExpiredCallback.bind(this)))
-          });
+      .subscribe((ready) => {
+        if (!ready) {
+          return;
+        }
+        //noinspection TypeScriptUnresolvedVariable,TypeScriptUnresolvedFunction
+        this.widgetId = (<any>window).grecaptcha.render(this.targetRef.nativeElement, {
+          'sitekey': this.site_key,
+          'theme': this.theme,
+          'type': this.type,
+          'size': this.size,
+          'tabindex': this.tabindex,
+          'callback': <any>((response: any) => this._zone.run(this.recaptchaCallback.bind(this, response))),
+          'expired-callback': <any>(() => this._zone.run(this.recaptchaExpiredCallback.bind(this)))
         });
+      });
   }
 
   public reset() {
-    if (!this.widgetId)
+    if (!this.widgetId) {
       return;
+    }
     //noinspection TypeScriptUnresolvedVariable
     (<any>window).grecaptcha.reset(this.widgetId);
   }
 
   public getResponse(): String {
-    if (!this.widgetId)
+    if (!this.widgetId) {
       return null;
+    }
     //noinspection TypeScriptUnresolvedVariable
     return (<any>window).grecaptcha.getResponse(this.targetRef.nativeElement);
   }

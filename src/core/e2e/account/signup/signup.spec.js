@@ -3,10 +3,10 @@
 var config = browser.params;
 var UserModel = require(config.serverConfig.root + '/server/model/user');
 
-describe('Signup View', function() {
+describe('Signup View', function () {
   var page;
 
-  var loadPage = function() {
+  var loadPage = function () {
     browser.manage().deleteAllCookies();
     browser.get(config.baseUrl + '/signup');
     page = require('./signup.po');
@@ -19,11 +19,11 @@ describe('Signup View', function() {
     confirmPassword: 'test'
   };
 
-  beforeEach(function() {
+  beforeEach(function () {
     loadPage();
   });
 
-  it('should include signup form with correct inputs and submit button', function() {
+  it('should include signup form with correct inputs and submit button', function () {
     expect(page.form.name.getAttribute('type')).toBe('text');
     expect(page.form.name.getAttribute('name')).toBe('name');
     expect(page.form.email.getAttribute('type')).toBe('email');
@@ -36,7 +36,7 @@ describe('Signup View', function() {
     expect(page.form.submit.getText()).toBe('Sign up');
   });
 
-  it('should include oauth buttons with correct classes applied', function() {
+  it('should include oauth buttons with correct classes applied', function () {
     expect(page.form.oauthButtons.facebook.getText()).toBe('Connect with Facebook');
     expect(page.form.oauthButtons.facebook.getAttribute('class')).toMatch('btn-block');
     expect(page.form.oauthButtons.google.getText()).toBe('Connect with Google+');
@@ -45,13 +45,13 @@ describe('Signup View', function() {
     expect(page.form.oauthButtons.twitter.getAttribute('class')).toMatch('btn-block');
   });
 
-  describe('with local auth', function() {
+  describe('with local auth', function () {
 
-    beforeAll(function(done) {
+    beforeAll(function (done) {
       UserModel.remove().then(done);
     });
 
-    it('should signup a new user, log them in, and redirecting to "/"', function() {
+    it('should signup a new user, log them in, and redirecting to "/"', function () {
       page.signup(testUser);
 
       var navbar = require('../../components/navbar/navbar.po');
@@ -60,7 +60,7 @@ describe('Signup View', function() {
       expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
     });
 
-    it('should indicate signup failures', function() {
+    it('should indicate signup failures', function () {
       page.signup(testUser);
 
       expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/signup');

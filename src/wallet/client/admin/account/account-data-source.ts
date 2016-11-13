@@ -32,12 +32,12 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
     });
 
     this.mergeAccounts = this.documentsSubject.asObservable()
-                             .combineLatest(
-                               this.currencyDataSource.documents,
-                               (accounts: AdminAccount[],
-                                currencies: Currency[]): AdminAccount[] =>
-                                 this.updateAccountCurrency(accounts, currencies)
-                             );
+      .combineLatest(
+        this.currencyDataSource.documents,
+        (accounts: AdminAccount[],
+         currencies: Currency[]): AdminAccount[] =>
+          this.updateAccountCurrency(accounts, currencies)
+      );
   }
 
   private updateAccountCurrency(accounts: AdminAccount[],

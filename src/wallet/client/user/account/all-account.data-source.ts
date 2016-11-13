@@ -19,12 +19,12 @@ export class AllAccountDataSource extends DataSourceDecorator<Account> {
               private currencyDataSource: CurrencyDataSource) {
     super(account);
     this.allAccounts = this.account.documents
-                           .combineLatest(
-                             this.currencyDataSource.documents,
-                             (accounts: Account[],
-                              currencies: Currency[]): Account[] =>
-                               this.updateAccountCurrency(accounts, currencies)
-                           );
+      .combineLatest(
+        this.currencyDataSource.documents,
+        (accounts: Account[],
+         currencies: Currency[]): Account[] =>
+          this.updateAccountCurrency(accounts, currencies)
+      );
   }
 
   private updateAccountCurrency(accounts: Account[],

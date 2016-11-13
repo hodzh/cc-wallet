@@ -26,11 +26,11 @@ function paygates(server, config) {
   function onConfirmWithdrawal(withdrawal) {
     log.trace('on confirmed withdrawal', withdrawal._id);
     return Promise.resolve()
-                  .then(function () {
-                    return approve(withdrawal);
-                  })
-                  .catch(function (error) {
-                    log.error(error);
-                  });
+      .then(function () {
+        return approve(withdrawal);
+      })
+      .catch(function (error) {
+        log.error(error);
+      });
   }
 }

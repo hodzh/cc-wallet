@@ -38,15 +38,15 @@ export class FilteredAccountDataSource extends DataSourceDecorator<Account> {
     this.searchSubject = new BehaviorSubject<string>('');
     this.hideZeroBalanceSubject = new BehaviorSubject<boolean>(false);
     this.filteredAccounts = this.accountDataSource.documents
-                                .combineLatest(
-                                  this.search$
-                                      .debounceTime(400),
-                                  this.hideZeroBalance$,
-                                  (accounts: Account[],
-                                   searchString: string,
-                                   hideZeroBalance: boolean): Account[] =>
-                                    this.filterAccounts(accounts, searchString, hideZeroBalance)
-                                );
+      .combineLatest(
+        this.search$
+          .debounceTime(400),
+        this.hideZeroBalance$,
+        (accounts: Account[],
+         searchString: string,
+         hideZeroBalance: boolean): Account[] =>
+          this.filterAccounts(accounts, searchString, hideZeroBalance)
+      );
   }
 
   private filterAccounts(accounts: Account[],

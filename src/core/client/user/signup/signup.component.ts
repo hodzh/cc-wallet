@@ -65,15 +65,15 @@ export class SignupComponent {
       password: this.password.value,
       captcha: this.signupForm.value.captcha
     })
-        .subscribe(
-          () => {
-            this.submitPending = false;
-          },
-          (error) => {
-            this.displayErrors(error);
-            this.submitPending = false;
-          }
-        );
+      .subscribe(
+        () => {
+          this.submitPending = false;
+        },
+        (error) => {
+          this.displayErrors(error);
+          this.submitPending = false;
+        }
+      );
   }
 
   displayErrors(error) {

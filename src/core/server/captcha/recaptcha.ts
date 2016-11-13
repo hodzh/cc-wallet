@@ -13,10 +13,10 @@ export class RecaptchaService {
     });
 
     return recaptcha.validate(res, ip)
-                    .then((result) => {
-                      if (!result) {
-                        throw new Error('Captcha required');
-                      }
-                    });
+      .then((result) => {
+        if (!result) {
+          throw new Error('Captcha required');
+        }
+      });
   }
 }

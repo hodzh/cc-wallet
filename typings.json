@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "bluebird": "registry:npm/bluebird#3.4.1+20160909132857",
+    "jsonwebtoken": "registry:npm/jsonwebtoken#7.1.8+20160811031426"
+  },
+  "globalDependencies": {
+    "chai": "registry:dt/chai#3.4.0+20160601211834",
+    "json5": "registry:dt/json5#0.0.0+20160316155526",
+    "nodemailer": "registry:dt/nodemailer#1.3.2+20160811111312",
+    "nodemailer-direct-transport": "registry:dt/nodemailer-direct-transport#0.0.0+20160805030905",
+    "nodemailer-smtp-transport": "registry:dt/nodemailer-smtp-transport#0.0.0+20160805030905"
+  }
+}

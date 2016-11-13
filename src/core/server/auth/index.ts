@@ -43,16 +43,16 @@ function isAuthenticated() {
     // Attach user to request
     .use(function (req, res, next) {
       User.findById(req.user._id)
-          .then(function (user) {
-            if (!user) {
-              return res.status(401).end();
-            }
-            req.user = user;
-            next();
-          })
-          .catch(function (err) {
-            return next(err);
-          });
+        .then(function (user) {
+          if (!user) {
+            return res.status(401).end();
+          }
+          req.user = user;
+          next();
+        })
+        .catch(function (err) {
+          return next(err);
+        });
     });
 }
 

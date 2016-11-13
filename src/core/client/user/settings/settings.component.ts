@@ -61,14 +61,14 @@ export class SettingsComponent {
       password: this.settingsForm.controls['password'].value,
       newPassword: this.newPassword.value
     })
-        .subscribe(
-          () => {
-            this.submitPending = false;
-          },
-          (error) => {
-            //this.settingsForm(error);
-            this.submitPending = false;
-          }
-        );
+      .subscribe(
+        () => {
+          this.submitPending = false;
+        },
+        (error) => {
+          //this.settingsForm(error);
+          this.submitPending = false;
+        }
+      );
   }
 }

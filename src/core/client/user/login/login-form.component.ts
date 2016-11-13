@@ -37,15 +37,15 @@ export class LoginFormComponent {
     this.submitPending = true;
     var params = this.loginForm.value;
     this.auth.login(params)
-        .subscribe(
-          () => {
-            this.submitPending = false;
-          },
-          (error) => {
-            this.displayErrors(error);
-            this.submitPending = false;
-          }
-        );
+      .subscribe(
+        () => {
+          this.submitPending = false;
+        },
+        (error) => {
+          this.displayErrors(error);
+          this.submitPending = false;
+        }
+      );
   }
 
   signup(event) {

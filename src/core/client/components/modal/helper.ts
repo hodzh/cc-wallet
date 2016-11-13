@@ -72,7 +72,7 @@ export class ComponentsHelper {
    */
   public appendNextToRoot<T extends Type<any>,N>(ComponentClass: T, ComponentOptionsClass: N, options: any, _viewContainerRef?: ViewContainerRef): Promise<ComponentRef<any>> {
     let componentFactory = this.componentResolver
-                               .resolveComponentFactory(ComponentClass);
+      .resolveComponentFactory(ComponentClass);
     const viewContainerRef = _viewContainerRef || this.getRootViewContainerRef();
     let bindings = ReflectiveInjector.resolve([
       {provide: ComponentOptionsClass, useValue: options}

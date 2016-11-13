@@ -3,10 +3,10 @@
 var config = browser.params;
 var UserModel = require(config.serverConfig.root + '/server/model/user');
 
-describe('Login View', function() {
+describe('Login View', function () {
   var page;
 
-  var loadPage = function() {
+  var loadPage = function () {
     var url = config.baseUrl + '/login';
     console.log('navigate to', url);
     page = require('./login.po');
@@ -20,10 +20,10 @@ describe('Login View', function() {
   };
 
   beforeEach(
-    function(done) {
+    function (done) {
       UserModel
         .remove()
-        .then(function() {
+        .then(function () {
           return UserModel.create(testUser);
         })
         .then(loadPage)
@@ -31,7 +31,7 @@ describe('Login View', function() {
     }
   );
 
-  it('should include login form with correct inputs and submit button', function() {
+  it('should include login form with correct inputs and submit button', function () {
     expect(page.form.email.getAttribute('type')).toBe('email');
     expect(page.form.email.getAttribute('name')).toBe('email');
     expect(page.form.password.getAttribute('type')).toBe('password');
@@ -40,7 +40,7 @@ describe('Login View', function() {
     expect(page.form.submit.getText()).toBe('Login');
   });
 
-  it('should include oauth buttons with correct classes applied', function() {
+  it('should include oauth buttons with correct classes applied', function () {
     expect(page.form.oauthButtons.facebook.getText()).toBe('Connect with Facebook');
     expect(page.form.oauthButtons.facebook.getAttribute('class')).toMatch('btn-block');
     expect(page.form.oauthButtons.google.getText()).toBe('Connect with Google+');
@@ -49,9 +49,9 @@ describe('Login View', function() {
     expect(page.form.oauthButtons.twitter.getAttribute('class')).toMatch('btn-block');
   });
 
-  describe('with local auth', function() {
+  describe('with local auth', function () {
 
-    it('should login a user and redirecting to "/"', function() {
+    it('should login a user and redirecting to "/"', function () {
       page.login(testUser);
 
       var navbar = require('../../components/navbar/navbar.po');
@@ -60,7 +60,7 @@ describe('Login View', function() {
       expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
     });
 
-    it('should indicate login failures', function() {
+    it('should indicate login failures', function () {
       page.login({
         email: testUser.email,
         password: 'badPassword'

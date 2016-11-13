@@ -1,9 +1,9 @@
-/node_modules
-/typings
-npm-debug.log
-
+/node_modules/
+/typings/
 /dist/
+/public-email/
+/temp/
+/.idea/
 
-.idea
-public-email
-temp
+
+npm-debug.log

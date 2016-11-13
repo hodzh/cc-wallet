@@ -57,36 +57,36 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
     //this.loadingSubject = new Subject<boolean>();
 
     this.currentPageSubject
-        .distinctUntilChanged()
-        .subscribe((currentPage) => {
-          this.pageInfo.next({
-            size: this.pageSizeSubject.getValue(),
-            index: currentPage
-          });
+      .distinctUntilChanged()
+      .subscribe((currentPage) => {
+        this.pageInfo.next({
+          size: this.pageSizeSubject.getValue(),
+          index: currentPage
         });
+      });
     this.pageSizeSubject
-        .distinctUntilChanged()
-        .subscribe((pageSize) => {
-          let pageCount = this.pageCount;
-          if (pageCount > 0 &&
-            this.currentPageSubject.getValue() > pageCount) {
-            // fix current page since it is out of range
-            this.currentPageSubject.next(pageCount);
-          }
-          this.pageInfo.next({
-            size: pageSize,
-            index: this.currentPageSubject.getValue()
-          });
+      .distinctUntilChanged()
+      .subscribe((pageSize) => {
+        let pageCount = this.pageCount;
+        if (pageCount > 0 &&
+          this.currentPageSubject.getValue() > pageCount) {
+          // fix current page since it is out of range
+          this.currentPageSubject.next(pageCount);
+        }
+        this.pageInfo.next({
+          size: pageSize,
+          index: this.currentPageSubject.getValue()
         });
+      });
 
     this.pageInfo
-        .debounceTime(300)
-        .switchMap(pageInfo => this.readPage(pageInfo))
-        .subscribe((data) => this.onRead(data),
-          error => {
-            console.error(error);
-            this.loading = false;
-          });
+      .debounceTime(300)
+      .switchMap(pageInfo => this.readPage(pageInfo))
+      .subscribe((data) => this.onRead(data),
+        error => {
+          console.error(error);
+          this.loading = false;
+        });
 
     this.pageInfo.next({
       size: this.pageSizeSubject.getValue(),
