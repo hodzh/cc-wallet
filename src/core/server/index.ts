@@ -1,5 +1,7 @@
 var async = require('async');
 var log = require('log4js').getLogger('core');
+var User = require('./model/user');
+var Token = require('./token');
 
 var app = {
   config: null,
@@ -15,6 +17,7 @@ var app = {
 export = app;
 
 function init(config, modules) {
+  log.trace('app init', process.version);
   app.config = config;
   initModels();
   initAuth();
@@ -24,21 +27,20 @@ function init(config, modules) {
   addModules(modules.slice(1));
 
   function initModels() {
-    app.db.models.user = require('./model/user');
+    app.db.models.user = User;
   }
 
   function initAuth() {
-    var userModel = require('./model/user');
-    app.auth.init(userModel, app.config);
+    app.auth.init(User, app.config);
   }
 
   function initMailer() {
-    var mail = require('./mailer')(config.email);
-    app.mail = mail;
+    var mail = require('./mailer');
+    app.mail = mail(config.email);
   }
 
   function initToken() {
-    var token = require('./token')(config.token);
+    var token = Token(config.token);
     app.token = token;
   }
 
@@ -95,7 +97,7 @@ function start(callback) {
   }
 }
 
-process.on('unhandledRejection', function (reason, p) {
+process.on('unhandledRejection', function (reason) {
   throw reason;
 });
 

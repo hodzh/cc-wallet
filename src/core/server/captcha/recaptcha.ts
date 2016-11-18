@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var Recaptcha = require('recaptcha2');
-var config = require('../../../../config');
+var config = require('../../../core/server/config').CONFIG;
 
 export class RecaptchaService {
 

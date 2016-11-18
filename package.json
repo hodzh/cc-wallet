@@ -4,7 +4,7 @@
   "description": "wallet application",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hodzh/walle.git"
+    "url": "https://github.com/hodzh/cc-wallet.git"
   },
   "scripts": {
     "watch": "webpack --watch",
@@ -18,6 +18,10 @@
     "debug:build": "node-nightly --inspect --debug-brk node_modules/webpack/bin/webpack.js",
     "debug": "node --debug-brk dist/server/index.js"
   },
+  "production-scripts": {
+    "prestart": "npm install",
+    "start": "node dist/server/index.js"
+  },
   "license": "MIT",
   "contributors": [
     "Eugene Hodzhaev <ehodzh@gmail.com>"
@@ -28,6 +32,7 @@
     "body-parser": "1.15.2",
     "composable-middleware": "0.3.0",
     "compression": "1.6.2",
+    "cookie-parser": "1.4.3",
     "errorhandler": "1.4.3",
     "express": "4.14.0",
     "express-jwt": "3.4.0",
@@ -82,7 +87,6 @@
     "bootstrap": "3.3.7",
     "browser-sync": "2.14.3",
     "connect-livereload": "0.5.4",
-    "cookie-parser": "1.4.3",
     "core-js": "2.4.1",
     "css-loader": "0.24.0",
     "del": "2.2.2",
@@ -120,6 +124,7 @@
     "selenium-webdriver": "^3.0.1",
     "shelljs": "0.7.4",
     "sort-stream": "1.0.1",
+    "source-map-support": "^0.4.6",
     "swig": "1.4.2",
     "through": "2.3.8",
     "through2": "2.0.1",

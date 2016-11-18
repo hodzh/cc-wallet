@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  name: 'Walle'
+  name: 'CC-Wallet'
 };

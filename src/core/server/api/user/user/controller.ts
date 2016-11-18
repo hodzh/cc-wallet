@@ -1,5 +1,5 @@
 'use strict';
-import Recaptcha = require("../../../captcha/recaptcha");
+import Recaptcha = require('../../../captcha/recaptcha');
 
 import * as Promise from 'bluebird';
 var log = require('log4js').getLogger('token');
@@ -166,20 +166,20 @@ function controllerFactory(token, mail) {
           return user;
         })
         .catch(controller.handleError(res));
-    }
+    };
   }
 
   function validationError(res, statusCode = 422) {
     return function (err) {
       res.status(statusCode).json(err);
-    }
+    };
   }
 
   function sendConfirmEmail(auth, user, firstTime) {
     if (!auth.isEmailVerify()) {
       return;
     }
-    if (user.role != 'applicant') {
+    if (user.role !== 'applicant') {
       return;
     }
     if (!user.emailVerify) {

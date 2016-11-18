@@ -28,35 +28,30 @@ var web = {
 export = web;
 
 function initServer(config) {
-
-  app.set('env', config.env);
-  app.set('rootPath', config.root);
-  app.set('appPath', path.join(config.root, 'client'));
-
   app.use(compression());
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(passport.initialize());
 
-  if ('production' === config.env) {
+  if (config.web.log) {
     app.use(morgan('dev'));
   }
 
-  if ('development' === app.get('env')) {
+  if (config.web.liveReload) {
     app.use(require('connect-livereload')());
   }
 
-  if ('development' === config.env || 'test' === config.env) {
-    app.use(morgan('dev'));
-  }
+  //if ('development' === config.env || 'test' === config.env) {
+  //  app.use(morgan('dev'));
+  //}
 
   //app.use(require('./io'));
 }
 
 function startServer(config, auth, callback) {
 
-  beforeStart(auth);
+  beforeStart(config, auth);
 
   server.listen(config.http.port, function (err) {
     if (err) {
@@ -64,13 +59,13 @@ function startServer(config, auth, callback) {
     }
 
     log.info('HTTP server listening on %d, in %s mode',
-      config.http.port, app.get('env'));
+      config.http.port);
 
     callback();
   });
 }
 
-function beforeStart(auth) {
+function beforeStart(config, auth) {
 
   // use api
 
@@ -85,8 +80,7 @@ function beforeStart(auth) {
       var apiPath = [routePath, apiKey].join('');
       if (typeof api === 'function') {
         api(apiRouter, auth);
-      }
-      else {
+      } else {
         registerApi(api, apiRouter, apiPath);
       }
       log.info('route', apiPath);
@@ -94,62 +88,37 @@ function beforeStart(auth) {
     }
   }
 
-  // use static api
+  if (config.static) {
 
-  app.use(express.static(app.get('appPath')));
-  //app.use(favicon(path.join(app.get('appPath'), 'favicon.ico')));
+    // use static api
 
-  if ('development' === app.get('env')) {
-    app.use(require('connect-livereload')());
+    app.use(express.static(path.resolve(config.static)));
+    //app.use(favicon(path.join(app.get('appPath'), 'favicon.ico')));
+
+    // render index.html otherwise
+
+    app.get('/*', renderRoot);
   }
-  if ('development' === app.get('env') || 'test' === app.get('env')) {
-    app.use('/bower_components',
-      express.static(path.join(app.get('rootPath'), 'bower_components')));
-  }
-
-  // render index.html otherwise
-
-  app.get('/*', renderRoot);
 
   // error handler has to be last
 
-  if ('development' === app.get('env') || 'test' === app.get('env')) {
-    app.use(errorHandler());
-  } else {
-    app.use(onError);
-  }
-
+  app.use(onError);
   function onError(err, req, res, next) {
+    log.error(err);
     var code = 500;
-    var msg = {message: "Internal Server Error"};
-
-    switch (err.name) {
-      case "UnauthorizedError":
-        code = err.status;
-        msg = null;
-        break;
-      case "BadRequestError":
-      case "UnauthorizedAccessError":
-      case "NotFoundError":
-        code = err.status;
-        msg = err.inner;
-        break;
-      default:
-        break;
-    }
-
+    var msg = {message: 'Internal Server Error'};
     return res.status(code).json(msg);
-
   }
-}
 
-function renderRoot(req, res) {
-  if (req.originalUrl !== '/') {
-    log.error(req.originalUrl, 'not found');
+
+  function renderRoot(req, res) {
+    if (req.originalUrl !== '/') {
+      log.error(req.originalUrl, 'not found');
+    }
+    var indexPath = path.join(path.resolve(config.static), 'index.html');
+    log.trace(indexPath);
+    res.sendFile(indexPath);
   }
-  var indexPath = path.join(app.get('appPath'), 'index.html');
-  log.trace(indexPath);
-  res.sendFile(indexPath);
 }
 
 function route(routers) {

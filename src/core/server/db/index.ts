@@ -31,11 +31,13 @@ function init(config, callback) {
 
   function onConnected() {
     connected = true;
+    console.log('mongodb connected');
     emit('connect')
       .then(function () {
         callback();
       })
       .catch(function (error) {
+        console.error(error);
         callback(error);
       });
   }

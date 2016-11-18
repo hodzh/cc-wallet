@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   enable: true,
   maxConfirmations: 2,

@@ -1,7 +1,6 @@
+'use strict';
+
 module.exports = {
-
-  hostname: process.env.HOST || process.env.HOSTNAME,
-
   // Set bodyParser options
   bodyParser: {
     json: {
@@ -11,7 +10,5 @@ module.exports = {
       limit: '100kb',
       extended: true
     }
-  },
-
-  templateEngine: 'swig'
+  }
 };
