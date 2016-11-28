@@ -1,5 +1,3 @@
-'use strict';
-
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');

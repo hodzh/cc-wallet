@@ -9,13 +9,15 @@ export class AuthResource {
   constructor(public http: Http) {
   }
 
-  login(params: Credentials): Observable<any> {
+  signin(params: Credentials): Observable<any> {
     let body = JSON.stringify(params);
     let req = this.http.post(
       '/auth/local',
       body, {
         headers: contentHeaders
-      }).share();
+      })
+      .map(res => res.json())
+      .share();
     return req;
   }
 
@@ -25,7 +27,9 @@ export class AuthResource {
       '/api/me',
       body, {
         headers: contentHeaders
-      }).share();
+      })
+      .map(res => res.json())
+      .share();
     return req;
   }
 }

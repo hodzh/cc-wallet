@@ -1,1 +1,1 @@
-export * from './page-table.component.ts';
+export * from './page-table.component';

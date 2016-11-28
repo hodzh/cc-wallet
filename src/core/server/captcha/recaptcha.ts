@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var Recaptcha = require('recaptcha2');
-var config = require('../../../core/server/config').CONFIG;
+var config = require('../config').CONFIG;
 
 export class RecaptchaService {
 
@@ -12,11 +12,17 @@ export class RecaptchaService {
       secretKey: config.recaptcha.private
     });
 
-    return recaptcha.validate(res, ip)
-      .then((result) => {
-        if (!result) {
-          throw new Error('Captcha required');
-        }
-      });
+    return new Promise((resolve, reject) => {
+      recaptcha.validate(res, ip)
+        .then((result) => {
+          if (!result) {
+            return reject(new Error('Captcha required'));
+          }
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 }

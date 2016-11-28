@@ -8,7 +8,7 @@ describe('Logout View', function () {
   var page;
 
   var loadPage = function () {
-    var url = config.baseUrl + '/login';
+    var url = config.baseUrl + '/signIn';
     console.log('navigate to', url);
     page = require('../login/login.po');
     return browser.get(url);
@@ -21,7 +21,7 @@ describe('Logout View', function () {
   };
 
   var login = function () {
-    page.login(testUser);
+    page.signIn(testUser);
   };
 
   beforeEach(function (done) {
@@ -37,7 +37,7 @@ describe('Logout View', function () {
 
   describe('with local auth', function () {
 
-    it('should logout a user and redirecting to "/"', function () {
+    it('should signOut a user and redirecting to "/"', function () {
 
       login();
 
@@ -46,7 +46,7 @@ describe('Logout View', function () {
       expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/');
       expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
 
-      browser.get(config.baseUrl + '/logout');
+      browser.get(config.baseUrl + '/signOut');
 
       navbar = require('../../components/navbar/navbar.po');
 

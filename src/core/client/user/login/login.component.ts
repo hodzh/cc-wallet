@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-//const styles   = require('./login.scss');
+//const styles   = require('./login.component.scss');
 const template = require('./login.component.html');
 
 @Component({

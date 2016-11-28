@@ -18,6 +18,11 @@ export interface PageInfo {
 
 export class PageDataSource<TDocument extends IDocument> extends DataSource<TDocument> {
 
+  private currentPageSubject: BehaviorSubject<number>;
+  private pageSizeSubject: BehaviorSubject<number>;
+  private totalCountSubject: BehaviorSubject<number>;
+  private pageInfo: Subject<PageInfo>;
+
   public get totalCount(): Observable<number> {
     return this.totalCountSubject.asObservable();
   }
@@ -46,6 +51,7 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
   public setCurrentPage(value: number) {
     this.currentPageSubject.next(value);
   }
+
 
   constructor(resource: Resource<TDocument>,
               public options: DataSourceOptions) {
@@ -123,9 +129,4 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
     }
     this.loading = false;
   }
-
-  private currentPageSubject: BehaviorSubject<number>;
-  private pageSizeSubject: BehaviorSubject<number>;
-  private totalCountSubject: BehaviorSubject<number>;
-  private pageInfo: Subject<PageInfo>;
 }

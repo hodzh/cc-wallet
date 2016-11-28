@@ -1,5 +1,3 @@
-'use strict';
-
 import controllerFactory = require('./controller');
 
 export = routeFactory;

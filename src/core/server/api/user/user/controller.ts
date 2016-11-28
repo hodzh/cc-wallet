@@ -1,4 +1,3 @@
-'use strict';
 import Recaptcha = require('../../../captcha/recaptcha');
 
 import * as Promise from 'bluebird';

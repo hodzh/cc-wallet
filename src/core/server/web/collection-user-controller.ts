@@ -21,7 +21,7 @@ function factory(model) {
           owner: req.user._id
         }, {
           page: req.query.page,
-          limit: req.query.limit
+          limit: req.query.limit,
         });
       })
       .then(controller.responseWithResult(res))

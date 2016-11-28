@@ -29,7 +29,7 @@ export class Auth {
     this.authToken.tokenChange.subscribe(
       (token: string) => {
         if (!token) {
-          this.onLogout();
+          this.onSignOut();
         }
       }
     );
@@ -43,11 +43,11 @@ export class Auth {
     return this.currentUser.role === role;
   }
 
-  public login(params: Credentials): Observable<any> {
-    let req = this.authResource.login(params);
+  public signIn(params: Credentials): Observable<any> {
+    let req = this.authResource.signin(params);
     req.subscribe(
       response => {
-        this.onLogin(response);
+        this.onSignIn(response);
       },
       error => {
         console.error(error.text());
@@ -56,18 +56,18 @@ export class Auth {
     return req;
   }
 
-  public logout(): void {
+  public signOut(): void {
     this.authToken.reset();
   }
 
-  public signup(params: Credentials): Observable<any> {
+  public signUp(params: Credentials): Observable<any> {
     let req = this.authResource.signup(params);
     req.subscribe(
       response => {
-        this.onLogin(response);
+        this.onSignIn(response);
       },
       error => {
-        console.error(error.text());
+        console.error(error);
       }
     );
     return req;
@@ -86,14 +86,14 @@ export class Auth {
     return req;
   }
 
-  private onLogin(response: Response): void {
-    let res = response.json();
+  private onSignIn(response: Response): void {
+    let res = response;
     this.authToken.token = res['token'];
     this.currentUser = res['user'];
     this.router.navigate(['/']);
   }
 
-  private onLogout(): void {
+  private onSignOut(): void {
     this.currentUser = guest;
     this.router.navigate(['/signin']);
   }

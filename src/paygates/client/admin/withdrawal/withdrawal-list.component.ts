@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PageDataSource } from '../../../../core/client/common/page-data-source';
-import { AdminWithdrawalResource } from './withdrawal.resource.ts';
+import { AdminWithdrawalResource } from './withdrawal.resource';
 import { WITHDRAWAL_LIST_SCHEMA } from './withdrawal-list-schema';
 import { AdminWithdrawal } from './withdrawal';
 import { TableSchema } from '../../../../core/client/components/grid/table-scheme';

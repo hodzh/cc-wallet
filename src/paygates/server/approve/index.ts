@@ -1,5 +1,3 @@
-'use strict';
-
 export = function (withdrawal) {
   // todo approvement
   setTimeout(function () {

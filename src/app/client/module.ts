@@ -7,6 +7,7 @@ import { WalletModule } from '../../wallet/client/module';
 import { VpModule } from '../../vp/client/module';
 import { PaygatesModule } from '../../paygates/client/module';
 import { PaygatesBitcoinModule } from '../../paygates-bitcoin/client/module';
+import { LayoutModule } from '../../core/client/layout/module';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -22,4 +23,13 @@ import { PaygatesBitcoinModule } from '../../paygates-bitcoin/client/module';
   ]
 })
 export class AppModule {
+  constructor() {
+    LayoutModule.MainMenu.push(
+      {
+        title: 'History',
+        state: '/history',
+        role: 'user'
+      }
+    );
+  }
 }

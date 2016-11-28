@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PageDataSource } from '../../../../core/client/common/page-data-source';
-import { AdminDepositResource } from './deposit.resource.ts';
+import { AdminDepositResource } from './deposit.resource';
 import { DEPOSIT_LIST_SCHEMA } from './deposit-list-schema';
 import { AdminDeposit } from './deposit';
 

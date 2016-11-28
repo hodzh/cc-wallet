@@ -40,23 +40,6 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
       );
   }
 
-  private updateAccountCurrency(accounts: AdminAccount[],
-                                currencies: Currency[]): AdminAccount[] {
-    if (!accounts || !currencies) {
-      return [];
-    }
-    accounts.forEach(account => {
-      let currency = currencies.find(currency =>
-      account.currency === currency.name);
-      if (currency) {
-        account.decimal = currency.decimal;
-        account.code = currency.code;
-        account.fee = currency.fee;
-      }
-    });
-    return accounts;
-  }
-
   public income(id: string, params: TransactionParams) {
     let income = this.resource.action(id, 'income', params);
     income.subscribe((incomeRes: TransactionResult) => {
@@ -73,5 +56,22 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
       this.onDocumentChanged(outcomeRes.accountFrom);
     });
     return outcome;
+  }
+
+  private updateAccountCurrency(accounts: AdminAccount[],
+                                currencies: Currency[]): AdminAccount[] {
+    if (!accounts || !currencies) {
+      return [];
+    }
+    accounts.forEach(account => {
+      let currency = currencies.find(currency =>
+      account.currency === currency.name);
+      if (currency) {
+        account.decimal = currency.decimal;
+        account.code = currency.code;
+        account.fee = currency.fee;
+      }
+    });
+    return accounts;
   }
 }

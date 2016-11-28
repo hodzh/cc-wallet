@@ -1,1 +1,1 @@
-export * from './settings.component.ts';
+export * from './settings.component';

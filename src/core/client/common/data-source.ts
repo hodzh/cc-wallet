@@ -20,6 +20,8 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   public loading: boolean;
 
+  protected documentsSubject: BehaviorSubject<TDocument[]>;
+
   constructor(public resource: Resource<TDocument>) {
     this.documentsSubject = new BehaviorSubject<TDocument[]>([]);
   }
@@ -111,8 +113,6 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
     return req;
   }
 
-  protected documentsSubject: BehaviorSubject<TDocument[]>;
-
   protected onDocumentChanged(doc) {
     var rows = this.documentsSubject.getValue()
       .map((row: TDocument) => {
@@ -158,11 +158,13 @@ export class DataSourceDecorator<TDocument extends IDocument> implements IDataSo
 
 export interface FeaturedDataSourceOptions {
   autoUpdate?: boolean;
-  autoUpdateMs?: number
+  autoUpdateMs?: number;
 }
 
 export class FeaturedDataSource<TDocument extends IDocument>
 extends DataSourceDecorator<IDocument> {
+  private autoUpdateInterval;
+  private featuredDocuments;
 
   constructor(protected dataSource: IDataSource<TDocument>,
               public options: FeaturedDataSourceOptions) {
@@ -176,6 +178,7 @@ extends DataSourceDecorator<IDocument> {
 
   startAutoUpdate() {
     const autoUpdateMs = 60000;
+    // todo get rid off setInterval
     this.autoUpdateInterval = setInterval(() => this.autoUpdate(), autoUpdateMs);
   }
 
@@ -186,7 +189,4 @@ extends DataSourceDecorator<IDocument> {
   autoUpdate() {
     this.read();
   }
-
-  private autoUpdateInterval;
-  private featuredDocuments;
 }

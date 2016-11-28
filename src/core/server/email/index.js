@@ -12,7 +12,7 @@ module.exports
   },
   newIpLogin: {
     subject: 'Successful Sign-in from New IP',
-    html: 'new-ip-login',
-    text: 'new-ip-login'
+    html: 'new-ip-signin',
+    text: 'new-ip-signin'
   }
 };

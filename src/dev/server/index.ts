@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var path = require('path');
 var log = require('log4js').getLogger('dev');

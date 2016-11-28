@@ -1,5 +1,3 @@
-'use strict';
-
 var app = require('../../../index').web.express;
 var request = require('supertest');
 var User = require('../../../model/user');

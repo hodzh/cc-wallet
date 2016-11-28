@@ -33,10 +33,16 @@ export class TableComponent {
 
   public getCellText(row, column: TableColumn): any {
     let value = this.getCellValue(row, column);
-    if (!column.converter) {
-      return value;
+    if (column.converter) {
+      value = column.converter.fromValue(value, row);
     }
-    value = column.converter.fromValue(value, row);
+    if (column.format) {
+      if (typeof column.format === 'function') {
+        value = column.format(value);
+      } else {
+        value = column.format.format(value);
+      }
+    }
     return value;
   }
 
@@ -50,12 +56,6 @@ export class TableComponent {
     let value = this.textToValue(row, column, text);
     this.setCellValue(data, column, value);
     this.source.update(row, data);
-  }
-
-  private textToValue(row, column: TableColumn, text: string): any {
-    let value = column.converter ?
-      column.converter.toValue(text, row) : text;
-    return value;
   }
 
   headerClick(column: TableColumn) {
@@ -87,5 +87,11 @@ export class TableComponent {
       index %= modes.length;
     }
     column.sort = modes[index];
+  }
+
+  private textToValue(row, column: TableColumn, text: string): any {
+    let value = column.converter ?
+      column.converter.toValue(text, row) : text;
+    return value;
   }
 }

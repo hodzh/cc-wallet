@@ -1,1 +1,1 @@
-export * from './deposit-list.component.ts';
+export * from './deposit-list.component';

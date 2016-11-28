@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var EventEmitter = require('events').EventEmitter;
@@ -87,7 +85,7 @@ schema.statics.off = WithdrawalEvents.removeListener.bind(WithdrawalEvents);
 // schema.statics.once = WithdrawalEvents.once.bind(WithdrawalEvents);
 
 schema.methods.confirm = function () {
-  var withdrawal = this;
+  let withdrawal = this;
   log.trace('confirm withdrawal');
   return Promise.resolve()
     .then(function () {
@@ -102,7 +100,7 @@ schema.methods.confirm = function () {
     });
 };
 schema.methods.approve = function () {
-  var withdrawal = this;
+  let withdrawal = this;
   log.trace('approve withdrawal');
   return Promise.resolve()
     .then(function () {
@@ -117,7 +115,7 @@ schema.methods.approve = function () {
     });
 };
 schema.methods.cancel = function () {
-  var withdrawal = this;
+  let withdrawal = this;
   log.trace('cancel withdrawal', withdrawal._id);
 
   return Promise.resolve()
@@ -134,7 +132,7 @@ schema.methods.cancel = function () {
     });
 };
 schema.methods.sign = function () {
-  var withdrawal = this;
+  let withdrawal = this;
   return Promise.resolve()
     .then(function () {
       if (withdrawal.status != 'approved') {
@@ -146,6 +144,10 @@ schema.methods.sign = function () {
     });
 };
 
-schema.plugin(require('../../../core/server/db/query'));
+schema.plugin(require('../../../core/server/db/query'), {
+  sort: {
+    created: -1
+  }
+});
 
 export = mongoose.model('Withdrawal', schema);

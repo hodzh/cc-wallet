@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Auth } from '../../auth';
+import { ReCaptchaComponent } from '../../components/recaptcha/recaptcha.component';
 
 const template = require('./login-form.component.html');
 
@@ -14,6 +15,8 @@ export class LoginFormComponent {
   public loginForm: FormGroup;
   public submitted: boolean = false;
   public submitPending: boolean = false;
+  @ViewChild('recaptcha')
+  private recaptchaComponent: ReCaptchaComponent;
 
   constructor(builder: FormBuilder,
               public router: Router,
@@ -25,7 +28,7 @@ export class LoginFormComponent {
     });
   }
 
-  login() {
+  signIn() {
     if (this.submitPending) {
       // already submitted
       return;
@@ -35,20 +38,21 @@ export class LoginFormComponent {
       return;
     }
     this.submitPending = true;
-    var params = this.loginForm.value;
-    this.auth.login(params)
+    let params = this.loginForm.value;
+    this.auth.signIn(params)
       .subscribe(
         () => {
           this.submitPending = false;
         },
         (error) => {
-          this.displayErrors(error);
+          this.displayErrors(error.json());
           this.submitPending = false;
+          this.recaptchaComponent.reset();
         }
       );
   }
 
-  signup(event) {
+  signUp(event) {
     event.preventDefault();
     this.router.navigate(['/signup']);
   }
@@ -75,7 +79,7 @@ export class LoginFormComponent {
 
   displayErrors(error) {
     if (error.messages) {
-      var messages = error.messages;
+      let messages = error.messages;
       messages.forEach((message) => {
         /*this.loginForm.controls[message.property]
          .setErrors({
@@ -83,7 +87,7 @@ export class LoginFormComponent {
          });*/
       });
     } else {
-      this.errors = `${error.reasonPhrase} (${error.code})`;
+      this.errors = `${error.message}`;
     }
   }
 

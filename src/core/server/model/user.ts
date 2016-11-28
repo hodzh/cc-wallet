@@ -1,5 +1,3 @@
-'use strict';
-
 var crypto = require('crypto');
 var Promise = require('bluebird');
 var mongoose = require('mongoose');

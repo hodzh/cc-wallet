@@ -1,5 +1,3 @@
-'use strict';
-
 export = paygates;
 
 function paygates(server, config) {

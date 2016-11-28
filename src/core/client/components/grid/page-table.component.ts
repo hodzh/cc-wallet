@@ -8,10 +8,10 @@ const DEFAULT_PAGINATION_SIZE = 16;
 const template = require('./page-table.component.html');
 
 interface GridColumn {
-  title?: string,
-  field?: string,
-  sortable?: string,
-  sort?: string
+  title?: string;
+  field?: string;
+  sortable?: string;
+  sort?: string;
 }
 
 type GridSchema = GridColumn[];

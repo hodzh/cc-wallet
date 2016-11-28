@@ -15,6 +15,6 @@ export class OauthButtonsComponent {
   ) {
   }
 
-  loginOauth(provider) {
+  signInOauth(provider) {
   }
 }

@@ -1,5 +1,3 @@
-'use strict';
-
 var jwt = require('jsonwebtoken');
 
 export = function (config) {

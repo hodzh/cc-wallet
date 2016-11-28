@@ -1,5 +1,3 @@
-'use strict';
-
 export = function (config) {
 
   var Promise = require('bluebird');

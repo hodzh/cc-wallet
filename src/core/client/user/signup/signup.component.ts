@@ -50,7 +50,7 @@ export class SignupComponent {
       .controls['confirmPassword'];
   }
 
-  signup() {
+  signUp() {
     if (this.submitPending) {
       // already submitted
       return;
@@ -60,7 +60,7 @@ export class SignupComponent {
       return;
     }
     this.submitPending = true;
-    this.auth.signup({
+    this.auth.signUp({
       email: this.signupForm.controls['email'].value,
       password: this.password.value,
       captcha: this.signupForm.value.captcha
@@ -70,7 +70,7 @@ export class SignupComponent {
           this.submitPending = false;
         },
         (error) => {
-          this.displayErrors(error);
+          this.displayErrors(error.json());
           this.submitPending = false;
         }
       );
@@ -78,15 +78,15 @@ export class SignupComponent {
 
   displayErrors(error) {
     if (error.messages) {
-      var messages = error.messages;
+      let messages = error.messages;
       messages.forEach((message) => {
-        /*this.loginForm.controls[message.property]
+        /*this.signupForm.controls[message.property]
          .setErrors({
          remote: message.message
          });*/
       });
     } else {
-      this.errors = `${error.reasonPhrase} (${error.code})`;
+      this.errors = `${error.message}`;
     }
   }
 
@@ -96,5 +96,16 @@ export class SignupComponent {
 
   captchaExpired() {
     this.signupForm.patchValue({captcha: null});
+  }
+
+  shouldDisableSubmitButton(): boolean {
+    // todo
+    return false && (!this.signupForm.valid ||
+      this.signupForm.pending ||
+      this.submitPending);
+  }
+
+  shouldDisplaySubmitProgress() {
+    return this.submitPending || this.signupForm.pending;
   }
 }

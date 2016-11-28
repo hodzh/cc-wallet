@@ -1,5 +1,5 @@
 import { IDocument } from '../../../core/client/common/document';
 
-export interface Withdrawal extends IDocument {
+export interface Deposit extends IDocument {
   currency: string;
 }

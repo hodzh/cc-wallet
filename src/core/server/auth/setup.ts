@@ -1,5 +1,3 @@
-'use strict';
-
 export = setup;
 
 function setup(userModel, config) {

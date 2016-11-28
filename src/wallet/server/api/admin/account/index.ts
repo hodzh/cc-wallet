@@ -1,5 +1,3 @@
-'use strict';
-
 var controller = require('./controller');
 
 export = route;

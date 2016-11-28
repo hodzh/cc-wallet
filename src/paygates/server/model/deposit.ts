@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -137,6 +135,10 @@ schema.statics.on = DepositEvents.on.bind(DepositEvents);
 schema.statics.off = DepositEvents.removeListener.bind(DepositEvents);
 schema.statics.once = DepositEvents.once.bind(DepositEvents);
 
-schema.plugin(require('../../../core/server/db/query'));
+schema.plugin(require('../../../core/server/db/query'), {
+  sort: {
+    created: -1
+  }
+});
 
 export = mongoose.model('Deposit', schema);

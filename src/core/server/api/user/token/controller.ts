@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var log = require('log4js').getLogger('token');
 var controller = require('../../../web/controller');
@@ -13,6 +11,7 @@ function controllerFactory(token) {
   function tokenVerify(req, res) {
     return Promise.resolve()
       .then(function () {
+        // todo check token format
         return token.verify(req.params.token);
       })
       .then(redirect())

@@ -1,1 +1,1 @@
-export * from './withdrawal-list.component.ts';
+export * from './withdrawal-list.component';

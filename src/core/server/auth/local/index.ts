@@ -1,5 +1,4 @@
-'use strict';
-import Recaptcha = require("../../captcha/recaptcha");
+import Recaptcha = require('../../captcha/recaptcha');
 
 var passport = require('passport');
 var controller = require('../../web/controller');
@@ -14,7 +13,9 @@ function route(router, auth) {
       .then(() => {
         return Recaptcha.RecaptchaService.verify(req)
           .catch((err) => {
-            res.status(401).json('Captcha required');
+            res.status(401).json({
+              message: 'Captcha required'
+            });
             throw err;
           });
       })

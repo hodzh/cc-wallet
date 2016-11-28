@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var controller = require('../../../core/server/web/controller');
 var mongoose = require('mongoose');

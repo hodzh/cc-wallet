@@ -42,10 +42,6 @@ function initServer(config) {
     app.use(require('connect-livereload')());
   }
 
-  //if ('development' === config.env || 'test' === config.env) {
-  //  app.use(morgan('dev'));
-  //}
-
   //app.use(require('./io'));
 }
 
@@ -58,7 +54,7 @@ function startServer(config, auth, callback) {
       return callback(err);
     }
 
-    log.info('HTTP server listening on %d, in %s mode',
+    log.info('HTTP server listening on %d',
       config.http.port);
 
     callback();
@@ -92,8 +88,9 @@ function beforeStart(config, auth) {
 
     // use static api
 
-    app.use(express.static(path.resolve(config.static)));
-    //app.use(favicon(path.join(app.get('appPath'), 'favicon.ico')));
+    var staticRoot = path.resolve(config.static);
+    app.use(express.static(staticRoot));
+    // app.use(favicon(path.join(staticRoot, 'favicon.ico')));
 
     // render index.html otherwise
 
@@ -103,6 +100,7 @@ function beforeStart(config, auth) {
   // error handler has to be last
 
   app.use(onError);
+
   function onError(err, req, res, next) {
     log.error(err);
     var code = 500;

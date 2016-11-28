@@ -8,7 +8,7 @@
       class="form"
       role="form"
       [formGroup]="signupForm"
-      (ngSubmit)="signup()">
+      (ngSubmit)="signUp()">
       <div
         class="form-group"
         [class.has-success]="signupForm.controls.email.valid && submitted"
@@ -92,10 +92,24 @@
           You also need to complete this CAPTCHA (JavaScript required).
         </p>
       </div>
-      <div>
-        <button class="btn btn-inverse btn-lg btn-register" type="submit">
+      <div
+        class="form-group"
+        [class.has-error]="submitted && errors">
+        <button
+          [disabled]="shouldDisableSubmitButton()"
+          class="btn btn-inverse btn-lg btn-register"
+          type="submit">
           Sign up
+          <span
+            *ngIf="shouldDisplaySubmitProgress()"
+            class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+      </span>
         </button>
+        <p
+          class="help-block"
+          *ngIf="submitted && errors">
+          {{errors}}
+        </p>
       </div>
       <hr/>
       <div>

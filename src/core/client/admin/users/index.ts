@@ -1,1 +1,1 @@
-export * from './user-list.component.ts';
+export * from './user-list.component';

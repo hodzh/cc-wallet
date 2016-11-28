@@ -1,7 +1,9 @@
-'use strict';
 import { QueryResult } from '../../common/query-result';
 
 var Promise = require('bluebird');
+
+const DEFAULT_QUERY_LIMIT = 10;
+const MAX_QUERY_LIMIT = 1000;
 
 export = function (schema, pluginOptions) {
   schema.statics.query = query;
@@ -31,8 +33,9 @@ export = function (schema, pluginOptions) {
       ? Boolean(options.leanWithId) : true;
     let limit = parseInt(options.limit);
     if (limit <= 0 || isNaN(limit)) {
-      limit = 10;
+      limit = DEFAULT_QUERY_LIMIT;
     }
+    limit = Math.min(limit, MAX_QUERY_LIMIT);
     let page, offset, skip, promises;
     if (options.offset) {
       offset = Number(options.offset);

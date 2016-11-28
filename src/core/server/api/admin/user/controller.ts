@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Promise from 'bluebird';
 
 import User = require('../../../model/user');

@@ -1,9 +1,3 @@
-/**
- * Account model events
- */
-
-'use strict';
-
 var EventEmitter = require('events').EventEmitter;
 var Account = require('./account');
 var AccountEvents = new EventEmitter();

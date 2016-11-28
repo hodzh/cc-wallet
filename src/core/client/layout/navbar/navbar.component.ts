@@ -29,6 +29,6 @@ export class NavbarComponent {
 
   logout($event) {
     $event.preventDefault();
-    return this.auth.logout();
+    return this.auth.signOut();
   }
 }

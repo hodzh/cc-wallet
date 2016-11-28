@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var WebpackBuildLogger = require('webpack-build-logger');
 var path = require('path');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
@@ -130,7 +131,7 @@ var clientConfig = {
 var serverConfig = {
   target: 'node',
   entry: './src/app/server/index',
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   output: {
     path: root('dist/server'),
     libraryTarget: 'commonjs2'
@@ -143,11 +144,13 @@ var serverConfig = {
   },
   externals: checkNodeImport,
   node: {
-    global: true,
+    console: false,
+    global: false,
     __dirname: false,
     __filename: false,
     process: false,
-    Buffer: true
+    Buffer: false,
+    setImmediate: false
   },
   plugins: [
     /*new webpack.SourceMapDevToolPlugin({
@@ -174,7 +177,12 @@ var defaultConfig = {
   output: {
     publicPath: path.resolve(__dirname),
     filename: 'index.js'
-  }
+  },
+  plugins: [
+    new WebpackBuildLogger({
+      logEnabled: true
+    })
+  ]
 };
 
 var webpackMerge = require('webpack-merge');

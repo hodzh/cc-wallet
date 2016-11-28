@@ -2,7 +2,7 @@
       class="form"
       role="form"
       [formGroup]="loginForm"
-      (ngSubmit)="login()">
+      (ngSubmit)="signIn()">
 
   <div
     class="form-group"
@@ -41,6 +41,7 @@
     [class.has-error]="!loginForm.controls.captcha.valid && submitted">
     <label>Please complete this CAPTCHA.</label>
     <re-captcha
+      #recaptcha
       site_key="6LdKlwgUAAAAANiQwucCM5Gstqlv11UrYKnOAPuh"
       (captchaResponse)="captchaResponse($event)"
       (captchaExpired)="captchaExpired()"
@@ -52,7 +53,9 @@
     </p>
   </div>
 
-  <div>
+  <div
+    class="form-group"
+    [class.has-error]="submitted && errors">
     <button
       [disabled]="shouldDisableSubmitButton()"
       class="btn btn-inverse btn-lg btn-login"
@@ -63,6 +66,11 @@
         class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
       </span>
     </button>
+    <p
+      class="help-block"
+      *ngIf="submitted && errors">
+      {{errors}}
+    </p>
   </div>
   <hr/>
   <div>

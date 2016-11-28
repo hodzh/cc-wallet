@@ -1,5 +1,3 @@
-'use strict';
-
 var Promise = require('bluebird');
 var Account = require('../../../model/account');
 var Transaction = require('../../../model/transaction');
