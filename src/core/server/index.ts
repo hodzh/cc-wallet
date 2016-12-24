@@ -98,6 +98,7 @@ function start(callback) {
 }
 
 process.on('unhandledRejection', function (reason) {
+  log.error(reason);
   throw reason;
 });
 

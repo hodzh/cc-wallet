@@ -13,8 +13,8 @@ const template = require('./reset-password.component.html');
 export class ResetPasswordComponent implements AfterViewInit, OnDestroy {
   @ViewChild('resetButton') resetButton: ElementRef;
   public submitPending: boolean = false;
+  public errors: string;
   private resetPasswordSubscription: Subscription;
-  errors;
 
   constructor(public router: Router,
               public auth: Auth,
@@ -55,11 +55,11 @@ export class ResetPasswordComponent implements AfterViewInit, OnDestroy {
 
   displayErrors(error) {
     if (error.messages) {
-      var messages = error.messages;
+      let messages = error.messages;
       messages.forEach((message) => {
       });
     } else {
-      this.errors = `${error.reasonPhrase} (${error.code})`;
+      this.errors = `${error.message}`;
     }
   }
 

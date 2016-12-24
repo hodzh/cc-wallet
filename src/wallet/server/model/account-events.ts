@@ -21,7 +21,7 @@ function emitEvent(event) {
   return function (doc) {
     AccountEvents.emit(event + ':' + doc._id, doc);
     AccountEvents.emit(event, doc);
-  }
+  };
 }
 
 export = AccountEvents;

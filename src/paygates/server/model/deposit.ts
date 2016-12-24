@@ -69,7 +69,7 @@ function emitEvent(event, doc) {
 }
 
 schema.methods.confirm = function () {
-  var deposit = this;
+  let deposit = this;
   log.trace('confirm deposit');
   return Promise.resolve()
     .then(function () {
@@ -87,7 +87,7 @@ schema.methods.confirm = function () {
       });
     })
     .then(function (account) {
-      var transaction = new Transaction({
+      let transaction = new Transaction({
         currency: deposit.currency,
         amount: deposit.amount,
         to: deposit.account,
@@ -122,7 +122,7 @@ schema.methods.confirm = function () {
 };
 
 schema.methods.verify = function () {
-  var deposit = this;
+  let deposit = this;
   return Promise.resolve()
     .then(function () {
       if (deposit.status != 'approved') {
