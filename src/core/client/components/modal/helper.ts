@@ -22,7 +22,10 @@ export class ComponentsHelper {
   private componentResolver: ComponentFactoryResolver;
   private injector: Injector;
 
-  public constructor(applicationRef: ApplicationRef, componentResolver: ComponentFactoryResolver, injector: Injector) {
+  public constructor(
+    applicationRef: ApplicationRef,
+    componentResolver: ComponentFactoryResolver,
+    injector: Injector) {
     this.applicationRef = applicationRef;
     this.componentResolver = componentResolver;
     this.injector = injector;
@@ -70,7 +73,10 @@ export class ComponentsHelper {
    * @param _viewContainerRef - optional instance of ViewContainerRef
    * @returns {Promise<ComponentRef<T>>} - returns a promise with ComponentRef<T>
    */
-  public appendNextToRoot<T extends Type<any>,N>(ComponentClass: T, ComponentOptionsClass: N, options: any, _viewContainerRef?: ViewContainerRef): Promise<ComponentRef<any>> {
+  public appendNextToRoot<T extends Type<any>, N>(
+    ComponentClass: T, ComponentOptionsClass: N,
+    options: any,
+    _viewContainerRef?: ViewContainerRef): Promise<ComponentRef<any>> {
     let componentFactory = this.componentResolver
       .resolveComponentFactory(ComponentClass);
     const viewContainerRef = _viewContainerRef || this.getRootViewContainerRef();
@@ -81,6 +87,7 @@ export class ComponentsHelper {
 
     const childInjector = Array.isArray(bindings) && bindings.length > 0 ?
       ReflectiveInjector.fromResolvedProviders(bindings, ctxInjector) : ctxInjector;
-    return Promise.resolve(viewContainerRef.createComponent(componentFactory, viewContainerRef.length, childInjector));
+    return Promise.resolve(viewContainerRef.createComponent(
+      componentFactory, viewContainerRef.length, childInjector));
   }
 }

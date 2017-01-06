@@ -44,11 +44,16 @@ export class CurrencyTextConverter {
     if (decimal <= 0 || isNaN(decimal)) {
       return value;
     }
-    let text = String(value);
+    let text = typeof value === 'number' ? value.toFixed(decimal) : String(value);
+    if (isNaN(parseFloat(text))) {
+      return value;
+    }
     let parts = text.split('.');
     let dec = parts[1] || '';
-    if (dec.length < args.decimal) {
-      dec += ZEROES.substr(0, args.decimal - dec.length);
+    if (dec.length < decimal) {
+      dec += ZEROES.substr(0, decimal - dec.length);
+    } else if (dec.length > decimal) {
+      dec = dec.substr(0, decimal);
     }
     return (parts[0] + dec).replace(/^0+/, '');
   }
