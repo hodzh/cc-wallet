@@ -55,6 +55,7 @@
     "recaptcha-async": "0.0.4",
     "recaptcha2": "1.0.8",
     "request": "2.74.0",
+    "source-map-support": "^0.4.6",
     "rxjs": "5.0.1",
     "validate.js": "^0.10.0"
   },
@@ -125,7 +126,6 @@
     "selenium-webdriver": "^3.0.1",
     "shelljs": "0.7.4",
     "sort-stream": "1.0.1",
-    "source-map-support": "^0.4.6",
     "swig": "1.4.2",
     "through": "2.3.8",
     "through2": "2.0.1",
