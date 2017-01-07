@@ -1,9 +1,6 @@
 export = wallet;
 
 function wallet(server, config) {
-
-  var path = require('path');
-
   server.db.models.account = require('./model/account');
   server.db.models.transaction = require('./model/transaction');
 
