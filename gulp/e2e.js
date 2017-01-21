@@ -21,7 +21,7 @@ gulp.task('e2e.update', function (done) {
 });
 
 gulp.task('e2e.startServer', ['e2e.update'], function (done) {
-  var server = require('../dist/server');
+  var server = require('../dist/cc-wallet/server');
   var config = require('../config');
   config.setEnv('development');
   server.start(config, onStart);

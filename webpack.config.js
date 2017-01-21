@@ -45,7 +45,7 @@ var clientConfig = {
   },
   devtool: 'source-map',
   output: {
-    path: root('dist/client/js'),
+    path: root('dist/cc-wallet/client/js'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map'
   },
@@ -133,7 +133,7 @@ var serverConfig = {
   entry: './src/app/server/index',
   devtool: 'inline-source-map',
   output: {
-    path: root('dist/server'),
+    path: root('dist/cc-wallet/server'),
     libraryTarget: 'commonjs2'
   },
   module: {

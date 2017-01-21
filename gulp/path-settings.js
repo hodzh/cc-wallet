@@ -28,7 +28,7 @@ module.exports = {
 
   // frontend settings
   client: {
-    public: 'dist/client',
+    public: 'dist/cc-wallet/client',
     temp: 'temp/client',
     favicon: 'src/core/client/favicon.ico',
     index: 'src/core/client/index.html',

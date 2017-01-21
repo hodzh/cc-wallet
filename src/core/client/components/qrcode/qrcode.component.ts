@@ -1,5 +1,5 @@
 import { Component, Input, ElementRef, OnChanges, OnInit, SimpleChange, ChangeDetectionStrategy } from '@angular/core';
-import * as QRCode from 'qrcodejs2';
+import * as QRCode from './qrcode';
 
 function isValidQrCodeText(data: string) {
   return !(typeof data === 'undefined' || data === '');
