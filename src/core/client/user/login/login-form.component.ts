@@ -45,7 +45,9 @@ export class LoginFormComponent {
           this.submitPending = false;
         },
         (error) => {
-          this.displayErrors(error.json());
+          if (error && error.json) {
+            this.displayErrors(error.json());
+          }
           this.submitPending = false;
           this.recaptchaComponent.reset();
         }
@@ -78,6 +80,9 @@ export class LoginFormComponent {
   }
 
   displayErrors(error) {
+    if (!error) {
+      return;
+    }
     if (error.messages) {
       let messages = error.messages;
       messages.forEach((message) => {
@@ -86,7 +91,7 @@ export class LoginFormComponent {
          remote: message.message
          });*/
       });
-    } else {
+    } else if (error.message) {
       this.errors = `${error.message}`;
     }
   }
