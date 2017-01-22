@@ -6,9 +6,8 @@ var autoprefixer = require('autoprefixer');
 
 var commonConfig = {
   resolve: {
-    root: __dirname,
+    //root: __dirname,
     extensions: [
-      '',
       '.ts',
       '.js',
       '.json',
@@ -72,10 +71,10 @@ var clientConfig = {
       {test: /\.json$/, loader: 'json-loader'},
 
       // CSS as raw text
-      {test: /\.css$/, loader: 'to-string!css?minimize!postcss'},
+      {test: /\.css$/, loader: ['to-string-loader','css-loader?minimize','postcss-loader']},
 
       // SCSS as raw text
-      {test: /\.scss$/, loader: 'to-string!css?minimize!postcss!sass'},
+      {test: /\.scss$/, loader: ['to-string-loader','css-loader?minimize','postcss-loader','sass-loader']},
 
       // support for .html as raw text
       {test: /\.html$/, loader: 'raw-loader'}
@@ -90,9 +89,9 @@ var clientConfig = {
     ]
   },
 
-  postcss: function () {
+  /* postcss: function () {
     return [precss, autoprefixer];
-  },
+  }, */
 
   plugins: [
     //new webpack.NoErrorsPlugin(),
@@ -122,10 +121,10 @@ var clientConfig = {
     })
   ],
 
-  tslint: {
+  /*tslint: {
     emitErrors: false,
     failOnHint: false
-  }
+  }*/
 };
 
 var serverConfig = {
@@ -172,7 +171,7 @@ var serverConfig = {
 var defaultConfig = {
   context: __dirname,
   resolve: {
-    root: root('/src')
+    //root: root('/src')
   },
   output: {
     publicPath: path.resolve(__dirname),

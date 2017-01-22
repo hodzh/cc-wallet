@@ -48,7 +48,7 @@ export class LoginFormComponent {
           try {
             this.displayErrors(error.json());
           } catch (errorParse) {
-            this.displayErrors(error.status);
+            this.displayErrors({message: error.status});
           }
           this.submitPending = false;
           this.recaptchaComponent.reset();

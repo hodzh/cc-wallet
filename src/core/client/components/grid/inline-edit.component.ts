@@ -19,7 +19,7 @@ export class InlineEditComponent {
   private preValue: any;
   private editing: boolean = false;
 
-  constructor(builder: FormBuilder, private renderer: Renderer,) {
+  constructor(builder: FormBuilder, private renderer: Renderer) {
   }
 
   edit() {
