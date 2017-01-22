@@ -95,6 +95,8 @@ function beforeStart(config, auth) {
     // render index.html otherwise
 
     app.get('/*', renderRoot);
+
+    log.info('serving static files from', staticRoot);
   }
 
   // error handler has to be last
