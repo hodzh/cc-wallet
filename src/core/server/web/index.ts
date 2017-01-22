@@ -1,21 +1,20 @@
-var path = require('path');
-var http = require('http');
+let path = require('path');
+let http = require('http');
 
-var bodyParser = require('body-parser');
-var compression = require('compression');
-var cookieParser = require('cookie-parser');
-var errorHandler = require('errorhandler');
-var express = require('express');
-var favicon = require('favicon');
-var methodOverride = require('method-override');
-var passport = require('passport');
-var morgan = require('morgan');
+let bodyParser = require('body-parser');
+let compression = require('compression');
+let cookieParser = require('cookie-parser');
+let errorHandler = require('errorhandler');
+let express = require('express');
+let methodOverride = require('method-override');
+let passport = require('passport');
+let morgan = require('morgan');
 
-var log = require('log4js').getLogger('core');
+let log = require('log4js').getLogger('core');
 
-var app = express();
-var server = http.createServer(app);
-var web = {
+let app = express();
+let server = http.createServer(app);
+let web = {
   express: app,
   server: server,
   init: initServer,
@@ -29,8 +28,8 @@ export = web;
 
 function initServer(config) {
   app.use(compression());
-  app.use(bodyParser.urlencoded({extended: false}));
-  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded(config.web.bodyParser.urlencoded));
+  app.use(bodyParser.json(config.web.bodyParser.json));
   app.use(methodOverride());
   app.use(passport.initialize());
 
@@ -71,9 +70,9 @@ function beforeStart(config, auth) {
     Object.keys(routers).forEach(registerApiKey);
 
     function registerApiKey(apiKey) {
-      var api = routers[apiKey];
-      var apiRouter = express.Router();
-      var apiPath = [routePath, apiKey].join('');
+      let api = routers[apiKey];
+      let apiRouter = express.Router();
+      let apiPath = [routePath, apiKey].join('');
       if (typeof api === 'function') {
         api(apiRouter, auth);
       } else {
@@ -88,9 +87,8 @@ function beforeStart(config, auth) {
 
     // use static api
 
-    var staticRoot = path.resolve(config.static);
+    let staticRoot = path.resolve(config.static);
     app.use(express.static(staticRoot));
-    // app.use(favicon(path.join(staticRoot, 'favicon.ico')));
 
     // render index.html otherwise
 
@@ -105,8 +103,8 @@ function beforeStart(config, auth) {
 
   function onError(err, req, res, next) {
     log.error(err);
-    var code = 500;
-    var msg = {message: 'Internal Server Error'};
+    let code = 500;
+    let msg = {message: 'Internal Server Error'};
     return res.status(code).json(msg);
   }
 
@@ -115,7 +113,7 @@ function beforeStart(config, auth) {
     if (req.originalUrl !== '/') {
       log.error(req.originalUrl, 'not found');
     }
-    var indexPath = path.join(path.resolve(config.static), 'index.html');
+    let indexPath = path.join(path.resolve(config.static), 'index.html');
     log.trace(indexPath);
     res.sendFile(indexPath);
   }
