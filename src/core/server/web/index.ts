@@ -10,7 +10,7 @@ let methodOverride = require('method-override');
 let passport = require('passport');
 let morgan = require('morgan');
 
-let log = require('log4js').getLogger('core');
+let log = require('log4js').getLogger('web');
 
 let app = express();
 let server = http.createServer(app);
@@ -34,7 +34,13 @@ function initServer(config) {
   app.use(passport.initialize());
 
   if (config.web.log) {
-    app.use(morgan('dev'));
+    app.use(morgan('dev', {
+      stream: {
+        write: (msg) => {
+          log.info(msg);
+        }
+      }
+    }));
   }
 
   if (config.web.liveReload) {

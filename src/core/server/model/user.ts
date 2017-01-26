@@ -10,17 +10,19 @@ var UserSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    require: true
+    require: true,
+    mergeable: false
   },
   emailVerify: Date,
   resetPassword: Date,
   role: {
     type: String,
-    require: true
+    require: true,
+    mergeable: false
   },
-  password: String,
-  provider: String,
-  salt: String,
+  password: { type: String, mergeable: false },
+  provider: { type: String, mergeable: false },
+  salt: { type: String, mergeable: false },
   facebook: {},
   twitter: {},
   google: {},
@@ -194,8 +196,7 @@ function authenticate(password, callback) {
 
     if (_this.password === pwdGen) {
       callback(null, true);
-    }
-    else {
+    } else {
       callback(null, false);
     }
   }
@@ -215,8 +216,7 @@ function makeSalt(byteSize, callback) {
   if (typeof arguments[0] === 'function') {
     callback = arguments[0];
     byteSize = defaultByteSize;
-  }
-  else if (typeof arguments[1] === 'function') {
+  } else if (typeof arguments[1] === 'function') {
     callback = arguments[1];
   }
 

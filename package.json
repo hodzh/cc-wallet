@@ -40,6 +40,7 @@
     "methods": "1.1.2",
     "mongoose": "4.7.7",
     "mongoose-long": "0.1.1",
+    "mongoose-merge-plugin": "0.0.5",
     "morgan": "1.7.0",
     "nodemailer": "2.7.0",
     "nodemailer-smtp-transport": "2.7.2",

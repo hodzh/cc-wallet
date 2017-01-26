@@ -2,6 +2,9 @@ var Promise = require('bluebird');
 var mongoose = require('mongoose');
 mongoose.Promise = Promise;
 require('mongoose-long')(mongoose);
+var merge = require('mongoose-merge-plugin');
+
+mongoose.plugin(merge);
 
 var EventEmitter = require('events').EventEmitter;
 var events = new EventEmitter();

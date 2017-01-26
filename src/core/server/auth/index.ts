@@ -38,6 +38,13 @@ function isAuthenticated() {
       }
       validateJwt(req, res, next);
     })
+    .use(function(err, req, res, next){
+      if (err.constructor.name === 'UnauthorizedError') {
+        res.send(401, 'Unauthorized');
+        return;
+      }
+      next(err);
+    })
     // Attach user to request
     .use(function (req, res, next) {
       User.findById(req.user._id)
