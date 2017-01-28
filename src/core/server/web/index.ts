@@ -62,6 +62,8 @@ function startServer(config, auth, callback) {
     log.info('HTTP server listening on %d',
       config.http.port);
 
+    // app.cluster.sendOnline();
+
     callback();
   });
 }
