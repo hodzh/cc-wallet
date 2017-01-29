@@ -7,6 +7,7 @@ export = {
 
 function handleError(res, statusCode = 500) {
   return function (err) {
+    // todo log error
     res.status(statusCode).send(err);
   };
 }

@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  emailWithdrawalConfirm: false
+  emailWithdrawalConfirm: true
 };

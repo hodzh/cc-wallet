@@ -30,6 +30,7 @@ function factory(model) {
   function index(req, res) {
     return Promise.resolve()
       .then(function () {
+        // todo limit
         return model.find({});
       })
       .then(controller.responseWithResult(res))
@@ -88,10 +89,7 @@ function factory(model) {
 function saveUpdates(updates) {
   return function (entity) {
     var updated = entity.merge(updates);
-    return updated.save()
-      .spread(function (updated) {
-        return updated;
-      });
+    return updated.save();
   };
 }
 

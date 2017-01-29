@@ -6,7 +6,7 @@ var autoprefixer = require('autoprefixer');
 
 var commonConfig = {
   resolve: {
-    //root: __dirname,
+    // root: __dirname,
     extensions: [
       '.ts',
       '.js',
@@ -21,7 +21,7 @@ var commonConfig = {
 var clientConfig = {
   target: 'web',
   entry: {
-    'vendor': [
+    vendor: [
       // Polyfills
       'core-js/es6',
       'core-js/es7/reflect',
@@ -38,7 +38,7 @@ var clientConfig = {
       'rxjs'
       // Other
     ],
-    'app': [
+    app: [
       './src/app/client/index'
     ]
   },
@@ -49,14 +49,14 @@ var clientConfig = {
     sourceMapFilename: '[name].js.map'
   },
   module: {
-    //preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
+    // preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
     loaders: [
       // .ts files.
       {
         test: /\.ts$/,
         loader: 'ts-loader',
         query: {
-          'ignoreDiagnostics': [
+          ignoreDiagnostics: [
             2403, // 2403 -> Subsequent variable declarations
             2300, // 2300 Duplicate identifier
             2304, // 2304 Cannot find name
@@ -71,10 +71,10 @@ var clientConfig = {
       {test: /\.json$/, loader: 'json-loader'},
 
       // CSS as raw text
-      {test: /\.css$/, loader: ['to-string-loader','css-loader?minimize','postcss-loader']},
+      {test: /\.css$/, loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader']},
 
       // SCSS as raw text
-      {test: /\.scss$/, loader: ['to-string-loader','css-loader?minimize','postcss-loader','sass-loader']},
+      {test: /\.scss$/, loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader', 'sass-loader']},
 
       // support for .html as raw text
       {test: /\.html$/, loader: 'raw-loader'}
@@ -106,7 +106,12 @@ var clientConfig = {
      }
      }),*/
     //new webpack.optimize.DedupePlugin(),
-    //new webpack.optimize.UglifyJsPlugin(),
+    // Minify all javascript, switch loaders to minimizing mode
+    new webpack.optimize.UglifyJsPlugin({
+      compress: true,
+      mangle  : false,
+      sourceMap: true
+    }),
     //new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -119,7 +124,7 @@ var clientConfig = {
       minChunks: 2,
       chunks: ['app', 'vendor']
     })
-  ],
+  ]
 
   /*tslint: {
     emitErrors: false,
@@ -130,7 +135,8 @@ var clientConfig = {
 var serverConfig = {
   target: 'node',
   entry: './src/app/server/index',
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
+  devtool: 'source-map',
   output: {
     path: root('dist/cc-wallet/server'),
     libraryTarget: 'commonjs2'
@@ -171,16 +177,16 @@ var serverConfig = {
 var defaultConfig = {
   context: __dirname,
   resolve: {
-    //root: root('/src')
+    // root: root('/src')
   },
   output: {
     publicPath: path.resolve(__dirname),
     filename: 'index.js'
   },
   plugins: [
-    new WebpackBuildLogger({
-      logEnabled: true
-    })
+    // new WebpackBuildLogger({
+    //   logEnabled: true
+    // })
   ]
 };
 
