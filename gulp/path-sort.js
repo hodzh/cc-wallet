@@ -1,4 +1,4 @@
-var modules = require('../config').modules;
+var modules = require('../config/defaults/modules');
 var util = require('gulp-util');
 var log = util.log;
 module.exports = function (a, b) {

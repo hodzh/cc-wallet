@@ -9,8 +9,8 @@ function getPathSettings() {
   // replace 'src/*/' with 'src/{list of modules}/
   // regarding current configuration
 
-  var config = require('../config');
-  resolveModules(paths, config.modules);
+  var modules = require('../config/defaults/modules');
+  resolveModules(paths, modules);
 
   return paths;
 }

@@ -2,9 +2,6 @@ import * as Promise from 'bluebird';
 import * as mailer from 'nodemailer';
 import * as smtpTransport from 'nodemailer-smtp-transport';
 var log = require('log4js').getLogger('email');
-var mails = require('../../../../public-email/index.json');
-// todo fix json loader
-var mailsObj = JSON.parse(mails);
 
 export = function (config) {
   var transport = mailer.createTransport(
@@ -16,6 +13,7 @@ export = function (config) {
 
   function send(options, key, context) {
     log.trace('send email', key);
+    var mailsObj = config.template;
     var mail = mailsObj[key];
     if (!mail) {
       log.error('unknown email type', key);

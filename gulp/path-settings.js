@@ -68,7 +68,7 @@ module.exports = {
 
   // email builder settings
   email: {
-    public: 'public-email',
+    public: 'dist/server',
     temp: 'temp/email',
     js: ['src/*/server/email/index.js'],
     html: ['src/*/server/email/**/*.html'],

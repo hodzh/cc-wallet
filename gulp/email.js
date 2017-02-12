@@ -1,12 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
-var del = require('del');
-var gulp = require('gulp');
-var plugin = {
-  less: require('gulp-less'),
+let fs = require('fs');
+let path = require('path');
+let async = require('async');
+let del = require('del');
+let gulp = require('gulp');
+let plugin = {
   sass: require('gulp-sass'),
   foreach: require('gulp-foreach'),
   swig: require('gulp-swig'),
@@ -18,21 +17,21 @@ var plugin = {
   data: require('gulp-data')
 };
 
-var util = require('gulp-util');
-var log = util.log;
+let util = require('gulp-util');
+let log = util.log;
 
-var browserSync = require('browser-sync').create();
-var through = require('through2');
+let browserSync = require('browser-sync').create();
+let through = require('through2');
 
-var swig = require('swig');
-var swigOptions = {
+let swig = require('swig');
+let swigOptions = {
   varControls: ['<{', '}>'],
   tagControls: ['<%', '%>'],
   cmtControls: ['<#', '#>']
 };
 swig.setDefaults(swigOptions);
 
-var autoprefixerOptions = {
+let autoprefixerOptions = {
   browsers: [
     'last 2 version',
     'safari 5',
@@ -44,17 +43,18 @@ var autoprefixerOptions = {
   cascade: false
 };
 
-var paths = require('./path-resolve').email;
-var config = require('../config');
+let paths = require('./path-resolve').email;
+let modules = require('../config/cc-dev/defaults/modules');
+let info = require('../config/cc-dev/cc-dev/public');
 
-var tempHtmlPath = path.join(paths.temp, 'html');
-var tempTextPath = path.join(paths.temp, 'text');
-var finalHtml = path.join(tempHtmlPath, '*.inline.html');
+let tempHtmlPath = path.join(paths.temp, 'html');
+let tempTextPath = path.join(paths.temp, 'text');
+let finalHtml = path.join(tempHtmlPath, '*.inline.html');
 
 function renameAsset() {
   return plugin.rename(function (file) {
     //log(file.dirname);
-    var parts = file.dirname.split(path.sep);
+    let parts = file.dirname.split(path.sep);
     parts.splice(0, 4); // remove 4 parts: src/*/server/email
     file.dirname = parts.join(path.sep);
     //log(file.dirname);
@@ -63,14 +63,6 @@ function renameAsset() {
 
 gulp.task('email-clean', function (callback) {
   return del([paths.temp], callback);
-});
-
-gulp.task('email-less', function () {
-  return gulp.src(paths.less, {base: 'src/*/server/email/html'})
-    .pipe(plugin.less())
-    .pipe(plugin.autoprefixer(autoprefixerOptions))
-    .pipe(renameAsset())
-    .pipe(gulp.dest(tempHtmlPath));
 });
 
 gulp.task('email-sass', function () {
@@ -89,13 +81,13 @@ gulp.task('email-css', function () {
 });
 
 // merged email index
-var index;
+let index;
 
 gulp.task('email-index-build', function () {
   index = {};
   return gulp.src([
       'src/{',
-      config.modules.join(','),
+      modules.join(','),
       '}/server/email/index.js'].join(''),
     {read: false})
     .pipe(indexBuilder());
@@ -105,12 +97,12 @@ gulp.task('email-index-build', function () {
 
     function transform(file, enc, callback) {
       log(file.path);
-      var emails = require(file.path);
+      let emails = require(file.path);
       delete require.cache[require.resolve(file.path)];
       Object.keys(emails).forEach(function (key) {
         log(key);
-        var email = emails[key];
-        var parent = index[key];
+        let email = emails[key];
+        let parent = index[key];
         if (parent) {
           if (email.subject) {
             parent.subject = email.subject;
@@ -147,7 +139,7 @@ gulp.task('email-index-build', function () {
       Object.keys(index).forEach(function (key) {
         index[key].subject =
           swig.render(index[key].subject,
-            config.public);
+            info);
       });
 
       callback();
@@ -163,27 +155,27 @@ gulp.task('email-html', function () {
 
 gulp.task('email-text', ['email-index-build'], function () {
   return gulp.src(Object.keys(index).map(function (key) {
-    var mail = index[key];
-    var text = mail.text;
+    let mail = index[key];
+    let text = mail.text;
     mail.text = path.join(tempTextPath, path.basename(text));
     return text;
   }))
-    .pipe(plugin.data(config.public))
+    .pipe(plugin.data(info))
     .pipe(plugin.swig(swigOptions))
     .pipe(plugin.extReplace('.txt'))
     .pipe(gulp.dest(tempTextPath));
 });
 
 gulp.task('email-html-inline',
-  ['email-html', 'email-css', 'email-sass', 'email-less'],
+  ['email-html', 'email-css', 'email-sass'],
   function () {
     return gulp.src(Object.keys(index).map(function (key) {
-      var mail = index[key];
-      var html = mail.html;
+      let mail = index[key];
+      let html = mail.html;
       mail.html = changeExtension(html, '.inline.html');
       return html;
     }))
-      .pipe(plugin.data(config.public))
+      .pipe(plugin.data(info))
       .pipe(plugin.swig(swigOptions))
       .pipe(plugin.inlineCss())
       .pipe(plugin.htmlmin({
@@ -196,14 +188,15 @@ gulp.task('email-html-inline',
 
 gulp.task('email-index', ['email-html-inline', 'email-text'], function (callback) {
   Object.keys(index).forEach(function (key) {
-    var mail = index[key];
+    let mail = index[key];
     mail.html = fs.readFileSync(mail.html, 'utf8');
     mail.text = fs.readFileSync(mail.text, 'utf8');
   });
-  var indexPath = path.join(__dirname, '../', paths.public, 'index.json');
+  let jsonFileName = 'email.json';
+  let indexPath = path.join(__dirname, '../', paths.public, jsonFileName);
   ensureDirectoryExistence(indexPath);
   fs.writeFile(
-    path.join(__dirname, '../', paths.public, 'index.json'),
+    path.join(__dirname, '../', paths.public, jsonFileName),
     JSON.stringify(index, null, '\t'),
     'utf8',
     callback
@@ -225,9 +218,9 @@ gulp.task('email', [
 ]);
 
 gulp.task('email-watch', ['email-build'], function () {
-  var everything = Array.prototype.concat.call(
+  let everything = Array.prototype.concat.call(
     paths.js, paths.html, paths.text,
-    paths.css, paths.sass, paths.less);
+    paths.css, paths.sass);
   //log(everything);
   gulp.watch(everything, ['email-build']);
 });
@@ -244,13 +237,13 @@ gulp.task('email-browser-sync', ['email-build'], function () {
 });
 
 function changeExtension(file, ext) {
-  var lastDotPosition = file.lastIndexOf('.');
+  let lastDotPosition = file.lastIndexOf('.');
   if (lastDotPosition === -1) return file;
   return file.substr(0, lastDotPosition) + ext;
 }
 
 function ensureDirectoryExistence(filePath) {
-  var dirname = path.dirname(filePath);
+  let dirname = path.dirname(filePath);
   if (directoryExists(dirname)) {
     return true;
   }
