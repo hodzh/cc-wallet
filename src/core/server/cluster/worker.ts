@@ -4,8 +4,10 @@ const DEFAULT_FORCE_TIMEOUT = 1000;
 
 export class ClusterWorker {
   private shuttingDown: boolean;
+  private config: any;
 
-  constructor(private config, private server) {
+  constructor(config, private server) {
+    this.config = config || {};
     process.on('SIGINT', () => this.shutdown());
     process.on('message', (msg) => {
       if (msg === 'shutdown') {
