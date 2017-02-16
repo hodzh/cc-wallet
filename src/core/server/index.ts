@@ -3,99 +3,79 @@ var log = require('log4js').getLogger('core');
 var User = require('./model/user');
 var Token = require('./token');
 
-var app = {
-  config: null,
-  db: require('./db'),
-  auth: require('./auth'),
-  web: require('./web'),
-  mail: null,
-  token: null,
-  init: init,
-  start: start
-};
+class App {
+  config = null;
+  db = require('./db');
+  auth = require('./auth');
+  web = require('./web');
+  mail = null;
+  token = null;
+
+  constructor() {
+  }
+
+  init(config, modules) {
+    log.trace('app init', process.version);
+    this.config = config;
+    this.db.models.user = User;
+    this.auth.init(User, this.config);
+    var mail = require('./mailer');
+    this.mail = mail(config.email);
+    var token = Token(config.token);
+    this.token = token;
+    modules.slice(1).forEach((moduleServer) => {
+      /*var path = require('path');
+       var fs = require('fs');
+       var modulePath = path.join(
+       __dirname, '../../../modules',
+       name, 'server');
+       if (!fs.existsSync(modulePath)) {
+       return;
+       }
+       var moduleServer = require(modulePath);*/
+      moduleServer(this, this.config);
+    });
+  }
+
+  start(callback) {
+    async.series([
+        this.db.init.bind(this.db, this.config.db),
+        initWeb,
+        this.web.start.bind(
+          this.web, this.config.web, this.auth)
+      ],
+      function (err) {
+        if (err) {
+          return callback(err);
+        }
+        return callback();
+      }
+    );
+
+    function initWeb(callback) {
+
+      var web = this.web;
+      var auth = this.auth;
+
+      web.init(this.config);
+
+      // register core routes
+
+      web.route({
+        '/auth/local': require('./auth/local'),
+        '/api/me': require('./api/user/user')(this.token, this.mail),
+        '/api/token': require('./api/user/token')(this.token),
+        '/aapi/user': require('./api/admin/user')
+      });
+
+      callback();
+    }
+  }
+}
+
+var app = new App();
 
 export = app;
-
-function init(config, modules) {
-  log.trace('app init', process.version);
-  app.config = config;
-  initModels();
-  initAuth();
-  initMailer();
-  initToken();
-  //addModules(config.modules.slice(1));
-  addModules(modules.slice(1));
-
-  function initModels() {
-    app.db.models.user = User;
-  }
-
-  function initAuth() {
-    app.auth.init(User, app.config);
-  }
-
-  function initMailer() {
-    var mail = require('./mailer');
-    app.mail = mail(config.email);
-  }
-
-  function initToken() {
-    var token = Token(config.token);
-    app.token = token;
-  }
-
-  function addModules(modules) {
-    modules.forEach(initModule);
-  }
-
-  function initModule(moduleServer) {
-    /*var path = require('path');
-     var fs = require('fs');
-     var modulePath = path.join(
-     __dirname, '../../../modules',
-     name, 'server');
-     if (!fs.existsSync(modulePath)) {
-     return;
-     }
-     var moduleServer = require(modulePath);*/
-    moduleServer(app, app.config);
-  }
-}
-
-function start(callback) {
-  async.series([
-      app.db.init.bind(app.db, app.config.db),
-      initWeb,
-      app.web.start.bind(
-        app.web, app.config.web, app.auth)
-    ],
-    function (err) {
-      if (err) {
-        return callback(err);
-      }
-      return callback();
-    }
-  );
-
-  function initWeb(callback) {
-
-    var web = app.web;
-    var auth = app.auth;
-
-    web.init(app.config);
-
-    // register core routes
-
-    web.route({
-      '/auth/local': require('./auth/local'),
-      '/api/me': require('./api/user/user')(app.token, app.mail),
-      '/api/token': require('./api/user/token')(app.token),
-      '/aapi/user': require('./api/admin/user')
-    });
-
-    callback();
-  }
-}
 
 process.on('unhandledRejection', function (reason) {
   log.error(reason);
