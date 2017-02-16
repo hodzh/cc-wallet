@@ -108,8 +108,10 @@ var clientConfig = {
     //new webpack.optimize.DedupePlugin(),
     // Minify all javascript, switch loaders to minimizing mode
     new webpack.optimize.UglifyJsPlugin({
-      compress: true,
-      mangle  : false,
+      compress: {
+        warnings: false
+      },
+      mangle: false,
       sourceMap: true
     }),
     //new webpack.optimize.OccurenceOrderPlugin(),

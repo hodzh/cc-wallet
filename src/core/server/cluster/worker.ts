@@ -1,4 +1,4 @@
-let logger = require('log4js').getLogger('worker');
+let log = require('log4js').getLogger('worker');
 
 const DEFAULT_FORCE_TIMEOUT = 1000;
 
@@ -7,9 +7,14 @@ export class ClusterWorker {
 
   constructor(private config, private server) {
     process.on('SIGINT', () => this.shutdown());
+    process.on('message', (msg) => {
+      if (msg === 'shutdown') {
+        this.shutdown();
+      }
+    });
   }
 
-  middleware(req, res, next) {
+  middleware (req, res, next) {
     if (!this.shuttingDown) {
       return next();
     }
@@ -25,15 +30,15 @@ export class ClusterWorker {
       return;
     }
     this.shuttingDown = true;
-    logger.warn('Received kill signal (SIGTERM), shutting down');
+    log.warn('Received kill signal (SIGTERM), shutting down');
 
     setTimeout(() => {
-      logger.error('Could not close connections in time, forcefully shutting down');
+      log.error('Could not close connections in time, forcefully shutting down');
       process.exit(1);
     }, this.config.forceTimeout || DEFAULT_FORCE_TIMEOUT);
 
     this.server.close(() => {
-      logger.info('Closed out remaining connections.');
+      log.info('Closed out remaining connections.');
       process.exit();
     });
   }

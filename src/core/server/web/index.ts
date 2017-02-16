@@ -1,10 +1,10 @@
+import { ClusterWorker } from '../cluster/worker';
 let path = require('path');
 let http = require('http');
 
 let bodyParser = require('body-parser');
 let compression = require('compression');
 let cookieParser = require('cookie-parser');
-let errorHandler = require('errorhandler');
 let express = require('express');
 let methodOverride = require('method-override');
 let passport = require('passport');
@@ -12,27 +12,28 @@ let morgan = require('morgan');
 
 let log = require('log4js').getLogger('web');
 
-let app = express();
-let server = http.createServer(app);
-
 class WebServer {
 
-  express = app;
-  server = server;
+  express;
+  server;
   routers = {};
 
   constructor() {
+    this.express = express();
+    this.server = http.createServer(this.express);
   }
 
   init(config) {
-    app.use(compression());
-    app.use(bodyParser.urlencoded(config.web.bodyParser.urlencoded));
-    app.use(bodyParser.json(config.web.bodyParser.json));
-    app.use(methodOverride());
-    app.use(passport.initialize());
+    let clusterWorker = new ClusterWorker(config.cluster, this.server);
+    this.express.use(clusterWorker.middleware.bind(clusterWorker));
+    this.express.use(compression());
+    this.express.use(bodyParser.urlencoded(config.web.bodyParser.urlencoded));
+    this.express.use(bodyParser.json(config.web.bodyParser.json));
+    this.express.use(methodOverride());
+    this.express.use(passport.initialize());
 
     if (config.web.log) {
-      app.use(morgan('dev', {
+      this.express.use(morgan('dev', {
         stream: {
           write: (msg) => {
             log.info(msg);
@@ -42,24 +43,25 @@ class WebServer {
     }
 
     if (config.web.liveReload) {
-      app.use(require('connect-livereload')());
+      this.express.use(require('connect-livereload')());
     }
 
-    //app.use(require('./io'));
+    //this.express.use(require('./io'));
   }
 
   start(config, auth, callback) {
 
     this.beforeStart(config, auth);
 
-    server.listen(config.http.port, err => {
+    this.server.listen(config.http.port, err => {
       if (err) {
         return callback(err);
       }
 
-      log.info(`HTTP server listening on ${config.http.host || '0.0.0.0'}:${config.http.port}`);
+      log.info(`HTTP server listening on \
+${config.http.host || '0.0.0.0'}:${config.http.port}`);
 
-      // app.cluster.sendOnline();
+      // this.express.cluster.sendOnline();
 
       callback();
     });
@@ -84,7 +86,7 @@ class WebServer {
           registerApi(api, apiRouter, apiPath);
         }
         log.info('route', apiPath);
-        router.use(apiKey, apiRouter);
+        router.express.use(apiKey, apiRouter);
       }
     }
 
@@ -93,18 +95,18 @@ class WebServer {
       // use static api
 
       let staticRoot = path.resolve(config.static);
-      app.use(express.static(staticRoot));
+      this.express.use(express.static(staticRoot));
 
       // render index.html otherwise
 
-      app.get('/*', renderRoot);
+      this.express.get('/*', renderRoot);
 
       log.info('serving static files from', staticRoot);
     }
 
     // error handler has to be last
 
-    app.use(onError);
+    this.express.use(onError);
 
     function onError(err, req, res, next) {
       log.error(err);
