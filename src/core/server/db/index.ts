@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 mongoose.Promise = Promise;
 require('mongoose-long')(mongoose);
 var merge = require('mongoose-merge-plugin');
+var log = require('log4js').getLogger('db');
+
 
 mongoose.plugin(merge);
 
@@ -34,13 +36,13 @@ function init(config, callback) {
 
   function onConnected() {
     connected = true;
-    console.log('mongodb connected');
+    log.info('mongodb connected');
     emit('connect')
       .then(function () {
         callback();
       })
       .catch(function (error) {
-        console.error(error);
+        log.error(error);
         callback(error);
       });
   }
@@ -48,7 +50,7 @@ function init(config, callback) {
   function emit(name) {
     var listeners = events.listeners(name);
     if (!listeners || !listeners.length) {
-      return Promise.fulfilled(false);
+      return Promise.resolve(false);
     }
     var args = Array.prototype.slice.call(arguments, 1);
     return Promise.all(listeners.map(listenerInvoke));

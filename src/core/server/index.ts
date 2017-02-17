@@ -40,7 +40,7 @@ class App {
   start(callback) {
     async.series([
         this.db.init.bind(this.db, this.config.db),
-        initWeb,
+        this.initWeb.bind(this),
         this.web.start.bind(
           this.web, this.config.web, this.auth)
       ],
@@ -51,25 +51,25 @@ class App {
         return callback();
       }
     );
+  }
 
-    function initWeb(callback) {
+  initWeb(callback) {
 
-      var web = this.web;
-      var auth = this.auth;
+    var web = this.web;
+    var auth = this.auth;
 
-      web.init(this.config);
+    web.init(this.config);
 
-      // register core routes
+    // register core routes
 
-      web.route({
-        '/auth/local': require('./auth/local'),
-        '/api/me': require('./api/user/user')(this.token, this.mail),
-        '/api/token': require('./api/user/token')(this.token),
-        '/aapi/user': require('./api/admin/user')
-      });
+    web.route({
+      '/auth/local': require('./auth/local'),
+      '/api/me': require('./api/user/user')(this.token, this.mail),
+      '/api/token': require('./api/user/token')(this.token),
+      '/aapi/user': require('./api/admin/user')
+    });
 
-      callback();
-    }
+    callback();
   }
 }
 

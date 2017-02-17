@@ -74,9 +74,7 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
     registerApi(this.routers, this, '');
 
     function registerApi(routers, router, routePath) {
-      Object.keys(routers).forEach(registerApiKey);
-
-      function registerApiKey(apiKey) {
+      Object.keys(routers).forEach((apiKey) => {
         let api = routers[apiKey];
         let apiRouter = express.Router();
         let apiPath = [routePath, apiKey].join('');
@@ -87,7 +85,7 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
         }
         log.info('route', apiPath);
         router.express.use(apiKey, apiRouter);
-      }
+      });
     }
 
     if (config.static) {
