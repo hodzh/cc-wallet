@@ -9,9 +9,14 @@
   "scripts": {
     "start": "npm install && npm run build",
     "dev": "./node_modules/.bin/webpack --watch",
-    "build": "./node_modules/.bin/webpack --progress -p",
+    "build": "npm_lifecycle_event=build ./node_modules/.bin/webpack",
+    "serve": "./node_modules/.bin/webpack-dev-server --watch --host 0.0.0.0 --port 8888",
     "server": "nodemon dist/server/index.js",
-    "debug": "node --debug-brk dist/server/index.js"
+    "debug": "node --debug-brk dist/server/index.js",
+    "win-dev": "./node_modules/.bin/webpack.cmd --watch",
+    "win-build": "set npm_lifecycle_event=build&& \"./node_modules/.bin/webpack.cmd\" --progress --colors --display-modules",
+    "wd": "npm run win-dev",
+    "wb": "npm run win-build"
   },
   "production-scripts": {
     "prestart": "npm install --production",
@@ -41,7 +46,7 @@
     "mongoose-long": "0.1.1",
     "mongoose-merge-plugin": "0.0.5",
     "morgan": "1.8.1",
-    "nodemailer": "3.1.1",
+    "nodemailer": "3.1.2",
     "nodemailer-smtp-transport": "2.7.2",
     "passport": "0.3.2",
     "passport-local": "1.0.0",

@@ -4,7 +4,22 @@ var path = require('path');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
-var commonConfig = {
+/**
+ * Env
+ * Get npm lifecycle event to identify the environment
+ */
+const ENV = process.env.npm_lifecycle_event;
+const isTest = ENV === 'test' || ENV === 'test-watch';
+const isProd = ENV === 'build';
+if (isProd){
+  console.log('production mode');
+}
+const isDev = !isProd && !isTest;
+if (isDev){
+  console.log('development mode');
+}
+
+const commonConfig = {
   resolve: {
     // root: __dirname,
     extensions: [
@@ -18,9 +33,9 @@ var commonConfig = {
   },
 };
 
-var clientConfig = {
-  target: 'web',
-  entry: {
+const clientConfig = {
+  target : 'web',
+  entry  : {
     vendor: [
       // Polyfills
       'core-js/es6',
@@ -38,24 +53,24 @@ var clientConfig = {
       'rxjs'
       // Other
     ],
-    app: [
+    app   : [
       './src/app/client/index'
     ]
   },
   devtool: 'source-map',
-  output: {
-    path: root('dist/cc-wallet/client/js'),
-    filename: '[name].js',
+  output : {
+    path             : root('dist/cc-wallet/client/js'),
+    filename         : '[name].js',
     sourceMapFilename: '[name].js.map'
   },
-  module: {
+  module : {
     // preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
     loaders: [
       // .ts files.
       {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-        query: {
+        test   : /\.ts$/,
+        loader : 'ts-loader',
+        query  : {
           ignoreDiagnostics: [
             2403, // 2403 -> Subsequent variable declarations
             2300, // 2300 Duplicate identifier
@@ -71,10 +86,14 @@ var clientConfig = {
       {test: /\.json$/, loader: 'json-loader'},
 
       // CSS as raw text
-      {test: /\.css$/, loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader']},
+      {test   : /\.css$/,
+        loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader']
+      },
 
       // SCSS as raw text
-      {test: /\.scss$/, loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader', 'sass-loader']},
+      {test   : /\.scss$/,
+        loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader', 'sass-loader']
+      },
 
       // support for .html as raw text
       {test: /\.html$/, loader: 'raw-loader'}
@@ -90,8 +109,8 @@ var clientConfig = {
   },
 
   /* postcss: function () {
-    return [precss, autoprefixer];
-  }, */
+   return [precss, autoprefixer];
+   }, */
 
   plugins: [
     //new webpack.NoErrorsPlugin(),
@@ -100,41 +119,39 @@ var clientConfig = {
      jQuery: "jquery",
      "windows.jQuery": "jquery"
      }),*/
-    /*new webpack.DefinePlugin({
-     'process.env': {
-     'NODE_ENV': JSON.stringify('production'),
-     }
-     }),*/
+    new webpack.DefinePlugin({
+      PRODUCTION: isProd
+    }),
     //new webpack.optimize.DedupePlugin(),
     // Minify all javascript, switch loaders to minimizing mode
     new webpack.optimize.UglifyJsPlugin({
-      compress: {
+      compress : {
         warnings: false
       },
-      mangle: false,
+      mangle   : false,
       sourceMap: true
     }),
     //new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.js',
+      name     : 'vendor',
+      filename : 'vendor.js',
       minChunks: Infinity
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      filename: 'common.js',
+      name     : 'common',
+      filename : 'common.js',
       minChunks: 2,
-      chunks: ['app', 'vendor']
+      chunks   : ['app', 'vendor']
     })
   ]
 
   /*tslint: {
-    emitErrors: false,
-    failOnHint: false
-  }*/
+   emitErrors: false,
+   failOnHint: false
+   }*/
 };
 
-var serverConfig = {
+const serverConfig = {
   target: 'node',
   entry: './src/app/server/index',
   // devtool: 'inline-source-map',
@@ -176,7 +193,7 @@ var serverConfig = {
 };
 
 // Default config
-var defaultConfig = {
+const defaultConfig = {
   context: __dirname,
   resolve: {
     // root: root('/src')
@@ -192,7 +209,7 @@ var defaultConfig = {
   ]
 };
 
-var webpackMerge = require('webpack-merge');
+const webpackMerge = require('webpack-merge');
 module.exports = [
   // Client
   webpackMerge({}, defaultConfig, commonConfig, clientConfig),

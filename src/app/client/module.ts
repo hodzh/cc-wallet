@@ -13,7 +13,7 @@ import { LayoutModule } from '../../core/client/layout/module';
   bootstrap: [AppComponent],
   imports: [
     CoreModule,
-    DevModule,
+    //...(PRODUCTION ? [] : [DevModule]),
     WalletModule,
     VpModule,
     PaygatesModule,
