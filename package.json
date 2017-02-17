@@ -18,10 +18,6 @@
     "wd": "npm run win-dev",
     "wb": "npm run win-build"
   },
-  "production-scripts": {
-    "prestart": "npm install --production",
-    "start": "node dist/server/index.js"
-  },
   "license": "MIT",
   "contributors": [
     "Eugene Hodzhaev <ehodzh@gmail.com>"

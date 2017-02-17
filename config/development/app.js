@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  name: 'Walle-dev',
+  name: 'CC-Wallet.dev',
   debug: true
 };
