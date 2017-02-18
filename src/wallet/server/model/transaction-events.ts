@@ -1,9 +1,9 @@
+var Promise = require('bluebird');
+var EventEmitter = require('events').EventEmitter;
+
 export = transactionEvents;
 
 function transactionEvents(schema) {
-
-  var Promise = require("bluebird");
-  var EventEmitter = require('events').EventEmitter;
 
   var events = new EventEmitter();
 

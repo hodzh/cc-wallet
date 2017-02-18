@@ -38,7 +38,7 @@
     "log4js": "1.1.0",
     "method-override": "2.3.7",
     "methods": "1.1.2",
-    "mongoose": "4.8.3",
+    "mongoose": "4.7.7",
     "mongoose-long": "0.1.1",
     "mongoose-merge-plugin": "0.0.5",
     "morgan": "1.8.1",
