@@ -42,7 +42,7 @@
     "mongoose-long": "0.1.1",
     "mongoose-merge-plugin": "0.0.5",
     "morgan": "1.8.1",
-    "nodemailer": "3.1.2",
+    "nodemailer": "3.0.2",
     "nodemailer-smtp-transport": "2.7.2",
     "passport": "0.3.2",
     "passport-local": "1.0.0",

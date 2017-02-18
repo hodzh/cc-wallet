@@ -1,7 +1,7 @@
-var async = require('async');
-var log = require('log4js').getLogger('core');
-var User = require('./model/user');
-var Token = require('./token');
+let async = require('async');
+let log = require('log4js').getLogger('core');
+let User = require('./model/user');
+let Token = require('./token');
 
 class App {
   config = null;
@@ -19,20 +19,20 @@ class App {
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);
-    var mail = require('./mailer');
+    let mail = require('./mailer');
     this.mail = mail(config.email);
-    var token = Token(config.token);
+    let token = Token(config.token);
     this.token = token;
     modules.slice(1).forEach((moduleServer) => {
-      /*var path = require('path');
-       var fs = require('fs');
-       var modulePath = path.join(
+      /*let path = require('path');
+       let fs = require('fs');
+       let modulePath = path.join(
        __dirname, '../../../modules',
        name, 'server');
        if (!fs.existsSync(modulePath)) {
        return;
        }
-       var moduleServer = require(modulePath);*/
+       let moduleServer = require(modulePath);*/
       moduleServer(this, this.config);
     });
   }
@@ -55,8 +55,8 @@ class App {
 
   initWeb(callback) {
 
-    var web = this.web;
-    var auth = this.auth;
+    let web = this.web;
+    let auth = this.auth;
 
     web.init(this.config);
 
@@ -73,16 +73,16 @@ class App {
   }
 }
 
-var app = new App();
+let app = new App();
 
 export = app;
 
-process.on('unhandledRejection', function (reason) {
+process.on('unhandledRejection', reason => {
   log.error(reason);
   throw reason;
 });
 
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', error => {
   log.error(error);
   // todo exit gracefully
   process.exit(1);
