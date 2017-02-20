@@ -1,7 +1,7 @@
 import { Type } from '@angular/core';
 
 export interface TableRowAction {
-  type: string;
+  type: 'remove' | 'refresh' | 'custom';
   factory?: Type<any>;
   bind?: string;
 }

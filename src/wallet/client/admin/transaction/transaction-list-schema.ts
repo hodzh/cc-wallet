@@ -16,6 +16,10 @@ export const TRANSACTION_LIST_SCHEMA = [
     field: 'status'
   },
   {
+    title: 'state',
+    field: 'state'
+  },
+  {
     title: 'category',
     field: 'category'
   },
@@ -28,10 +32,6 @@ export const TRANSACTION_LIST_SCHEMA = [
     field: 'amount',
     sortable: 'both',
     converter: CURRENCY_TEXT_CONVERTER
-  },
-  {
-    title: 'address',
-    field: 'bitcoin.address'
   },
   {
     title: 'actions',

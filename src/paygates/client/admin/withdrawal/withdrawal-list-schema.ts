@@ -1,4 +1,10 @@
 import { TableSchema } from '../../../../core/client/components/grid/table-scheme';
+import { TableRowAction } from '../../../../core/client/components/grid/table-row-action';
+
+export const WITHDRAWAL_LIST_ACTIONS: TableRowAction[] = [
+  {type: 'remove'},
+  {type: 'refresh'}
+  ];
 
 export const WITHDRAWAL_LIST_SCHEMA: TableSchema = [
   {
@@ -39,6 +45,6 @@ export const WITHDRAWAL_LIST_SCHEMA: TableSchema = [
   {
     title: 'actions',
     type: 'actions',
-    actions: [{type: 'remove'}]
+    actions: WITHDRAWAL_LIST_ACTIONS
   }
 ];

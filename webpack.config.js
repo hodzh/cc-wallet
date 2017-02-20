@@ -71,6 +71,27 @@ const clientConfig = {
         test   : /\.ts$/,
         loader : 'ts-loader',
         query  : {
+          // "compilerOptions": {
+          //   "emitDecoratorMetadata" : true,
+          //   "experimentalDecorators": true,
+          //   "target"                : isDev ? "es6" : "es5",
+          //   "module"                : "commonjs",
+          //   "removeComments"        : true,
+          //   "sourceMap"             : true,
+          //   "inlineSources"         : true,
+          //   "lib"                   : [
+          //     "es5",
+          //     "dom"
+          //   ],
+          //   "types"                 : [
+          //     "core-js",
+          //   ]
+          // },
+          // "exclude"        : [
+          //   "src/**/*.integration.ts",
+          //   "node_modules",
+          //   "!node_modules/@types/**/*.d.ts"
+          // ],
           ignoreDiagnostics: [
             2403, // 2403 -> Subsequent variable declarations
             2300, // 2300 Duplicate identifier
@@ -124,13 +145,13 @@ const clientConfig = {
     }),
     //new webpack.optimize.DedupePlugin(),
     // Minify all javascript, switch loaders to minimizing mode
-    new webpack.optimize.UglifyJsPlugin({
+    ... (isDev ? [] : [new webpack.optimize.UglifyJsPlugin({
       compress : {
         warnings: false
       },
       mangle   : false,
       sourceMap: true
-    }),
+    })]),
     //new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name     : 'vendor',
@@ -162,7 +183,41 @@ const serverConfig = {
   },
   module: {
     loaders: [
-      {test: /\.ts$/, loaders: ['ts-loader']},
+      {
+        test   : /\.ts$/,
+        loader : 'ts-loader',
+        query  : {
+          // "compilerOptions": {
+          //   "emitDecoratorMetadata" : true,
+          //   "experimentalDecorators": true,
+          //   "target"                : "es5",
+          //   "module"                : "commonjs",
+          //   "removeComments"        : true,
+          //   "sourceMap"             : true,
+          //   "inlineSources"         : true,
+          //   "lib"                   : [
+          //     'es5'
+          //   ],
+          //   "types"                 : [
+          //     "core-js",
+          //     "node"
+          //   ]
+          // },
+          // "exclude"        : [
+          //   "src/**/*.integration.ts",
+          //   "node_modules",
+          //   "!node_modules/@types/**/*.d.ts"
+          // ],
+          ignoreDiagnostics: [
+            2403, // 2403 -> Subsequent variable declarations
+            2300, // 2300 Duplicate identifier
+            2304, // 2304 Cannot find name
+            2374, // 2374 -> Duplicate number index signature
+            2375  // 2375 -> Duplicate string index signature
+          ]
+        },
+        exclude: [/\.spec\.ts$/, /\.e2e\.ts$/, /node_modules/]
+      },
       {test: /\.json$/, loader: 'raw-loader'}
     ]
   },

@@ -5,11 +5,7 @@ var log = require('log4js').getLogger('core');
 var config = require('../../core/server/config').CONFIG;
 import server = require('../../core/server');
 server.init(config, MODULES);
-server.start(onStart);
-
-function onStart(err) {
-  if (err) {
-    log.error(err);
-    process.exit(1);
-  }
-}
+server.start().catch((err) => {
+  log.error(err);
+  process.exit(1);
+});

@@ -14,7 +14,7 @@
     "server": "nodemon dist/server/index.js",
     "debug": "node --debug-brk dist/server/index.js",
     "win-dev": "./node_modules/.bin/webpack.cmd --watch",
-    "win-build": "set npm_lifecycle_event=build&& \"./node_modules/.bin/webpack.cmd\" --progress --colors --display-modules",
+    "win-build": "set npm_lifecycle_event=build&& \"./node_modules/.bin/webpack.cmd\" --progress --colors",
     "wd": "npm run win-dev",
     "wb": "npm run win-build"
   },
@@ -23,7 +23,6 @@
     "Eugene Hodzhaev <ehodzh@gmail.com>"
   ],
   "dependencies": {
-    "async": "2.1.4",
     "bluebird": "3.4.7",
     "body-parser": "1.16.1",
     "composable-middleware": "0.3.0",

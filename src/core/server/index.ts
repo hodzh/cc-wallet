@@ -1,4 +1,4 @@
-let async = require('async');
+var Promise = require('bluebird');
 let log = require('log4js').getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
@@ -37,20 +37,12 @@ class App {
     });
   }
 
-  start(callback) {
-    async.series([
-        this.db.init.bind(this.db, this.config.db),
-        this.initWeb.bind(this),
-        this.web.start.bind(
-          this.web, this.config.web, this.auth)
-      ],
-      function (err) {
-        if (err) {
-          return callback(err);
-        }
-        return callback();
-      }
-    );
+  start() {
+    return Promise.resolve()
+      .then(() => Promise.fromNode(this.db.init.bind(this.db, this.config.db)))
+      .then(() => Promise.fromNode(this.initWeb.bind(this)))
+      .then(() => Promise.fromNode(this.web.start.bind(
+        this.web, this.config.web, this.auth)));
   }
 
   initWeb(callback) {

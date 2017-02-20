@@ -88,14 +88,14 @@ schema.methods.confirm = function () {
   let withdrawal = this;
   log.trace('confirm withdrawal');
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (withdrawal.status != 'unconfirmed') {
         throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'confirmed';
       return withdrawal.save();
     })
-    .then(function () {
+    .then(() => {
       emitEvent('confirmed', withdrawal);
     });
 };
@@ -103,14 +103,14 @@ schema.methods.approve = function () {
   let withdrawal = this;
   log.trace('approve withdrawal');
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (withdrawal.status != 'confirmed') {
         throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'approved';
       return withdrawal.save();
     })
-    .then(function () {
+    .then(() => {
       emitEvent('approved', withdrawal);
     });
 };
@@ -119,14 +119,14 @@ schema.methods.cancel = function () {
   log.trace('cancel withdrawal', withdrawal._id);
 
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (withdrawal.status != 'confirmed') {
         throw new Error('bad withdrawal status ' + withdrawal.status);
       }
       withdrawal.status = 'cancelled';
       return withdrawal.save();
     })
-    .then(function (withdrawal) {
+    .then(withdrawal => {
       emitEvent('canceled', withdrawal);
       return withdrawal;
     });

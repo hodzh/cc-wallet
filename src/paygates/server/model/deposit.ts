@@ -72,21 +72,19 @@ schema.methods.confirm = function () {
   let deposit = this;
   log.trace('confirm deposit');
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (deposit.status != 'unconfirmed') {
         throw new Error('bad deposit status');
       }
       deposit.status = 'confirmed';
       return deposit.save();
     })
-    .then(function () {
-      return Account.enable({
-        owner: null,
-        type: 'paygate',
-        currency: deposit.currency
-      });
-    })
-    .then(function (account) {
+    .then(() => Account.enable({
+      owner: null,
+      type: 'paygate',
+      currency: deposit.currency
+    }))
+    .then(account => {
       let transaction = new Transaction({
         currency: deposit.currency,
         amount: deposit.amount,
@@ -98,25 +96,23 @@ schema.methods.confirm = function () {
       return transaction.save()
         .thenReturn(transaction);
     })
-    .then(function (transaction) {
+    .then(transaction => {
       deposit.transaction = transaction._id;
       deposit.status = 'process';
       return deposit.save()
         .thenReturn(transaction);
     })
-    .then(function (transaction) {
-      return Transaction
-        .process(transaction);
-    })
-    .then(function (result) {
+    .then(transaction => Transaction
+      .process(transaction))
+    .then(result => {
       deposit.status = 'done';
       return deposit.save()
         .thenReturn(result.transaction);
     })
-    .then(function (transaction) {
+    .then(transaction => {
       log.trace('deposit processed', transaction._id);
     })
-    .catch(function (error) {
+    .catch(error => {
       log.error(error);
     });
 };
