@@ -34,7 +34,9 @@ class WebServer {
     this.express.use(passport.initialize());
 
     if (config.web.log) {
-      this.express.use(morgan('common', {
+      let logMode = typeof config.web.log === 'string' ?
+        config.web.log : 'common';
+      this.express.use(morgan(logMode, {
         stream: {
           write: (msg) => {
             log.info(msg);
