@@ -16,6 +16,12 @@ export class ClusterWorker {
     });
   }
 
+  ready() {
+    if (process.send) {
+      process.send('ready');
+    }
+  }
+
   middleware (req, res, next) {
     if (!this.shuttingDown) {
       return next();

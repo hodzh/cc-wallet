@@ -17,6 +17,7 @@ class WebServer {
   express;
   server;
   routers = {};
+  private clusterWorker: ClusterWorker;
 
   constructor() {
     this.express = express();
@@ -24,8 +25,8 @@ class WebServer {
   }
 
   init(config) {
-    let clusterWorker = new ClusterWorker(config.cluster, this.server);
-    this.express.use(clusterWorker.middleware.bind(clusterWorker));
+    this.clusterWorker = new ClusterWorker(config.cluster, this.server);
+    this.express.use(this.clusterWorker.middleware.bind(this.clusterWorker));
     this.express.use(compression());
     this.express.use(bodyParser.urlencoded(config.web.bodyParser.urlencoded));
     this.express.use(bodyParser.json(config.web.bodyParser.json));
@@ -33,7 +34,7 @@ class WebServer {
     this.express.use(passport.initialize());
 
     if (config.web.log) {
-      this.express.use(morgan('dev', {
+      this.express.use(morgan('common', {
         stream: {
           write: (msg) => {
             log.info(msg);
@@ -61,7 +62,7 @@ class WebServer {
       log.info(`HTTP server listening on \
 ${config.http.host || '0.0.0.0'}:${config.http.port}`);
 
-      // this.express.cluster.sendOnline();
+      this.clusterWorker.ready();
 
       callback();
     });
