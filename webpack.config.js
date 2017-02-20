@@ -54,7 +54,7 @@ const clientConfig = {
       // Other
     ],
     app   : [
-      './src/app/client/index'
+      './src/app/cc-wallet/client/index'
     ]
   },
   devtool: 'source-map',
@@ -174,7 +174,7 @@ const clientConfig = {
 
 const serverConfig = {
   target: 'node',
-  entry: './src/app/server/index',
+  entry: './src/app/cc-wallet/server/index',
   // devtool: 'inline-source-map',
   devtool: 'source-map',
   output: {

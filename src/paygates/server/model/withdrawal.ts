@@ -134,7 +134,7 @@ schema.methods.cancel = function () {
 schema.methods.sign = function () {
   let withdrawal = this;
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (withdrawal.status != 'approved') {
         throw new Error('bad withdrawal status ' + withdrawal.status);
       }
