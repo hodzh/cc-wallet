@@ -4,16 +4,7 @@
     "browser": true
   },
   "globals": {
-    "Drupal": true,
-    "drupalSettings": true,
-    "drupalTranslations": true,
-    "domready": true,
-    "jQuery": true,
-    "_": true,
-    "matchMedia": true,
-    "Backbone": true,
-    "Modernizr": true,
-    "CKEDITOR": true
+    "domready": true
   },
   "rules": {
     "array-bracket-spacing": [2, "never"],

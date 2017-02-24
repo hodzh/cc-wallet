@@ -21,15 +21,10 @@ export class CurrencyTextConverter {
       sign = '-';
     }
     if (text.length <= decimal) {
-      return [sign,
-        '0.',
-        ZEROES.substr(0, decimal - text.length),
-        text].join('');
+      return `${sign}0.${ZEROES.substr(0, decimal - text.length)}${text}`;
     }
-    return [sign,
-      text.substr(0, text.length - decimal),
-      '.',
-      text.substr(-decimal)].join('');
+    return `${sign}${text.substr(0, text.length - decimal)}.\
+${text.substr(-decimal)}`;
   }
 
   toValue(value, args?) {
@@ -55,7 +50,7 @@ export class CurrencyTextConverter {
     } else if (dec.length > decimal) {
       dec = dec.substr(0, decimal);
     }
-    return (parts[0] + dec).replace(/^0+/, '');
+    return (parts[0] + dec).replace(/^0+/, '') || '0';
   }
 }
 

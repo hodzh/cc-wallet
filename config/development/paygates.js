@@ -1,5 +1,8 @@
 'use strict';
 
 module.exports = {
-  emailWithdrawalConfirm: true
+  withdrawal: {
+    confirmEmail: true,
+    maxPerHour: 10
+  }
 };

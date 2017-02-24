@@ -35,7 +35,7 @@ class WebServer {
 
     if (config.web.log) {
       let logMode = typeof config.web.log === 'string' ?
-        config.web.log : 'common';
+        config.web.log : 'default';
       this.express.use(morgan(logMode, {
         stream: {
           write: (msg) => {
