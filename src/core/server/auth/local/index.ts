@@ -1,4 +1,5 @@
 import Recaptcha = require('../../captcha/recaptcha');
+var Promise = require('bluebird');
 
 let passport = require('passport');
 let controller = require('../../web/controller');

@@ -1,4 +1,5 @@
 export = {
   deposit: require('./deposit'),
-  withdrawal: require('./withdrawal')
+  withdrawal: require('./withdrawal'),
+  withdrawalStat: require('./withdrawal-stat'),
 };

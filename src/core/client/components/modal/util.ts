@@ -1,5 +1,3 @@
-import { global } from '@angular/core/src/facade/lang';
-
 export class Utils {
   public static reflow(element: any): void {
     new Function('bs', 'return bs')(element.offsetHeight);
@@ -13,7 +11,7 @@ export class Utils {
     let view = elem.ownerDocument.defaultView;
 
     if (!view || !view.opener) {
-      view = global;
+      view = window;
     }
 
     return view.getComputedStyle(elem);

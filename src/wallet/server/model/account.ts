@@ -26,14 +26,6 @@ var schema = new Schema({
     default: true,
     require: true
   },
-  updated: {
-    type: Date,
-    require: true
-  },
-  created: {
-    type: Date,
-    require: true
-  },
   pendingTransactions: [
     {
       type: Schema.ObjectId,
@@ -52,14 +44,6 @@ schema.index({
   {
     unique: true
   });
-
-schema.pre('save', function (next) {
-  if (this.isNew) {
-    this.created = new Date();
-  }
-  this.updated = new Date();
-  next();
-});
 
 schema.statics.enable = function (index, value) {
   return this.findOneAndUpdate(
@@ -128,6 +112,8 @@ schema.methods.getUserData = function () {
 };
 
 
-schema.plugin(require('../../../core/server/db/query'));
+schema.plugin(require('../../../core/server/db/query-plugin'));
+schema.plugin(require('../../../core/server/db/created-plugin'));
+schema.plugin(require('../../../core/server/db/updated-plugin'));
 
 export = mongoose.model('AdminAccount', schema);

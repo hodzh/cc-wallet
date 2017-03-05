@@ -15,7 +15,7 @@ class App {
   }
 
   init(config, modules) {
-    log.trace('app init', process.version);
+    log.trace('app init node', process.version);
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);

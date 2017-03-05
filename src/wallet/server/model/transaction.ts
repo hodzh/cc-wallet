@@ -1,4 +1,4 @@
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var log = require('log4js').getLogger('wallet');
 var Schema = mongoose.Schema;
@@ -8,14 +8,6 @@ var Account = require('./account');
 var schema = new Schema({
   state: {
     type: String,
-    require: true
-  },
-  created: {
-    type: Date,
-    require: true
-  },
-  updated: {
-    type: Date,
     require: true
   },
   currency: {
@@ -55,17 +47,9 @@ var schema = new Schema({
   collection: 'transaction'
 });
 
-schema.pre('save', function (next) {
-  if (this.isNew) {
-    this.created = new Date();
-  }
-  this.updated = new Date();
-  next();
-});
-
 schema.statics.getPendingTransactions = function (id, callback) {
   this.find({
-    state: "pending",
+    state: 'pending',
     $or: [
       {to: id},
       {from: id}
@@ -85,8 +69,8 @@ schema.statics.getStatistics = function (currency, callback) {
     },
     {
       $group: {
-        _id: "$category",
-        amount: {$sum: "$amount"}
+        _id: '$category',
+        amount: {$sum: '$amount'}
       }
     },
     function (err, result) {
@@ -159,9 +143,9 @@ schema.statics.outcome = function (adminId, accountId, data) {
   return adminTransaction(this, 'outcome', adminId, accountId, data);
 };
 
-require('./transaction-events')(schema);
 require('./transaction-process')(schema, Account);
 
-schema.plugin(require('../../../core/server/db/query'));
+schema.plugin(require('./../../../core/server/db/events-plugin'));
+schema.plugin(require('../../../core/server/db/query-plugin'));
 
 export = mongoose.model('Transaction', schema);

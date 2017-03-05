@@ -77,7 +77,7 @@ UserSchema.methods = {
   sanitize: sanitize
 };
 
-UserSchema.plugin(require('../db/query'));
+UserSchema.plugin(require('../db/query-plugin'));
 
 export = mongoose.model('User', UserSchema);
 

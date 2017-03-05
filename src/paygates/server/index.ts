@@ -1,18 +1,20 @@
+import { WithdrawalMaxPerHour } from './withdrawal-max-per-hour';
+
+var Promise = require('bluebird');
+var path = require('path');
+var log = require('log4js').getLogger('paygates');
+
 export = paygates;
 
 function paygates(server, config) {
 
-  var Promise = require('bluebird');
-  var path = require('path');
-  var log = require('log4js').getLogger('paygates');
+  let approve = require('./approve');
+  new WithdrawalMaxPerHour(config);
 
-  var approve = require('./approve');
-
-  var paygatesModels = require('./model');
+  let paygatesModels = require('./model');
   server.db.models.deposit = paygatesModels.deposit;
   server.db.models.withdrawal = paygatesModels.withdrawal;
-
-  server.db.models.withdrawal.on('confirmed', onConfirmWithdrawal);
+  //server.db.models.withdrawal.onEvent('confirmed', onConfirmWithdrawal);
 
   server.web.route({
     '/aapi/paygates/deposit': require('./api/admin/deposit')(),
@@ -24,10 +26,8 @@ function paygates(server, config) {
   function onConfirmWithdrawal(withdrawal) {
     log.trace('on confirmed withdrawal', withdrawal._id);
     return Promise.resolve()
-      .then(function () {
-        return approve(withdrawal);
-      })
-      .catch(function (error) {
+      .then(() => approve(withdrawal))
+      .catch(error => {
         log.error(error);
       });
   }

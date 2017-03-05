@@ -23,41 +23,41 @@
         class="table-editable-cell"
         *ngFor="let column of schema">
         <div [ngSwitch]="column.type">
-          <template ngSwitchCase="">
-          </template>
-          <template [ngSwitchCase]="'text'">
+          <ng-template ngSwitchCase="">
+          </ng-template>
+          <ng-template [ngSwitchCase]="'text'">
             <cc-inline-edit
               [value]="getCellText(row, column)"
               (valueChange)="setCellText(row, column, $event)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-edit>
-          </template>
-          <template [ngSwitchCase]="'email'">
+          </ng-template>
+          <ng-template [ngSwitchCase]="'email'">
             <cc-inline-edit
               [value]="getCellText(row, column)"
               (valueChange)="setCellText(row, column, $event)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-edit>
-          </template>
-          <template [ngSwitchCase]="'select'">
+          </ng-template>
+          <ng-template [ngSwitchCase]="'select'">
             <cc-inline-select
               options="column.options"
               [value]="getCellText(row, column)"
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-select>
-          </template>
-          <template [ngSwitchCase]="'actions'">
+          </ng-template>
+          <ng-template [ngSwitchCase]="'actions'">
             <cc-table-row-actions
               [source]="source"
               [row]="row"
               [actions]="column.actions"
             ></cc-table-row-actions>
-          </template>
-          <template ngSwitchDefault>
+          </ng-template>
+          <ng-template ngSwitchDefault>
             <div>
               {{getCellText(row, column)}}
             </div>
-          </template>
+          </ng-template>
         </div>
       </td>
     </tr>

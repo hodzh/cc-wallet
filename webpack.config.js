@@ -258,9 +258,9 @@ const defaultConfig = {
     filename: 'index.js'
   },
   plugins: [
-    // new WebpackBuildLogger({
-    //   logEnabled: true
-    // })
+    new WebpackBuildLogger({
+      logEnabled: true
+    })
   ]
 };
 

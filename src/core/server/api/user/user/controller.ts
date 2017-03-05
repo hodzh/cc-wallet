@@ -24,17 +24,17 @@ function controllerFactory(token, mail) {
    */
   function changePassword(req, res, next) {
     return Promise.resolve()
-      .then(function () {
+      .then(() => {
         var userId = req.user._id;
         return User.findById(userId);
       })
-      .then(function (user) {
+      .then(user => {
         var oldPass = String(req.body.oldPassword);
         var newPass = String(req.body.newPassword);
         if (user.authenticate(oldPass)) {
           user.password = newPass;
           return user.save()
-            .then(function () {
+            .then(() => {
               res.status(204).end();
             })
             .catch(validationError(res));
@@ -51,20 +51,18 @@ function controllerFactory(token, mail) {
   function me(req, res, next) {
 
     return Promise.resolve()
-      .then(function () {
+      .then(() => {
         var userId = req.user._id;
         return User.findOne({_id: userId}, '-salt -password');
       })
-      .then(function (user) {
+      .then(user => {
         if (!user) {
           return res.status(401).end();
         }
         // don't ever give out the password or salt
         res.json(user.sanitize());
       })
-      .catch(function (err) {
-        return next(err);
-      });
+      .catch(err => next(err));
   }
 
   /**
@@ -72,13 +70,10 @@ function controllerFactory(token, mail) {
    */
   function create(auth) {
     return function (req, res, next) {
-      var user;
       return Promise.resolve()
+        .then(() => Recaptcha.RecaptchaService.verify(req))
         .then(() => {
-          return Recaptcha.RecaptchaService.verify(req);
-        })
-        .then(function () {
-          var newUser = new User({
+          var user = new User({
             email: req.body.email,
             password: req.body.password,
             provider: 'local',
@@ -86,10 +81,9 @@ function controllerFactory(token, mail) {
             emailVerify: new Date(),
             resetPassword: new Date()
           });
-          user = newUser;
-          return newUser.save();
+          return user.save();
         })
-        .then(function (user) {
+        .then(user => {
           var code = auth.signToken(user._id, user.role);
           res.json({
             token: code,
@@ -97,13 +91,13 @@ function controllerFactory(token, mail) {
           });
           return user;
         })
-        .then(function (user) {
+        .then(user => {
           sendConfirmEmail(auth, user, true)
             .catch((err) => {
               log.error(err);
             });
         })
-        .catch(function (err) {
+        .catch(err => {
           log.error(err);
           validationError(res);
         });
@@ -117,15 +111,11 @@ function controllerFactory(token, mail) {
     return function (req, res, next) {
       var user;
       return Promise.resolve()
+        .then(() => Recaptcha.RecaptchaService.verify(req))
+        .then(() => User.find({
+          email: req.body.email
+        }))
         .then(() => {
-          return Recaptcha.RecaptchaService.verify(req);
-        })
-        .then(function () {
-          return User.find({
-            email: req.body.email
-          });
-        })
-        .then(function () {
           if (user.resetPassword) {
             const resetPasswordInterval = 60 /*min*/;
             var nextTime = user.resetPassword.getTime() +
@@ -155,10 +145,8 @@ function controllerFactory(token, mail) {
   function emailVerify(auth) {
     return function (req, res, next) {
       return Promise.resolve()
-        .then(function () {
-          return sendConfirmEmail(auth, req.user, false);
-        })
-        .then(function (user) {
+        .then(() => sendConfirmEmail(auth, req.user, false))
+        .then(user => {
           res.json({
             emailVerify: req.user.emailVerify
           });
@@ -169,7 +157,7 @@ function controllerFactory(token, mail) {
   }
 
   function validationError(res, statusCode = 422) {
-    return function (err) {
+    return err => {
       res.status(statusCode).json(err);
     };
   }
@@ -218,22 +206,20 @@ function controllerFactory(token, mail) {
 
   function confirmEmail(token) {
     return Promise.resolve()
-      .then(function () {
-        return User.update({
-          _id: token.user,
-          role: 'applicant'
-        }, {
-          $set: {
-            role: 'user'
-          }
-        });
-      })
-      .then(function (result) {
+      .then(() => User.update({
+        _id: token.user,
+        role: 'applicant'
+      }, {
+        $set: {
+          role: 'user'
+        }
+      }))
+      .then(result => {
         if (!result || !result.nModified) {
           log.error('fail to confirm email');
         }
       })
-      .catch(function (err) {
+      .catch(err => {
         log.error(err);
       });
   }

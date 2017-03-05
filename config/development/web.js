@@ -22,5 +22,15 @@ module.exports = {
   },
 
   static: './dist/cc-wallet/client',
-  log: true
+  log: 'tiny',
+
+  bodyParser: {
+    json: {
+      limit: '100kb'
+    },
+    urlencoded: {
+      limit: '100kb',
+      extended: true
+    }
+  }
 };

@@ -9,10 +9,4 @@ module.exports = {
     tokenUrl: 'http://localhost:7002/api/token/'
   },
 
-  languages: [{
-    locale: 'en',
-    direction: 'ltr'
-  }],
-
-  currentLanguage: 'en'
 };

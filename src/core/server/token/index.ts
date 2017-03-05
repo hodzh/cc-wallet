@@ -1,6 +1,6 @@
-export = function (config) {
+var Promise = require('bluebird');
 
-  var Promise = require('bluebird');
+export = function (config) {
   var events = new (require('events').EventEmitter)();
   var token = require('./jwt')(config);
 
@@ -41,11 +41,7 @@ export = function (config) {
    */
   function verify(code) {
     return Promise.resolve()
-      .then(function () {
-        return token.verify(code);
-      })
-      .then(function (token) {
-        events.emit(token.type, token);
-      });
+      .then(() => token.verify(code))
+      .then(token => events.emit(token.type, token));
   }
 };

@@ -34,12 +34,12 @@ class WebServer {
     this.express.use(passport.initialize());
 
     if (config.web.log) {
-      let logMode = typeof config.web.log === 'string' ?
-        config.web.log : 'default';
+      const logMode = typeof config.web.log === 'string' ?
+        config.web.log : 'combined';
       this.express.use(morgan(logMode, {
         stream: {
           write: (msg) => {
-            log.info(msg);
+            log.info(msg.slice(0, -1));
           }
         }
       }));

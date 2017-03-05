@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var Account = require('../../../wallet/server/model/account');
 var Transaction = require('../../../wallet/server/model/transaction');
-var log = require('log4js').getLogger('devModule');
+var log = require('log4js').getLogger('paygates');
 
 var schema = new Schema({
   owner: {
@@ -25,14 +25,6 @@ var schema = new Schema({
     type: Schema.ObjectId,
     ref: 'Transaction'
   },
-  updated: {
-    type: Date,
-    require: true
-  },
-  created: {
-    type: Date,
-    require: true
-  },
   amount: {
     type: Schema.Types.Long,
     require: true
@@ -45,28 +37,6 @@ var schema = new Schema({
   discriminatorKey: 'type',
   collection: 'deposit'
 });
-
-schema.pre('save', function (next) {
-  if (this.isNew) {
-    this.created = new Date();
-  }
-  this.updated = new Date();
-  next();
-});
-
-schema.post('save', function (doc) {
-  emitEvent('save', doc);
-});
-
-var EventEmitter = require('events').EventEmitter;
-var DepositEvents = new EventEmitter();
-// Set max event listeners (0 == unlimited)
-DepositEvents.setMaxListeners(0);
-
-function emitEvent(event, doc) {
-  DepositEvents.emit(event + ':' + doc._id, doc);
-  DepositEvents.emit(event, doc);
-}
 
 schema.methods.confirm = function () {
   let deposit = this;
@@ -127,14 +97,13 @@ schema.methods.verify = function () {
     });
 };
 
-schema.statics.on = DepositEvents.on.bind(DepositEvents);
-schema.statics.off = DepositEvents.removeListener.bind(DepositEvents);
-schema.statics.once = DepositEvents.once.bind(DepositEvents);
-
-schema.plugin(require('../../../core/server/db/query'), {
+schema.plugin(require('../../../core/server/db/query-plugin'), {
   sort: {
     created: -1
   }
 });
+schema.plugin(require('../../../core/server/db/events-plugin'));
+schema.plugin(require('../../../core/server/db/created-plugin'));
+schema.plugin(require('../../../core/server/db/updated-plugin'));
 
 export = mongoose.model('Deposit', schema);

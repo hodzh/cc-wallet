@@ -1,3 +1,5 @@
+var Promise = require('bluebird');
+
 export = transactionProcess;
 
 function transactionProcess(schema, Account) {
@@ -9,91 +11,67 @@ function transactionProcess(schema, Account) {
     var Transaction = this;
 
     return transactionFrom(transaction)
-      .then(function () {
-        return Transaction.emit('processFrom', transaction);
-      })
-      .then(function () {
-        return Transaction.emit('processFrom:' + transaction._id, transaction);
-      })
-      .then(function () {
-        return transactionTo(transaction);
-      })
-      .then(function () {
-        return Transaction.emit('processTo', transaction);
-      })
-      .then(function () {
-        return Transaction.emit('processTo:' + transaction._id, transaction);
-      })
-      .then(function () {
-        return Transaction.findByIdAndUpdate(
-          transaction._id,
-          {
-            $set: {
-              state: 'commit'
-            }
-          });
-      })
-      .catch(function (err) {
+      .then(() => Transaction.emitEvent('processFrom', transaction))
+      .then(() => Transaction.emitEvent('processFrom:' +
+        transaction._id, transaction))
+      .then(() => transactionTo(transaction))
+      .then(() => Transaction.emitEvent('processTo', transaction))
+      .then(() => Transaction.emitEvent('processTo:' +
+        transaction._id, transaction))
+      .then(() => Transaction.findByIdAndUpdate(
+        transaction._id,
+        {
+          $set: {
+            state: 'commit'
+          }
+        }))
+      .catch(err => {
         console.log('transaction failed', err);
         return Transaction.rollback(transaction)
           .then(
-            function () {
+            () => {
               throw new Error(err);
             }
           );
       })
-      .then(function () {
-        return [
-          transactionCommitFrom(transaction),
-          transactionCommitTo(transaction)
-        ];
-      })
-      .spread(function (accountFrom, accountTo) {
-        return Transaction.findByIdAndUpdate(
-          transaction._id,
-          {
-            $set: {
-              state: 'done'
-            }
-          },
-          {
-            returnNewDocument: true,
-            new: true
-          })
-          .then(function (transactionNew) {
-            return Transaction.emit('done', transaction)
-              .then(function () {
-                return {
-                  accountFrom: accountFrom,
-                  accountTo: accountTo,
-                  transaction: transactionNew
-                };
-              });
-          });
-      });
+      .then(() => [
+        transactionCommitFrom(transaction),
+        transactionCommitTo(transaction)
+      ])
+      .spread((accountFrom, accountTo) => Transaction.findByIdAndUpdate(
+        transaction._id,
+        {
+          $set: {
+            state: 'done'
+          }
+        },
+        {
+          returnNewDocument: true,
+          new: true
+        })
+        .then(transactionNew => Transaction.emitEvent('done', transaction)
+          .then(() => ({
+            accountFrom: accountFrom,
+            accountTo: accountTo,
+            transaction: transactionNew
+          }))));
   }
 
   function rollback(transaction) {
-    var Transaction = this;
+    let Transaction = this;
     return rollbackFrom(transaction)
-      .then(function () {
-        return rollbackTo(transaction);
-      })
-      .then(function () {
-        return Transaction.findByIdAndUpdate(
-          transaction._id,
-          {
-            $set: {
-              state: 'error'
-            }
-          });
-      })
-      .then(function () {
-        return Transaction.findByIdAndRemove(
-          transaction._id);
-      })
+      .then(() => rollbackTo(transaction))
+      .then(() => Transaction.findByIdAndUpdate(
+        transaction._id,
+        {
+          $set: {
+            state: 'error'
+          }
+        }))
+      .then(() => Transaction.findByIdAndRemove(
+        transaction._id))
       .catch(
-        function (err) {
+        err => {
           console.log('transaction rollback failed', err);
         }
       );
@@ -112,10 +90,10 @@ function transactionProcess(schema, Account) {
         $pull: {pendingTransactions: transaction._id}
       })
       .then(
-        function (result) {
+        result => {
           if (result.nModified !== 1 &&
             result.nModified !== 0) {
-            return Promise.reject(Error('failed rollback to'));
+            throw new Error('failed rollback to');
           }
         }
       );
@@ -134,7 +112,7 @@ function transactionProcess(schema, Account) {
         $pull: {pendingTransactions: transaction._id}
       })
       .then(
-        function (result) {
+        result => {
           if (result.nModified !== 1 &&
             result.nModified !== 0) {
             throw new Error('failed rollback from');
@@ -159,7 +137,7 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(function (result) {
+      .then(result => {
         if (result.nModified !== 1) {
           throw new Error('failed process to');
         }
@@ -179,7 +157,7 @@ function transactionProcess(schema, Account) {
           pendingTransactions: transaction._id
         }
       })
-      .then(function (result) {
+      .then(result => {
         if (result.nModified !== 1) {
           throw new Error('failed process from');
         }
@@ -201,7 +179,7 @@ function transactionProcess(schema, Account) {
         new: true
       })
       .then(
-        function (result) {
+        result => {
           if (!result) {
             throw new Error('failed commit to');
           }
@@ -225,7 +203,7 @@ function transactionProcess(schema, Account) {
         new: true
       })
       .then(
-        function (result) {
+        result => {
           if (!result) {
             throw new Error('failed commit from');
           }

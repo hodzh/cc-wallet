@@ -11,7 +11,6 @@ import {
   OnDestroy,
   Output
 } from '@angular/core';
-import { global } from '@angular/core/src/facade/lang';
 import { ModalBackdropComponent, ModalBackdropOptions } from './modal-backdrop.component';
 import { modalConfigDefaults, ClassName, ModalOptions, Selector } from './modal-options';
 import { ComponentsHelper } from './helper';
@@ -315,7 +314,7 @@ export class ModalDirective implements AfterViewInit, OnDestroy {
 
   private checkScrollbar(): void {
     // this._isBodyOverflowing = document.body.clientWidth < window.innerWidth
-    this.isBodyOverflowing = this.document.body.clientWidth < (global as any).innerWidth;
+    this.isBodyOverflowing = this.document.body.clientWidth < window.innerWidth;
     this.scrollbarWidth = this.getScrollbarWidth();
   }
 

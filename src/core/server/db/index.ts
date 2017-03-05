@@ -21,6 +21,7 @@ export = {
 function init(config, callback) {
   let connected = false;
   mongoose.connect(config.host, config.options);
+  // {autoIndex: process.env.NODE_ENV !== 'production'}
 
   mongoose.connection.on('error', onError);
   mongoose.connection.on('connected', onConnected);

@@ -2,25 +2,25 @@ export interface QueryResult {
   /**
    * Array of documents
    */
-  docs: any[],
+  docs: any[];
   /**
    * Total number of documents in collection that match a query
    */
-  total: number,
+  total: number;
   /**
    * Limit that was used
    */
-  limit: number,
+  limit: number;
   /**
    * Only if specified or default page/offset values were used
    */
-  page?: number,
+  page?: number;
   /**
    * Only if page specified or default page/offset values were used
    */
-  pages?: number,
+  pages?: number;
   /**
    * Only if specified or default page/offset values were used
    */
-  offset?: number
+  offset?: number;
 }
