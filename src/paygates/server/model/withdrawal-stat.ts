@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var log = require('log4js').getLogger('paygates');
 
@@ -24,11 +23,6 @@ var schema = new Schema({
 
 schema.index({ 'owner': 1 }, { unique: true });
 schema.index({ 'updated': 1 }, { expireAfterSeconds: 3600 });
-
-schema.pre('save', function (next) {
-  this.updated = new Date();
-  next();
-});
 
 schema.statics.onNewWithdrawal = function (withdrawal, maxPerHour) {
   return Promise.resolve()

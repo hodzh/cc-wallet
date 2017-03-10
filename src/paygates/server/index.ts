@@ -1,6 +1,5 @@
 import { WithdrawalMaxPerHour } from './withdrawal-max-per-hour';
 
-var Promise = require('bluebird');
 var path = require('path');
 var log = require('log4js').getLogger('paygates');
 
@@ -14,7 +13,7 @@ function paygates(server, config) {
   let paygatesModels = require('./model');
   server.db.models.deposit = paygatesModels.deposit;
   server.db.models.withdrawal = paygatesModels.withdrawal;
-  //server.db.models.withdrawal.onEvent('confirmed', onConfirmWithdrawal);
+  server.db.models.withdrawal.onEvent('confirmed', onConfirmWithdrawal);
 
   server.web.route({
     '/aapi/paygates/deposit': require('./api/admin/deposit')(),

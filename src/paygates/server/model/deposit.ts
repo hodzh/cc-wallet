@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -63,21 +62,20 @@ schema.methods.confirm = function () {
         category: 'deposit',
         state: 'new'
       });
-      return transaction.save()
-        .thenReturn(transaction);
+      return transaction.save();
     })
     .then(transaction => {
       deposit.transaction = transaction._id;
       deposit.status = 'process';
       return deposit.save()
-        .thenReturn(transaction);
+        .then(() => transaction);
     })
     .then(transaction => Transaction
       .process(transaction))
     .then(result => {
       deposit.status = 'done';
       return deposit.save()
-        .thenReturn(result.transaction);
+        .then(() => result.transaction);
     })
     .then(transaction => {
       log.trace('deposit processed', transaction._id);
@@ -90,7 +88,7 @@ schema.methods.confirm = function () {
 schema.methods.verify = function () {
   let deposit = this;
   return Promise.resolve()
-    .then(function () {
+    .then(() => {
       if (deposit.status != 'approved') {
         throw new Error('bad deposit status ' + deposit.status);
       }

@@ -1,6 +1,6 @@
 import { ValueConverter } from './value-converter';
 import { TableRowAction } from './table-row-action';
-import { Type } from '@angular/core';
+import { Type, PipeTransform } from '@angular/core';
 
 export interface TableColumn {
   title?: string;
@@ -12,6 +12,8 @@ export interface TableColumn {
   actions?: TableRowAction[];
   factory?: Type<any>;
   format?: any;
+  pipe?: PipeTransform;
+  pipeArgs?: any[];
 }
 
 export type TableSchema = TableColumn[];

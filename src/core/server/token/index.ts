@@ -1,5 +1,3 @@
-var Promise = require('bluebird');
-
 export = function (config) {
   var events = new (require('events').EventEmitter)();
   var token = require('./jwt')(config);

@@ -43,6 +43,9 @@ export class TableComponent {
         value = column.format.format(value);
       }
     }
+    if (column.pipe) {
+      value = column.pipe.transform(value, ...column.pipeArgs);
+    }
     return value;
   }
 

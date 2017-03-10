@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var Account = require('../../../model/account');
 var Transaction = require('../../../model/transaction');
 var controller = require('../../../../../core/server/web/controller');

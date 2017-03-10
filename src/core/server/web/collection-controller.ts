@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var controller = require('./controller');
 
 export = factory;

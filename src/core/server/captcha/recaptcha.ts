@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var Recaptcha = require('recaptcha2');
 var config = require('../config').CONFIG;
 

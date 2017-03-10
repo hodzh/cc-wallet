@@ -1,7 +1,4 @@
 import { QueryResult } from '../../common/query-result';
-
-var Promise = require('bluebird');
-
 const DEFAULT_QUERY_LIMIT = 10;
 const MAX_QUERY_LIMIT = 1000;
 
@@ -51,49 +48,47 @@ export = function (schema, pluginOptions) {
     if (limit <= 0) {
       throw new Error('limit should be positive');
     }
-    if (limit) {
-      let docsQuery = this.find(query)
-        .select(select)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .lean(lean);
-      if (populate) {
-        [].concat(populate).forEach((item) => {
-          docsQuery.populate(item);
-        });
-      }
-      promises = {
-        docs: docsQuery.exec(),
-        count: this.count(query).exec()
-      };
-      if (lean && leanWithId) {
-        promises.docs = promises.docs.then((docs) => {
-          docs.forEach((doc) => {
-            doc.id = String(doc._id);
-          });
-          return docs;
-        });
-      }
+    let docsQuery = this.find(query)
+      .select(select)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .lean(lean);
+    if (populate) {
+      [].concat(populate).forEach((item) => {
+        docsQuery.populate(item);
+      });
     }
-    promises = Object.keys(promises).map((x) => promises[x]);
-    return Promise.all(promises).then((data) => {
-      let result: QueryResult = {
-        docs: data[0].map(doc => (doc.sanitize || doc.toObject).call(doc)),
-        total: data[1],
-        limit: limit
-      };
-      if (typeof offset !== 'undefined') {
-        result.offset = offset;
-      }
-      if (typeof page !== 'undefined') {
-        result.page = page;
-        result.pages = Math.ceil(data.count / limit) || 1;
-      }
-      if (typeof callback === 'function') {
-        return callback(null, result);
-      }
-      return result;
-    });
+    return Promise
+      .all([
+        docsQuery.exec()
+          .then((docs) => {
+            if (lean && leanWithId) {
+              docs.forEach((doc) => {
+                doc.id = String(doc._id);
+              });
+            }
+            return docs;
+          }),
+        this.count(query).exec(),
+      ])
+      .then(([docs, count]) => {
+        let result: QueryResult = {
+          docs: docs.map(doc => (doc.sanitize || doc.toObject).call(doc)),
+          total: count,
+          limit: limit,
+        };
+        if (typeof offset !== 'undefined') {
+          result.offset = offset;
+        }
+        if (typeof page !== 'undefined') {
+          result.page = page;
+          result.pages = Math.ceil(count / limit) || 1;
+        }
+        if (typeof callback === 'function') {
+          return callback(null, result);
+        }
+        return result;
+      });
   }
 };

@@ -23,7 +23,6 @@
     "Eugene Hodzhaev <ehodzh@gmail.com>"
   ],
   "dependencies": {
-    "bluebird": "3.4.7",
     "body-parser": "1.16.1",
     "composable-middleware": "0.3.0",
     "compression": "1.6.2",
@@ -37,7 +36,7 @@
     "log4js": "1.1.1",
     "method-override": "2.3.7",
     "methods": "1.1.2",
-    "mongoose": "4.8.5",
+    "mongoose": "4.7.7",
     "mongoose-long": "0.1.1",
     "mongoose-merge-plugin": "0.0.5",
     "morgan": "1.8.1",

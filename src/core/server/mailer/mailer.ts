@@ -1,6 +1,6 @@
-import * as Promise from 'bluebird';
 import * as mailer from 'nodemailer';
 import * as smtpTransport from 'nodemailer-smtp-transport';
+import { callback2promise } from '../polyfills/promisify';
 var log = require('log4js').getLogger('email');
 
 export = function (config) {
@@ -22,6 +22,6 @@ export = function (config) {
     var sender = transport.templateSender(mail, {
       from: options.from
     });
-    return Promise.fromNode(sender.bind(null, options, context));
+    return callback2promise(sender.bind(null, options, context));
   }
 };

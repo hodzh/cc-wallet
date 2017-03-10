@@ -1,6 +1,4 @@
 import Recaptcha = require('../../../captcha/recaptcha');
-
-import * as Promise from 'bluebird';
 var log = require('log4js').getLogger('token');
 import controller = require('../../../web/controller');
 import User = require('../../../model/user');

@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var log = require('log4js').getLogger('paygates');
 

@@ -1,5 +1,3 @@
-var Promise = require('bluebird');
-
 export = transactionProcess;
 
 function transactionProcess(schema, Account) {
@@ -34,11 +32,11 @@ function transactionProcess(schema, Account) {
             }
           );
       })
-      .then(() => [
+      .then(() => Promise.all([
         transactionCommitFrom(transaction),
         transactionCommitTo(transaction)
-      ])
-      .spread((accountFrom, accountTo) => Transaction.findByIdAndUpdate(
+      ]))
+      .then(([accountFrom, accountTo]) => Transaction.findByIdAndUpdate(
         transaction._id,
         {
           $set: {

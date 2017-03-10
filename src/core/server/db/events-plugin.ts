@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var EventEmitter = require('events').EventEmitter;
 var log = require('log4js').getLogger('db');
 
@@ -10,24 +9,22 @@ export = function(schema) {
   events.setMaxListeners(0);
 
   schema.statics.onceEvent = function(key, handler) {
-    var model = this;
     const invokeHandler = () => {
       var result = handler();
-      model.off(key, invokeHandler);
+      schema.statics.offEvent(key, invokeHandler);
       return result;
     };
-    model.on(key, invokeHandler);
+    schema.statics.onEvent(key, invokeHandler);
   };
 
   schema.statics.onEvent = events.addListener.bind(events);
   schema.statics.offEvent = events.removeListener.bind(events);
 
-  schema.statics.emitEvent = function (name) {
+  schema.statics.emitEvent = function (name, ...args) {
     const listeners = events.listeners(name);
     if (!listeners || !listeners.length) {
       return Promise.resolve(false);
     }
-    const args = Array.prototype.slice.call(arguments, 1);
     return Promise.all(listeners.map(listener => listener.apply(events, args)));
   };
 
@@ -42,7 +39,7 @@ export = function(schema) {
       });
   });
 
-  schema.post('save', function() {
-    schema.statics.emitEvent('save', this);
-  });
+  // schema.post('save', function() {
+  //   schema.statics.emitEvent('save', this);
+  // });
 };

@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var controller = require('./controller');
 
 export = factory;
@@ -101,10 +100,7 @@ function factory(model) {
 function saveUpdates(updates) {
   return function (entity) {
     var updated = Object.merge(entity, updates);
-    return updated.save()
-      .spread(function (updated) {
-        return updated;
-      });
+    return updated.save();
   };
 }
 

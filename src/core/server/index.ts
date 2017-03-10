@@ -1,4 +1,4 @@
-var Promise = require('bluebird');
+import { callback2promise } from './polyfills/promisify';
 let log = require('log4js').getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
@@ -39,9 +39,9 @@ class App {
 
   start() {
     return Promise.resolve()
-      .then(() => Promise.fromNode(this.db.init.bind(this.db, this.config.db)))
-      .then(() => Promise.fromNode(this.initWeb.bind(this)))
-      .then(() => Promise.fromNode(this.web.start.bind(
+      .then(() => callback2promise(this.db.init.bind(this.db, this.config.db)))
+      .then(() => callback2promise(this.initWeb.bind(this)))
+      .then(() => callback2promise(this.web.start.bind(
         this.web, this.config.web, this.auth)));
   }
 

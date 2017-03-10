@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var controller = require('../../../core/server/web/controller');
 var mongoose = require('mongoose');
 var User = require('../../../core/server/model/user');

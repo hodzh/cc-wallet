@@ -1,6 +1,6 @@
 export = function (withdrawal) {
   // todo approvement
-  setTimeout(function () {
+  setTimeout(() => {
     withdrawal.approve();
   }, 10);
 };

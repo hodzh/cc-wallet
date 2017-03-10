@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var mongoose = require('mongoose');
 mongoose.Promise = Promise;
 require('mongoose-long')(mongoose);
@@ -39,25 +38,23 @@ function init(config, callback) {
     connected = true;
     log.info('mongodb connected');
     emit('connect')
-      .then(function () {
+      .then(() => {
         callback();
       })
-      .catch(function (error) {
+      .catch(error => {
         log.error(error);
         callback(error);
       });
   }
 
-  function emit(name) {
+  function emit(name, ...args): Promise<any> {
     var listeners = events.listeners(name);
     if (!listeners || !listeners.length) {
       return Promise.resolve(false);
     }
-    var args = Array.prototype.slice.call(arguments, 1);
     return Promise.all(listeners.map(listenerInvoke));
 
     function listenerInvoke(listener) {
-      //events.removeListener(name, listener);
       return listener.apply(events, args);
     }
   }

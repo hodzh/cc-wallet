@@ -1,5 +1,3 @@
-import * as Promise from 'bluebird';
-
 import User = require('../../../model/user');
 
 function validationError(res, statusCode = 422) {
@@ -118,7 +116,7 @@ function create(req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.save()
-    .spread(function (user) {
+    .then(user => {
       res.json(user);
     })
     .catch(validationError(res));

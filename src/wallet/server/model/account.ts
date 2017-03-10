@@ -1,5 +1,4 @@
 var log = require('log4js').getLogger('wallet');
-var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
