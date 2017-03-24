@@ -10,7 +10,7 @@ export = function(schema) {
 
   schema.statics.onceEvent = function(key, handler) {
     const invokeHandler = () => {
-      var result = handler();
+      const result = handler();
       schema.statics.offEvent(key, invokeHandler);
       return result;
     };
@@ -25,7 +25,12 @@ export = function(schema) {
     if (!listeners || !listeners.length) {
       return Promise.resolve(false);
     }
-    return Promise.all(listeners.map(listener => listener.apply(events, args)));
+    return Promise.all(listeners.map(listener => listener.apply(events, args)))
+      .catch((err) => {
+        log.error('emitEvent', err);
+        throw err;
+      })
+      ;
   };
 
   schema.pre('save', function(next) {
@@ -34,7 +39,7 @@ export = function(schema) {
         next();
       })
       .catch((err) => {
-        log.error(err);
+        log.error('pre-save', err);
         next(err);
       });
   });

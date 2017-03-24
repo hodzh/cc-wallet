@@ -40,6 +40,9 @@ export = function (config) {
   function verify(code) {
     return Promise.resolve()
       .then(() => token.verify(code))
-      .then(token => events.emit(token.type, token));
+      .then(token => {
+        events.emit(token.type, token);
+        return token;
+      });
   }
 };

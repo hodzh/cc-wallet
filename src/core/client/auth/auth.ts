@@ -86,6 +86,19 @@ export class Auth {
     return req;
   }
 
+  public setPassword(params: {token: string; password: string}) {
+    let req = this.accountResource.setPassword(params);
+    req.subscribe(
+      () => {
+        this.router.navigate(['/signin']);
+      },
+      error => {
+        console.error(error.text());
+      }
+    );
+    return req;
+  }
+
   private onSignIn(response: Response): void {
     let res = response;
     this.authToken.token = res['token'];

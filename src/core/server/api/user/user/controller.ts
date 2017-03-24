@@ -1,18 +1,19 @@
 import Recaptcha = require('../../../captcha/recaptcha');
-var log = require('log4js').getLogger('token');
+let log = require('log4js').getLogger('token');
 import controller = require('../../../web/controller');
 import User = require('../../../model/user');
 
 export = controllerFactory;
 
-function controllerFactory(token, mail) {
+function controllerFactory(tokenService, mail, auth) {
 
-  token.on('confirmEmail', confirmEmail);
+  tokenService.on('confirmEmail', confirmEmail);
 
   return {
     create: create,
     changePassword: changePassword,
     resetPassword: resetPassword,
+    setPassword: setPassword,
     me: me,
     emailVerify: emailVerify
   };
@@ -20,15 +21,15 @@ function controllerFactory(token, mail) {
   /**
    * Change a users password
    */
-  function changePassword(req, res, next) {
+  function changePassword(req, res) {
     return Promise.resolve()
       .then(() => {
-        var userId = req.user._id;
+        let userId = req.user._id;
         return User.findById(userId);
       })
       .then(user => {
-        var oldPass = String(req.body.oldPassword);
-        var newPass = String(req.body.newPassword);
+        let oldPass = String(req.body.oldPassword);
+        let newPass = String(req.body.password);
         if (user.authenticate(oldPass)) {
           user.password = newPass;
           return user.save()
@@ -46,11 +47,11 @@ function controllerFactory(token, mail) {
   /**
    * Get my info
    */
-  function me(req, res, next) {
+  function me(req, res) {
 
     return Promise.resolve()
       .then(() => {
-        var userId = req.user._id;
+        let userId = req.user._id;
         return User.findOne({_id: userId}, '-salt -password');
       })
       .then(user => {
@@ -60,107 +61,134 @@ function controllerFactory(token, mail) {
         // don't ever give out the password or salt
         res.json(user.sanitize());
       })
-      .catch(err => next(err));
+      .catch(controller.handleError(res));
   }
 
   /**
    * Creates a new user
    */
-  function create(auth) {
-    return function (req, res, next) {
-      return Promise.resolve()
-        .then(() => Recaptcha.RecaptchaService.verify(req))
-        .then(() => {
-          var user = new User({
-            email: req.body.email,
-            password: req.body.password,
-            provider: 'local',
-            role: auth.isEmailVerify() ? 'applicant' : 'user',
-            emailVerify: new Date(),
-            resetPassword: new Date()
-          });
-          return user.save();
-        })
-        .then(user => {
-          var code = auth.signToken(user._id, user.role);
-          res.json({
-            token: code,
-            user: user.sanitize()
-          });
-          return user;
-        })
-        .then(user => {
-          sendConfirmEmail(auth, user, true)
-            .catch((err) => {
-              log.error(err);
-            });
-        })
-        .catch(err => {
-          log.error(err);
-          validationError(res);
+  function create(req, res) {
+    return Promise.resolve()
+      .then(() => Recaptcha.RecaptchaService.verify(req))
+      .then(() => {
+        let user = new User({
+          email: req.body.email,
+          password: req.body.password,
+          provider: 'local',
+          role: auth.isEmailVerify() ? 'applicant' : 'user',
+          emailVerify: new Date(),
+          resetPassword: new Date()
         });
-    };
+        return user.save();
+      })
+      .then(user => {
+        let code = auth.signToken(user._id, user.role);
+        res.json({
+          token: code,
+          user: user.sanitize()
+        });
+        return user;
+      })
+      .then(user => {
+        sendConfirmEmail(user, true)
+          .catch((err) => {
+            log.error(err);
+          });
+      })
+      .catch(validationError(res));
   }
 
   /**
    * Reset a user password
    */
-  function resetPassword(auth) {
-    return function (req, res, next) {
-      var user;
-      return Promise.resolve()
-        .then(() => Recaptcha.RecaptchaService.verify(req))
-        .then(() => User.find({
-          email: req.body.email
-        }))
-        .then(() => {
-          if (user.resetPassword) {
-            const resetPasswordInterval = 60 /*min*/;
-            var nextTime = user.resetPassword.getTime() +
-              resetPasswordInterval * 60 * 1000;
-            if (nextTime > Date.now()) {
-              return;
-            }
+  function resetPassword(req, res) {
+    return Promise.resolve()
+    // .then(() => Recaptcha.RecaptchaService.verify(req))
+      .then(() => true)
+      .then(controller.responseWithResult(res))
+      .then(() => User.findOne({
+        email: req.body.email
+      }))
+      .then((user) => {
+        if (!user) {
+          return;
+        }
+        if (user.resetPassword) {
+          const resetPasswordInterval = 60 /*min*/;
+          let nextTime = user.resetPassword.getTime() +
+            resetPasswordInterval * 60 * 1000;
+          if (nextTime > Date.now()) {
+            return;
           }
+        }
 
-          // create verification code
-          var code = token.create({
-            type: 'resetPassword',
-            user: user._id
-          });
+        // create verification code
+        let code = tokenService.create({
+          type: 'resetPassword',
+          user: user._id.toString(),
+        });
 
-          // send email with code
-          return mail.send({
-            to: user.email
-          }, 'resetPassword', {
-            token: code
-          });
-        })
-        .catch(controller.handleError(res));
-    };
+        // send email with code
+        return mail.send({
+          to: user.email
+        }, 'resetPassword', {
+          token: code
+        });
+      })
+      .catch(controller.handleError(res));
   }
 
-  function emailVerify(auth) {
-    return function (req, res, next) {
-      return Promise.resolve()
-        .then(() => sendConfirmEmail(auth, req.user, false))
-        .then(user => {
-          res.json({
-            emailVerify: req.user.emailVerify
-          });
-          return user;
-        })
-        .catch(controller.handleError(res));
-    };
+  /**
+   * Set a user password
+   */
+  function setPassword(req, res) {
+    return Promise.resolve()
+      .then(() => {
+        let token = req.body.token;
+        if (!token) {
+          throw new Error('undefined token');
+        }
+        return tokenService.verify(token);
+      })
+      .then(token => {
+        if (token.type !== 'resetPassword') {
+          throw new Error('bad token type');
+        }
+        return token;
+      })
+      .then((token) => User.findById(token.user))
+      .then((user) => {
+        if (!user) {
+          throw new Error('bad user id');
+        }
+        user.password = req.body.password;
+        return user.save();
+      })
+      .then(() => true)
+      .then(controller.responseWithResult(res))
+      .catch(controller.handleError(res));
+  }
+
+  function emailVerify(req, res) {
+    return Promise.resolve()
+      .then(() => sendConfirmEmail(req.user, false))
+      .then(user => {
+        res.json({
+          emailVerify: req.user.emailVerify
+        });
+        return user;
+      })
+      .catch(controller.handleError(res));
   }
 
   function validationError(res, statusCode = 422) {
     return err => {
+      log.error(err);
       res.status(statusCode).json(err);
     };
   }
 
-  function sendConfirmEmail(auth, user, firstTime) {
+  function sendConfirmEmail(user, firstTime) {
     if (!auth.isEmailVerify()) {
       return;
     }
@@ -172,7 +200,7 @@ function controllerFactory(token, mail) {
     }
     if (!firstTime) {
       const emailVerifyInterval = 10 /*min*/;
-      var nextTime = user.emailVerify.getTime() +
+      let nextTime = user.emailVerify.getTime() +
         emailVerifyInterval * 60 * 1000;
       if (nextTime > Date.now()) {
         return;
@@ -189,7 +217,7 @@ function controllerFactory(token, mail) {
       })
       .then(() => {
         // create verification code
-        var code = token.create({
+        let code = tokenService.create({
           type: 'confirmEmail',
           user: user._id
         });

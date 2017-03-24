@@ -8,11 +8,23 @@ export class ClusterWorker {
 
   constructor(config, private server) {
     this.config = config || {};
-    process.on('SIGINT', () => this.shutdown());
+    process.on('SIGINT', () => {
+      log.trace('SIGINT');
+      this.shutdown();
+    });
     process.on('message', (msg) => {
       if (msg === 'shutdown') {
+        log.trace('shutdown message');
         this.shutdown();
       }
+    });
+    process.on('unhandledRejection', error => {
+      log.error('unhandledRejection', error);
+      this.shutdown();
+    });
+    process.on('uncaughtException', error => {
+      log.error('uncaughtException', error);
+      this.shutdown();
     });
   }
 
@@ -27,7 +39,7 @@ export class ClusterWorker {
       return next();
     }
     res.set('Connection', 'close');
-    res.status(503).send('Server is in the process of restarting.');
+    res.status(503).send('Server is in the process of restarting');
   }
 
   private shutdown() {
@@ -38,7 +50,7 @@ export class ClusterWorker {
       return;
     }
     this.shuttingDown = true;
-    log.warn('Received kill signal (SIGTERM), shutting down');
+    log.warn('Shutting down');
 
     setTimeout(() => {
       log.error('Could not close connections in time, forcefully shutting down');
@@ -46,7 +58,7 @@ export class ClusterWorker {
     }, this.config.forceTimeout || DEFAULT_FORCE_TIMEOUT);
 
     this.server.close(() => {
-      log.info('Closed out remaining connections.');
+      log.info('Closed out remaining connections');
       process.exit();
     });
   }

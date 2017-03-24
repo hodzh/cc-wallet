@@ -81,7 +81,7 @@ schema.methods.confirm = function () {
       log.trace('deposit processed', transaction._id);
     })
     .catch(error => {
-      log.error(error);
+      log.error('withdrawal confirm', error);
     });
 };
 

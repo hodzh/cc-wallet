@@ -1,3 +1,5 @@
+let log = require('log4js').getLogger('web');
+
 export = {
   handleError: handleError,
   responseWithResult: responseWithResult,
@@ -7,8 +9,10 @@ export = {
 
 function handleError(res, statusCode = 500) {
   return function (err) {
-    // todo log error
-    res.status(statusCode).send(err);
+    log.error('handle error', err);
+    res.status(statusCode).json({
+      message: err.message,
+    });
   };
 }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AuthHttp } from './auth-http';
 import { ChangePasswordParams } from './change-password-params';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 
 export interface ResetPasswordParams {
   email: string;
@@ -34,9 +34,11 @@ export class UserResource {
     let body = JSON.stringify({
       email: params.email
     });
-    let req = this.http.post(
+    let req = this.http.put(
       '/api/me/reset-password',
-      body).share();
+      body, {
+        headers: this.createHttpHeader()
+      });
     return req;
   }
 
@@ -45,5 +47,22 @@ export class UserResource {
       '/api/me/email-verify',
       {});
     return req;
+  }
+
+  setPassword(params: {token: string; password: string}): Observable<any> {
+    let body = JSON.stringify(params);
+    let req = this.http.put(
+      '/api/me/set-password',
+      body, {
+        headers: this.createHttpHeader()
+      });
+    return req;
+  }
+
+  private createHttpHeader(): Headers {
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Content-Type', 'application/json');
+    return headers;
   }
 }

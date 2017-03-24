@@ -18,11 +18,7 @@ export = {
 // Gets a list of Accounts
 function index(req, res) {
   Account.getAccounts('user', req.user._id)
-    .then((accounts) => {
-      return accounts.map(function (account) {
-        return account.sanitize();
-      });
-    })
+    .then((accounts) => accounts.map(account => account.sanitize()))
     .then(controller.responseWithResult(res, 200))
     .catch(controller.handleError(res));
 }

@@ -23,8 +23,8 @@ export class CurrencyTextConverter {
     if (text.length <= decimal) {
       return `${sign}0.${ZEROES.substr(0, decimal - text.length)}${text}`;
     }
-    return `${sign}${text.substr(0, text.length - decimal)}.\
-${text.substr(-decimal)}`;
+    return `${sign}${text.substr(0, text.length - decimal)}.${
+      text.substr(-decimal)}`;
   }
 
   toValue(value, args?) {
@@ -43,7 +43,7 @@ ${text.substr(-decimal)}`;
     if (isNaN(parseFloat(text))) {
       return value;
     }
-    let parts = text.split('.');
+    let parts = text.split(/\.|,/);
     let dec = parts[1] || '';
     if (dec.length < decimal) {
       dec += ZEROES.substr(0, decimal - dec.length);

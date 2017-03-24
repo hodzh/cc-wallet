@@ -27,7 +27,7 @@ function paygates(server, config) {
     return Promise.resolve()
       .then(() => approve(withdrawal))
       .catch(error => {
-        log.error(error);
+        log.error('on confirm withdrawal', error);
       });
   }
 }

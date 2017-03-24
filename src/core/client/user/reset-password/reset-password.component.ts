@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Auth } from '../../auth';
 import { Observable, Subscription } from 'rxjs';
 import { UserResource } from '../../auth/user.resource';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 const template = require('./reset-password.component.html');
 
@@ -11,59 +12,82 @@ const template = require('./reset-password.component.html');
   providers: []
 })
 export class ResetPasswordComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('resetButton') resetButton: ElementRef;
+  public form: FormGroup;
+  public submitted: boolean = false;
   public submitPending: boolean = false;
   public errors: string;
-  private resetPasswordSubscription: Subscription;
 
-  constructor(public router: Router,
-              public auth: Auth,
-              private userResource: UserResource) {
+  constructor(
+    public router: Router,
+    public auth: Auth,
+    private userResource: UserResource,
+    builder: FormBuilder,
+  ) {
+    this.form = builder.group({
+      email: ['', Validators.required],
+    });
+    //this.form.controls.email.setValue(this.auth.currentUser.email);
   }
 
   ngAfterViewInit() {
-    const throttleIntervalMin: number = 60;
-    this.resetPasswordSubscription = Observable
-      .fromEvent(this.resetButton.nativeElement, 'click')
-      .throttle(() =>
-        Observable.timer(throttleIntervalMin * 60 * 1000))
-      .do(() => {
-        this.submitPending = true;
-      })
-      .flatMap(() =>
-        this.userResource.resetPassword({
-          email: this.auth.currentUser.email
-        })
-      )
-      .subscribe(
-        (res) => {
-          if (res.error) {
-            this.displayErrors(res.error);
-          }
-        },
-        (err) => {
-          console.error(err);
-        },
-        () => {
-          this.submitPending = false;
-        });
   }
 
   ngOnDestroy() {
-    this.resetPasswordSubscription.unsubscribe();
   }
 
   displayErrors(error) {
+    if (!error) {
+      return;
+    }
     if (error.messages) {
       let messages = error.messages;
       messages.forEach((message) => {
+        /*this.loginForm.controls[message.property]
+         .setErrors({
+         remote: message.message
+         });*/
       });
-    } else {
+    } else if (error.message) {
       this.errors = `${error.message}`;
     }
   }
 
-  login() {
-    this.router.navigate(['/signin']);
+  resetPassword() {
+    if (this.submitPending) {
+      // already submitted
+      return;
+    }
+    this.submitted = true;
+    if (!this.form.valid) {
+      return;
+    }
+    this.submitPending = true;
+    this.userResource.resetPassword({
+      email: this.form.value.email
+    })
+      .subscribe(
+        () => {
+          this.submitPending = false;
+          this.router.navigate(['/reset-password-done']);
+        },
+        (error) => {
+          try {
+            this.displayErrors(error.json());
+          } catch (errorParse) {
+            this.displayErrors({message: error.status});
+          }
+          this.submitPending = false;
+        }
+      );
+  }
+
+  shouldDisplaySubmitProgress() {
+    return this.submitPending || this.form.pending;
+  }
+
+  shouldDisableSubmitButton(): boolean {
+    return false && (!this.form.valid ||
+      this.form.pending ||
+      this.submitPending);
   }
 }

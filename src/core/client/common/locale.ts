@@ -1,1 +1,1 @@
-export const defaultLocale = '';
+export let defaultLocale;

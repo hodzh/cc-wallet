@@ -8,6 +8,8 @@ import { LoginModalComponent } from './login/login-modal.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CoreComponentsModule } from '../components/module';
 import { CoreAuthModule } from '../auth/module';
+import { SetPasswordComponent } from './set-password/set-password.component';
+import { ResetPasswordDoneComponent } from './reset-password-done/reset-password-done.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +18,16 @@ import { CoreAuthModule } from '../auth/module';
     SignupComponent,
     LoginFormComponent,
     LoginModalComponent,
-    ResetPasswordComponent],
+    ResetPasswordComponent,
+    ResetPasswordDoneComponent,
+    SetPasswordComponent,
+  ],
   entryComponents: [],
   imports: [
     ROUTER,
     CoreComponentsModule,
     //LayoutModule,
-    CoreAuthModule
+    CoreAuthModule,
   ],
   providers: []
 })

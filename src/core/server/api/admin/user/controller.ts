@@ -3,7 +3,7 @@ import User = require('../../../model/user');
 function validationError(res, statusCode = 422) {
   return function (err) {
     res.status(statusCode).json(err);
-  }
+  };
 }
 
 function handleError(res, statusCode = 500) {
@@ -42,7 +42,7 @@ function index(req, res) {
 /**
  * Get a single user
  */
-function show(req, res, next) {
+function show(req, res) {
   var userId = req.params.id;
   Promise.resolve()
     .then(function () {
@@ -54,15 +54,13 @@ function show(req, res, next) {
       }
       res.json(user.sanitize());
     })
-    .catch(function (err) {
-      return next(err);
-    });
+    .catch(handleError(res));
 }
 
 /**
  * Update a single user
  */
-function update(req, res, next) {
+function update(req, res) {
   var userId = req.params.id;
   Promise.resolve()
     .then(function () {
@@ -89,9 +87,7 @@ function update(req, res, next) {
     .then(function (user) {
       res.json(user.profile);
     })
-    .catch(function (err) {
-      return next(err);
-    });
+    .catch(handleError(res));
 }
 
 /**
@@ -111,7 +107,7 @@ function destroy(req, res) {
 /**
  * Creates a new user
  */
-function create(req, res, next) {
+function create(req, res) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';

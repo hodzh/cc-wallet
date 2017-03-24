@@ -46,17 +46,13 @@ class App {
   }
 
   initWeb(callback) {
-
-    let web = this.web;
-    let auth = this.auth;
-
-    web.init(this.config);
+    this.web.init(this.config);
 
     // register core routes
 
-    web.route({
+    this.web.route({
       '/auth/local': require('./auth/local'),
-      '/api/me': require('./api/user/user')(this.token, this.mail),
+      '/api/me': require('./api/user/user')(this.token, this.mail, this.auth),
       '/api/token': require('./api/user/token')(this.token),
       '/aapi/user': require('./api/admin/user')
     });
@@ -68,14 +64,3 @@ class App {
 let app = new App();
 
 export = app;
-
-process.on('unhandledRejection', reason => {
-  log.error(reason);
-  throw reason;
-});
-
-process.on('uncaughtException', error => {
-  log.error(error);
-  // todo exit gracefully
-  process.exit(1);
-});

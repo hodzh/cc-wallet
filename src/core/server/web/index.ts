@@ -110,7 +110,7 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
     this.express.use(onError);
 
     function onError(err, req, res, next) {
-      log.error(err);
+      log.error('on error', err);
       let code = 500;
       let msg = {message: 'Internal Server Error'};
       return res.status(code).json(msg);

@@ -9,10 +9,7 @@ function controllerFactory(token) {
 
   function tokenVerify(req, res) {
     return Promise.resolve()
-      .then(() => {
-        // todo check token format
-        return token.verify(req.params.token);
-      })
+      .then(() => token.verify(req.params.token))
       .then(() => {
         res.redirect('/');
       })

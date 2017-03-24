@@ -28,11 +28,11 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   public remove(document): Observable<boolean> {
     this.loading = true;
-    var req = this.resource.remove(document._id);
+    let req = this.resource.remove(document._id);
     req.subscribe(
       (res) => {
         if (res) {
-          var rows = this.documentsSubject.getValue()
+          let rows = this.documentsSubject.getValue()
             .filter(item => item !== document);
           this.documentsSubject.next(rows);
         }
@@ -48,7 +48,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   public refresh(document): Observable<TDocument> {
     this.loading = true;
-    var req = this.resource.get(document._id);
+    let req = this.resource.get(document._id);
     req.subscribe(
       (doc) => {
         this.onDocumentChanged(doc);
@@ -64,10 +64,10 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   public create(data): Observable<TDocument> {
     this.loading = true;
-    var req = this.resource.create(data);
+    let req = this.resource.create(data);
     req.subscribe(
       (doc) => {
-        var rows = this.documentsSubject.getValue().concat(doc);
+        let rows = this.documentsSubject.getValue().concat(doc);
         this.documentsSubject.next(rows);
         this.loading = false;
       },
@@ -81,7 +81,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
 
   public update(document, data): Observable<TDocument> {
     this.loading = true;
-    var req = this.resource.update(document._id, data);
+    let req = this.resource.update(document._id, data);
     req.subscribe(
       (document) => {
         this.onDocumentChanged(document);
@@ -114,7 +114,7 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
   }
 
   protected onDocumentChanged(doc) {
-    var rows = this.documentsSubject.getValue()
+    let rows = this.documentsSubject.getValue()
       .map((row: TDocument) => {
         return row._id === doc._id ? doc : row;
       });

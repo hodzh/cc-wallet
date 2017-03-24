@@ -3,6 +3,6 @@
 module.exports = {
   withdrawal: {
     confirmEmail: true,
-    maxPerHour: 3
+    maxPerHour: 2
   }
 };

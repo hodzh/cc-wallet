@@ -190,7 +190,7 @@ function authenticate(password, callback) {
 
   function onEncrypt(err, pwdGen) {
     if (err) {
-      callback(err);
+      return callback(err);
     }
 
     if (_this.password === pwdGen) {
@@ -229,7 +229,7 @@ function makeSalt(byteSize, callback) {
 
   return crypto.randomBytes(byteSize, function (err, salt) {
     if (err) {
-      callback(err);
+      return callback(err);
     }
     return callback(null, salt.toString('base64'));
   });
@@ -248,9 +248,11 @@ function encryptPassword(password, callback) {
     return null;
   }
 
-  var defaultIterations = 10000;
-  var defaultKeyLength = 64;
-  var salt = new Buffer(this.salt, 'base64');
+  const defaultIterations = 10000;
+  const defaultKeyLength = 512;
+  const defaultDigest = 'sha512';
+
+  const salt = new Buffer(this.salt, 'base64');
 
   if (!callback) {
     return crypto.pbkdf2Sync(
@@ -266,11 +268,12 @@ function encryptPassword(password, callback) {
     salt,
     defaultIterations,
     defaultKeyLength,
+    defaultDigest,
     onEncrypt);
 
   function onEncrypt(err, key) {
     if (err) {
-      callback(err);
+      return callback(err);
     }
     return callback(null, key.toString('base64'));
   }

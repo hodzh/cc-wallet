@@ -81,18 +81,17 @@ schema.statics.getStatistics = function (currency, callback) {
 };
 
 schema.methods.sanitize = function () {
-  var me = this;
   return {
-    _id: me._id.toString(),
-    state: me.state,
-    created: me.created,
-    updated: me.updated,
-    category: me.category,
-    currency: me.currency,
-    amount: me.amount,
-    fee: me.fee,
-    status: me.status,
-    error: me.error
+    _id: this._id.toString(),
+    state: this.state,
+    created: this.created,
+    updated: this.updated,
+    category: this.category,
+    currency: this.currency,
+    amount: this.amount,
+    fee: this.fee,
+    status: this.status,
+    error: this.error
   };
 };
 
@@ -100,38 +99,32 @@ function adminTransaction(Transaction, type, adminId, accountId, data) {
   log.trace(type, adminId, accountId, JSON.stringify(data));
 
   return Account.findById(accountId)
-    .then(enableAdminAccount);
-
-  function enableAdminAccount(userAccount) {
-    if (!userAccount) {
-      throw new Error('account not found');
-    }
-    return Account.enable({
-      type: 'admin',
-      owner: adminId,
-      currency: userAccount.currency
-    }, true)
-      .then(createTransaction);
-
-    function createTransaction(adminAccount) {
-      if (!adminAccount) {
-        throw new Error('admin account not found');
+    .then((userAccount) => {
+      if (!userAccount) {
+        throw new Error('account not found');
       }
-      log.trace('create transaction');
-      var transaction = new Transaction({
-        state: 'new',
-        category: type,
-        currency: adminAccount.currency,
-        amount: data.amount,
-        from: type === 'income' ? adminAccount._id : userAccount._id,
-        to: type === 'outcome' ? adminAccount._id : userAccount._id
-      });
-      return transaction.save().then(
-        function () {
-          return Transaction.process(transaction);
+      return Account.enable({
+        type: 'admin',
+        owner: adminId,
+        currency: userAccount.currency
+      }, true)
+        .then((adminAccount) => {
+          if (!adminAccount) {
+            throw new Error('admin account not found');
+          }
+          log.trace('create transaction');
+          let transaction = new Transaction({
+            state: 'new',
+            category: type,
+            currency: adminAccount.currency,
+            amount: data.amount,
+            from: type === 'income' ? adminAccount._id : userAccount._id,
+            to: type === 'outcome' ? adminAccount._id : userAccount._id
+          });
+          return transaction.save()
+            .then(() => Transaction.process(transaction));
         });
-    }
-  }
+    });
 }
 
 schema.statics.income = function (adminId, accountId, data) {

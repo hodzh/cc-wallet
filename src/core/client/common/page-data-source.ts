@@ -111,8 +111,7 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
         limit: pageInfo.size
       });
     }
-    let req = this.resource.queryPage(query);
-    return req;
+    return this.resource.queryPage(query);
   }
 
   private onRead(data) {
