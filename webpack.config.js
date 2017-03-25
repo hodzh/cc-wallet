@@ -107,12 +107,14 @@ const clientConfig = {
       {test: /\.json$/, loader: 'json-loader'},
 
       // CSS as raw text
-      {test   : /\.css$/,
+      {
+        test  : /\.css$/,
         loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader']
       },
 
       // SCSS as raw text
-      {test   : /\.scss$/,
+      {
+        test  : /\.scss$/,
         loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader', 'sass-loader']
       },
 
@@ -146,12 +148,13 @@ const clientConfig = {
     //new webpack.optimize.DedupePlugin(),
     // Minify all javascript, switch loaders to minimizing mode
     ... (isDev ? [] : [new webpack.optimize.UglifyJsPlugin({
-      compress : {
-        warnings: false
-      },
-      mangle   : false,
-      sourceMap: true
-    })]),
+        compress : {
+          warnings: false,
+        },
+        mangle   : true,
+        sourceMap: true,
+        comments : false,
+      })]),
     //new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name     : 'vendor',
