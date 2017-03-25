@@ -8,7 +8,7 @@
     "sourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es5",
+      "es2017",
       "dom"
     ],
     "types": [
