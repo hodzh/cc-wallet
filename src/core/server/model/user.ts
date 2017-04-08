@@ -22,10 +22,6 @@ var UserSchema = new Schema({
   password: { type: String, mergeable: false },
   provider: { type: String, mergeable: false },
   salt: { type: String, mergeable: false },
-  facebook: {},
-  twitter: {},
-  google: {},
-  github: {}
 }, {
   collection: 'user'
 });
@@ -74,6 +70,15 @@ UserSchema.methods = {
   makeSalt: makeSalt,
   encryptPassword: encryptPassword,
   sanitize: sanitize
+};
+
+UserSchema.statics.addUser = async function(model) {
+  const User = this;
+  await User.remove({
+    email: model.email
+  });
+  const user = new User(model);
+  return await user.save();
 };
 
 UserSchema.plugin(require('../db/query-plugin'));

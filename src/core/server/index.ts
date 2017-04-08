@@ -1,4 +1,3 @@
-import { callback2promise } from './polyfills/promisify';
 let log = require('log4js').getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
@@ -14,7 +13,34 @@ class App {
   constructor() {
   }
 
-  init(config, modules) {
+  async start(config, modules) {
+    await this.init(config, modules);
+    await this.db.init(this.config.db);
+    let addUser = process.argv.indexOf('--add-user');
+    if (addUser !== -1) {
+      if (!process.getuid || process.getuid() !== 0) {
+        throw new Error('permission denied');
+      }
+      await User.addUser({
+        provider: 'local',
+        email: process.argv[++addUser],
+        emailValid: true,
+        password: process.argv[++addUser],
+        role: process.argv[++addUser],
+      }).then((user) => {
+        log.info('add user', user.email);
+      }).catch((err) => {
+        log.error(err);
+      }).then(() => {
+        process.exit(0);
+      });
+      return true;
+    }
+    await this.initWeb();
+    await this.web.start(this.config.web, this.auth);
+  }
+
+  private init(config, modules) {
     log.trace('app init node', process.version);
     this.config = config;
     this.db.models.user = User;
@@ -37,15 +63,7 @@ class App {
     });
   }
 
-  start() {
-    return Promise.resolve()
-      .then(() => callback2promise(this.db.init.bind(this.db, this.config.db)))
-      .then(() => callback2promise(this.initWeb.bind(this)))
-      .then(() => callback2promise(this.web.start.bind(
-        this.web, this.config.web, this.auth)));
-  }
-
-  initWeb(callback) {
+  private initWeb() {
     this.web.init(this.config);
 
     // register core routes
@@ -56,8 +74,6 @@ class App {
       '/api/token': require('./api/user/token')(this.token),
       '/aapi/user': require('./api/admin/user')
     });
-
-    callback();
   }
 }
 

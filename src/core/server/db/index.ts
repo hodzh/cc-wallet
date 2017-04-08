@@ -1,62 +1,66 @@
-var mongoose = require('mongoose');
+import mongoose = require('mongoose');
 mongoose.Promise = Promise;
 require('mongoose-long')(mongoose);
-var merge = require('mongoose-merge-plugin');
-var log = require('log4js').getLogger('db');
+import merge = require('mongoose-merge-plugin');
+const log = require('log4js').getLogger('db');
+const EventEmitter = require('events').EventEmitter;
 
+class Database {
+  private eventEmitter: any;
+  private models: any;
+  private connected: boolean;
 
-mongoose.plugin(merge);
+  constructor() {
+    this.connected = false;
+    this.eventEmitter = new EventEmitter();
+    this.models = {};
 
-var EventEmitter = require('events').EventEmitter;
-var events = new EventEmitter();
-var models = {};
+    mongoose.plugin(merge);
+  }
 
-export = {
-  models: models,
-  init: init,
-  once: events.once.bind(events)
-};
+  init(config) {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(config.host, config.options);
+      mongoose.connection.on('error', (err) => {
+        this.onError(err);
+        reject(err || 'undefined error');
+      });
+      mongoose.connection.on('connected', () => {
+        this.onConnected()
+          .then(() => resolve())
+          .catch(error => {
+            log.error(error);
+            reject(error);
+          });
+      });
+    });
+  }
 
-function init(config, callback) {
-  let connected = false;
-  mongoose.connect(config.host, config.options);
-  // {autoIndex: process.env.NODE_ENV !== 'production'}
-
-  mongoose.connection.on('error', onError);
-  mongoose.connection.on('connected', onConnected);
-
-  function onError(err) {
+  onError(err) {
     console.error('MongoDB connection error: ' + err);
-    if (!connected) {
-      callback(err || 'undefined error');
-    } else {
+    if (this.connected) {
       throw new Error(err);
     }
   }
 
-  function onConnected() {
-    connected = true;
+  onConnected() {
+    this.connected = true;
     log.info('mongodb connected');
-    emit('connect')
-      .then(() => {
-        callback();
-      })
-      .catch(error => {
-        log.error(error);
-        callback(error);
-      });
+    return this.emit('connect');
   }
 
-  function emit(name, ...args): Promise<any> {
-    var listeners = events.listeners(name);
+  emit(name, ...args): Promise<any> {
+    let listeners = this.eventEmitter.listeners(name);
     if (!listeners || !listeners.length) {
       return Promise.resolve(false);
     }
-    return Promise.all(listeners.map(listenerInvoke));
-
-    function listenerInvoke(listener) {
-      return listener.apply(events, args);
-    }
+    return Promise.all(listeners.map((listener) =>
+      listener.apply(this.eventEmitter, args)));
   }
 
+  once(...args) {
+    this.eventEmitter.once(...args);
+  }
 }
+
+export = new Database();

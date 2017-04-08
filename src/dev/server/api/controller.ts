@@ -16,18 +16,7 @@ class DevDbController {
 
   addUsers(req, res) {
     return Promise.all(this.config.users
-      .map(model => {
-        return Promise.resolve()
-          .then(() => {
-            return User.remove({
-              email: model.email
-            });
-          })
-          .then(() => {
-            let user = new User(model);
-            return user.save().catch(error => console.error(error));
-          });
-      }))
+      .map(model => User.addUser(model)))
       .then(() => true)
       .then(controller.responseWithResult(res))
       .catch(controller.handleError(res));

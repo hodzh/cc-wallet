@@ -52,21 +52,18 @@ class WebServer {
     //this.express.use(require('./io'));
   }
 
-  start(config, auth, callback) {
-
+  start(config, auth) {
     this.beforeStart(config, auth);
-
-    this.server.listen(config.http.port, err => {
-      if (err) {
-        return callback(err);
-      }
-
-      log.info(`HTTP server listening on \
+    return new Promise((resolve, reject) => {
+      this.server.listen(config.http.port, err => {
+        if (err) {
+          return reject(err);
+        }
+        log.info(`HTTP server listening on \
 ${config.http.host || '0.0.0.0'}:${config.http.port}`);
-
-      this.clusterWorker.ready();
-
-      callback();
+        this.clusterWorker.ready();
+        resolve();
+      });
     });
   }
 
