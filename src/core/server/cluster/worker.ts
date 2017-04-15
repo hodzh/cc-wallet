@@ -3,6 +3,9 @@ let log = require('log4js').getLogger('worker');
 const DEFAULT_FORCE_TIMEOUT = 1000;
 
 export class ClusterWorker {
+  static get isRoot(): boolean {
+    return process.getuid && process.getuid() === 0;
+  }
   private shuttingDown: boolean;
   private config: any;
 

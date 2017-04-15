@@ -1,3 +1,5 @@
+import { Mailer } from './mailer/index';
+import { ClusterWorker } from './cluster/worker';
 let log = require('log4js').getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
@@ -7,7 +9,7 @@ class App {
   db = require('./db');
   auth = require('./auth');
   web = require('./web');
-  mail = null;
+  mail: Mailer = null;
   token = null;
 
   constructor() {
@@ -15,10 +17,9 @@ class App {
 
   async start(config, modules) {
     await this.init(config, modules);
-    await this.db.init(this.config.db);
     let addUser = process.argv.indexOf('--add-user');
     if (addUser !== -1) {
-      if (!process.getuid || process.getuid() !== 0) {
+      if (!ClusterWorker.isRoot) {
         throw new Error('permission denied');
       }
       await User.addUser({
@@ -36,19 +37,16 @@ class App {
       });
       return true;
     }
-    await this.initWeb();
     await this.web.start(this.config.web, this.auth);
   }
 
-  private init(config, modules) {
+  private async init(config, modules) {
     log.trace('app init node', process.version);
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);
-    let mail = require('./mailer');
-    this.mail = mail(config.email);
-    let token = Token(config.token);
-    this.token = token;
+    this.mail = new Mailer();
+    this.token = Token(this.config.token);
     modules.slice(1).forEach((moduleServer) => {
       /*let path = require('path');
        let fs = require('fs');
@@ -61,13 +59,9 @@ class App {
        let moduleServer = require(modulePath);*/
       moduleServer(this, this.config);
     });
-  }
-
-  private initWeb() {
+    await this.db.init(this.config.db);
+    this.mail.init(this.config.email, this.db.queueService);
     this.web.init(this.config);
-
-    // register core routes
-
     this.web.route({
       '/auth/local': require('./auth/local'),
       '/api/me': require('./api/user/user')(this.token, this.mail, this.auth),

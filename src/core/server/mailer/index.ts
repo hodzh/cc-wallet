@@ -1,6 +1,19 @@
-export = function (config) {
-  var mailer = require('./mailer')(config);
-  return {
-    send: mailer.send.bind(mailer)
-  };
-};
+import { MailerQueue } from './mailer-queue';
+import { QueueService } from '../queue/queue-service';
+import { callback2promise } from '../polyfills/promisify';
+
+export class Mailer {
+  private mailer: any;
+
+  constructor() {
+  }
+
+  init(config, queueService: QueueService) {
+    this.mailer = new MailerQueue(config, queueService);
+  }
+
+  send(params, options) {
+    return callback2promise(this.mailer.send.bind(
+      this.mailer, params, options || {}));
+  }
+}

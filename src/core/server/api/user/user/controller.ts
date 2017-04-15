@@ -130,9 +130,13 @@ function controllerFactory(tokenService, mail, auth) {
 
         // send email with code
         return mail.send({
-          to: user.email
-        }, 'resetPassword', {
-          token: code
+          options: {
+            to: user.email
+          },
+          key: 'resetPassword',
+          context: {
+            token: code
+          }
         });
       })
       .catch(controller.handleError(res));
@@ -223,9 +227,13 @@ function controllerFactory(tokenService, mail, auth) {
         });
         // send email with code
         return mail.send({
-          to: user.email
-        }, 'confirmEmail', {
-          token: code
+          options: {
+            to: user.email
+          },
+          key: 'confirmEmail',
+          context: {
+            token: code
+          }
         });
       });
   }
