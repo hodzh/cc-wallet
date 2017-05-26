@@ -44,7 +44,7 @@ let autoprefixerOptions = {
 
 let paths = require('./path-resolve').email;
 let modules = require('../config/cc-dev/defaults/modules');
-let info = require('../config/cc-dev/cc-dev/public');
+let info = require('../config/cc-dev/public');
 
 let tempHtmlPath = path.join(paths.temp, 'html');
 let tempTextPath = path.join(paths.temp, 'text');

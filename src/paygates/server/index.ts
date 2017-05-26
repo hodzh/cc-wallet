@@ -8,7 +8,7 @@ export = paygates;
 function paygates(server, config) {
 
   let approve = require('./approve');
-  new WithdrawalMaxPerHour(config);
+  let withdrawalMaxPerHour = new WithdrawalMaxPerHour(config);
 
   let paygatesModels = require('./model');
   server.db.models.deposit = paygatesModels.deposit;

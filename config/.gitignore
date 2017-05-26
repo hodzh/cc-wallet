@@ -1,1 +1,3 @@
-cc-dev
+*
+!dev
+!test
