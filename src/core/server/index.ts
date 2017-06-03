@@ -1,5 +1,7 @@
 import { Mailer } from './mailer/index';
 import { ClusterWorker } from './cluster/worker';
+let EventEmitter = require('events').EventEmitter;
+
 let log = require('log4js').getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
@@ -11,8 +13,25 @@ class App {
   web = require('./web');
   mail: Mailer = null;
   token = null;
+  eventEmitter = new EventEmitter();
 
   constructor() {
+  }
+
+  on(...args) {
+    this.eventEmitter.on(...args);
+  }
+
+  once(...args) {
+    this.eventEmitter.once(...args);
+  }
+
+  off(...args) {
+    this.eventEmitter.removeEventEmitter(...args);
+  }
+
+  emit(...args) {
+    this.eventEmitter.emit(...args);
   }
 
   async start(config, modules) {
@@ -38,10 +57,12 @@ class App {
       return true;
     }
     await this.web.start(this.config.web, this.auth);
+    this.emit('start');
   }
 
   private async init(config, modules) {
     log.trace('app init node', process.version);
+    this.emit('init');
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);
@@ -64,9 +85,9 @@ class App {
     this.web.init(this.config);
     this.web.route({
       '/auth/local': require('./auth/local'),
-      '/api/me': require('./api/user/user')(this.token, this.mail, this.auth),
+      '/api/me': require('./api/user/user')(config.auth, this.token, this.mail, this.auth),
       '/api/token': require('./api/user/token')(this.token),
-      '/aapi/user': require('./api/admin/user')
+      '/aapi/user': require('./api/admin/user'),
     });
   }
 }

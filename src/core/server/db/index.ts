@@ -19,6 +19,7 @@ class Database {
   }
 
   async init(config) {
+    log.trace('mongodb init');
     await mongoose.connect(config.host, config.options);
     this.queueService = new QueueService(mongoose.connection.db);
     mongoose.connection.on('error', (err) => {

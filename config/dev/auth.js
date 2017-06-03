@@ -22,6 +22,9 @@ module.exports = {
    */
   // landingPage: '/',
 
+  signup: true,
+  resetPassword: true,
+
   /**
    * auth using email
    */

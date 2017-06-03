@@ -1,4 +1,4 @@
-export function callback2promise(f) {
+export function callback2promise(f): Promise<any> {
   return new Promise(
     function (resolve, reject) {
       f((error, data) => {

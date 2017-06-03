@@ -2,7 +2,7 @@ import controllerFactory = require('./controller');
 
 export = routeFactory;
 
-function routeFactory(token, mailer, auth) {
+function routeFactory(config, token, mailer, auth) {
 
   let controller = controllerFactory(token, mailer, auth);
   return route;
@@ -10,9 +10,13 @@ function routeFactory(token, mailer, auth) {
   function route(router) {
     router.get('/', auth.isAuthenticated(), controller.me);
     router.put('/password', auth.hasRole('user'), controller.changePassword);
-    router.put('/reset-password', controller.resetPassword);
+    if (config.resetPassword) {
+      router.put('/reset-password', controller.resetPassword);
+    }
     router.put('/set-password', controller.setPassword);
     router.put('/email-verify', auth.hasRole('applicant'), controller.emailVerify);
-    router.post('/', controller.create);
+    if (config.signup) {
+      router.post('/', controller.create);
+    }
   }
 }

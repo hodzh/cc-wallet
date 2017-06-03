@@ -15,6 +15,3 @@ import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/interval';
 
-//require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css');
-//require('file?name=../css/[name].[ext]?[hash]!bootstrap/dist/css/bootstrap.min.css.map');
-//require('file?name=../[name].[ext]?[hash]!../modules/core/client/index.html');

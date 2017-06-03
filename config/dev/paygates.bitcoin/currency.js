@@ -7,8 +7,13 @@ module.exports = {
     updateInterval  : 60,
 
     client: {
-      uri    : "http://localhost:4001/rpc/Bitcoin",
-      timeout: 600000 // ms
+      url    : "http://localhost:4001/api/bitcoind/",
+      timeout: 600000,
+      auth: {
+        url: 'http://localhost:4001/auth/local',
+        email: 'ehodzh@ngs.ru',
+        password: '123',
+      }
     }
   },
   Dogecoin: {
@@ -17,8 +22,13 @@ module.exports = {
     updateInterval  : 60,
 
     client: {
-      uri    : "http://localhost:4001/rpc/Dogecoin",
-      timeout: 600000 // ms
+      url    : "http://localhost:4001/api/bitcoind/",
+      timeout: 600000,
+      auth: {
+        url: 'http://localhost:4001/auth/local',
+        email: 'ehodzh@ngs.ru',
+        password: '123',
+      }
     }
   },
   Litecoin: {
@@ -27,8 +37,13 @@ module.exports = {
     updateInterval  : 60,
 
     client: {
-      uri    : "http://localhost:4001/rpc/Litecoin",
-      timeout: 600000 // ms
+      url    : "http://localhost:4001/api/bitcoind/",
+      timeout: 600000,
+      auth: {
+        url: 'http://localhost:4001/auth/local',
+        email: 'ehodzh@ngs.ru',
+        password: '123',
+      }
     }
   }
 };

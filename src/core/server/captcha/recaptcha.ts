@@ -3,7 +3,10 @@ var config = require('../config').CONFIG;
 
 export class RecaptchaService {
 
-  static verify(req) {
+  static verify(req): Promise<any> {
+    if (!config.recaptcha) {
+      return Promise.resolve();
+    }
     let res = req.body.captcha;
     let ip = req.connection.remoteAddress;
     let recaptcha = new Recaptcha({

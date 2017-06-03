@@ -23,6 +23,7 @@
     "Eugene Hodzhaev <ehodzh@gmail.com>"
   ],
   "dependencies": {
+    "bitcoin": "^3.0.1",
     "body-parser": "1.17.1",
     "composable-middleware": "0.3.0",
     "compression": "1.6.2",
@@ -83,6 +84,7 @@
     "css-loader": "0.28.0",
     "del": "2.2.2",
     "eslint": "3.19.0",
+    "file-loader": "0.11.1",
     "glob": "7.1.1",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.1",
