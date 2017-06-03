@@ -1,10 +1,10 @@
 'use strict';
 
-var webpack = require('webpack');
-var WebpackBuildLogger = require('webpack-build-logger');
-var path = require('path');
-var precss = require('precss');
-var autoprefixer = require('autoprefixer');
+const webpack = require('webpack');
+const WebpackBuildLogger = require('webpack-build-logger');
+const path = require('path');
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 
 module.exports = function({
                             root,
