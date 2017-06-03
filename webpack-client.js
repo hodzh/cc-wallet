@@ -149,16 +149,9 @@ module.exports = function({
       new WebpackBuildLogger({
         logEnabled: true
       }),
-      //new webpack.NoErrorsPlugin(),
-      /*new webpack.ProvidePlugin({
-       $: "jquery",
-       jQuery: "jquery",
-       "windows.jQuery": "jquery"
-       }),*/
       new webpack.DefinePlugin({
         PRODUCTION: isProd
       }),
-      //new webpack.optimize.DedupePlugin(),
       // Minify all javascript, switch loaders to minimizing mode
       ... (isDev ? [] : [
         new webpack.optimize.UglifyJsPlugin({
@@ -170,18 +163,11 @@ module.exports = function({
           comments : false,
         })
       ]),
-      //new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.optimize.CommonsChunkPlugin({
         name     : 'vendor',
         filename : 'vendor.js',
         minChunks: Infinity
-      }),
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name     : 'common',
-      //   filename : 'common.js',
-      //   minChunks: 2,
-      //   chunks   : ['app', 'vendor']
-      // })
+      })
     ]
 
     /*tslint: {
