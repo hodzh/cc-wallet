@@ -1,5 +1,8 @@
 <span *ngFor="let action of actions">
-  <span [ngSwitch]="action.type">
+  <span
+    *ngIf="!action.show || action.show(row)"
+    [ngSwitch]="action.type"
+  >
     <ng-template [ngSwitchCase]="'remove'">
       <button
         class="btn btn-danger glyphicon glyphicon-trash"
@@ -20,7 +23,7 @@
     <ng-template ngSwitchDefault>
       <button
         class="btn"
-        (click)="broadcast(action)">
+        (click)="onAction(action)">
         {{action.text}}
       </button>
     </ng-template>

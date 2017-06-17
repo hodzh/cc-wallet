@@ -70,11 +70,10 @@ schema.statics.enable = function (index, value) {
         return account;
       }
     )
-    .catch(
-      function (error) {
-        log.error('failed', 'enable', 'account', JSON.stringify(index), 'due', JSON.stringify(error));
-      }
-    );
+    .catch(error => {
+      log.error('failed', 'enable', 'account',
+        JSON.stringify(index), 'due', JSON.stringify(error));
+    });
 };
 
 schema.statics.getAccounts = function (type, userId) {
@@ -96,7 +95,7 @@ schema.methods.sanitize = function () {
     owner: account.owner,
     updated: account.updated,
     created: account.created,
-  }
+  };
 };
 
 schema.methods.getUserData = function () {
@@ -107,7 +106,7 @@ schema.methods.getUserData = function () {
     currency: account.currency,
     balance: account.balance,
     address: account.address
-  }
+  };
 };
 
 

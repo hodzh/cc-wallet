@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageDataSource } from '../../common/page-data-source';
 
 const PAGE_SIZES = [20, 50, 100];
@@ -23,7 +23,12 @@ type GridSchema = GridColumn[];
 export class PageTableComponent {
   @Input() schema: GridSchema;
   @Input() source: PageDataSource<any>;
+  @Output() action: EventEmitter<any> = new EventEmitter();
 
   constructor() {
+  }
+
+  onAction(action) {
+    this.action.emit(action);
   }
 }

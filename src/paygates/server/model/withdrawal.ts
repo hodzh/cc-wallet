@@ -82,13 +82,42 @@ schema.methods.cancel = function () {
 
   return Promise.resolve()
     .then(() => {
-      if (withdrawal.status != 'confirmed') {
-        throw new Error('cancel bad withdrawal status ' + withdrawal.status);
+      if (withdrawal.status != 'unconfirmed' &&
+        withdrawal.status != 'confirmed') {
+        return Promise.reject(new Error('cancel bad withdrawal status ' + withdrawal.status));
       }
       withdrawal.status = 'cancelled';
       return withdrawal.save();
     })
-    .then(() => withdrawal.constructor.emitEvent('canceled', withdrawal))
+    .then((withdrawal) => {
+      return Account.enable({
+        owner: null,
+        type: 'paygate',
+        currency: withdrawal.currency,
+      })
+        .then((account) => {
+          let transactionCancel = new Transaction({
+            currency: withdrawal.currency,
+            amount: withdrawal.amount.add(withdrawal.fee),
+            to: withdrawal.account,
+            from: account._id,
+            category: 'withdrawalCancel',
+            state: 'new',
+          });
+          return transactionCancel.save().then((transactionCancel) => ({
+            withdrawal,
+            transactionCancel
+          }));
+        });
+    })
+    .then(({withdrawal, transactionCancel}) => {
+      withdrawal.transactionCancel = transactionCancel._id;
+      return withdrawal.save().then(() => ({withdrawal, transactionCancel}));
+    })
+    .then(({withdrawal, transactionCancel}) => {
+      return Transaction.process(transactionCancel).then(() => withdrawal);
+    })
+    .then((withdrawal) => withdrawal.constructor.emitEvent('canceled', withdrawal))
     .then(() => withdrawal);
 };
 schema.methods.sign = function () {

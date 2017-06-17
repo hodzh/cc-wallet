@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-
+  enable: true,
   hostname: 'http://localhost:3002',
 
   http: {

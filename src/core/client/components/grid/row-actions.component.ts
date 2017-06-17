@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { Broadcast } from '../../common/broadcast';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataSource } from '../../common/data-source';
 import { TableRowAction } from './table-row-action';
 
@@ -13,6 +12,7 @@ export class RowActionsComponent {
   @Input() source: DataSource<any>;
   @Input() row: any;
   @Input() actions: TableRowAction[];
+  @Output() action: EventEmitter<any> = new EventEmitter<any>();
 
   remove() {
     this.source.remove(this.row);
@@ -22,10 +22,10 @@ export class RowActionsComponent {
     this.source.refresh(this.row);
   }
 
-  broadcast(action) {
+  onAction(action) {
     console.log(action);
-    Broadcast.emit({
-      source: this.row,
+    this.action.emit({
+      row: this.row,
       action
     });
   }

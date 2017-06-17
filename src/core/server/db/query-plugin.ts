@@ -1,4 +1,5 @@
 import { QueryResult } from '../../common/query-result';
+
 const DEFAULT_QUERY_LIMIT = 10;
 const MAX_QUERY_LIMIT = 1000;
 

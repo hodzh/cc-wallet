@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataSource } from '../../common/data-source';
 import { TableSchema, TableColumn } from './table-scheme';
 
@@ -13,6 +13,7 @@ const template = require('./table.component.html');
 export class TableComponent {
   @Input() schema: TableSchema;
   @Input() source: DataSource<any>;
+  @Output() action: EventEmitter<any> = new EventEmitter();
 
   constructor() {
   }
@@ -32,19 +33,24 @@ export class TableComponent {
   }
 
   public getCellText(row, column: TableColumn): any {
-    let value = this.getCellValue(row, column);
-    if (column.converter) {
-      value = column.converter.fromValue(value, row);
-    }
-    if (column.format) {
-      if (typeof column.format === 'function') {
-        value = column.format(value);
-      } else {
-        value = column.format.format(value);
+    let value;
+    if (column.field) {
+      value = this.getCellValue(row, column);
+      if (column.converter) {
+        value = column.converter.fromValue(value, row);
       }
-    }
-    if (column.pipe) {
-      value = column.pipe.transform(value, ...column.pipeArgs);
+      if (column.format) {
+        if (typeof column.format === 'function') {
+          value = column.format(value);
+        } else {
+          value = column.format.format(value);
+        }
+      }
+      if (column.pipe) {
+        value = column.pipe.transform(value, ...column.pipeArgs);
+      }
+    } else {
+      value = column.format(row);
     }
     return value;
   }
@@ -90,6 +96,10 @@ export class TableComponent {
       index %= modes.length;
     }
     column.sort = modes[index];
+  }
+
+  onAction(action) {
+    this.action.emit(action);
   }
 
   private textToValue(row, column: TableColumn, text: string): any {

@@ -32,13 +32,14 @@ export class AuthRequest {
     await this.auth();
     let url = this.options.url + data.url;
     let result: any = await callback2promise(request.bind(request, url, {
-      form: data.form || {},
+      body: data.form || {},
+      json: true,
       method: data.method || 'GET',
       headers: {
         Authorization: 'Bearer ' + this.authToken,
       }
     }));
-    if (!result) {
+    if (!result || !result.statusCode) {
       return Promise.reject(new Error('bad request result'));
     }
     if (result.statusCode === 401) {
@@ -46,9 +47,13 @@ export class AuthRequest {
       this.authToken = null;
       return await request(data);
     }
-    if (result.statusCode !== 200) {
+    if (result.statusCode === 404) {
+      return Promise.reject(new Error('not found'));
+    }
+    if (result.statusCode >= 400) {
       return Promise.reject(new Error('bad request status'));
     }
-    return JSON.parse(result.body);
+    //return JSON.parse(result.body);
+    return result.body;
   }
 }

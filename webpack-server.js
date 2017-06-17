@@ -49,37 +49,40 @@ module.exports = function({
         {
           test   : /\.ts$/,
           loader : 'ts-loader',
-          query  : {
-            // "compilerOptions": {
-            //   "emitDecoratorMetadata" : true,
-            //   "experimentalDecorators": true,
-            //   "target"                : "es5",
-            //   "module"                : "commonjs",
-            //   "removeComments"        : true,
-            //   "sourceMap"             : true,
-            //   "inlineSources"         : true,
-            //   "lib"                   : [
-            //     'es5'
-            //   ],
-            //   "types"                 : [
-            //     "core-js",
-            //     "node"
-            //   ]
-            // },
-            // "exclude"        : [
-            //   "src/**/*.integration.ts",
-            //   "node_modules",
-            //   "!node_modules/@types/**/*.d.ts"
-            // ],
+          options: {
+            // configFileName : path.join(__dirname, 'tsconfig.server.json')
+            "compilerOptions": {
+              "emitDecoratorMetadata" : true,
+              "experimentalDecorators": true,
+              "target"                : "ES2017",
+              "module"                : "commonjs",
+              "removeComments"        : true,
+              "sourceMap"             : true,
+              "inlineSources"         : true,
+              "lib"                   : [
+                "es2017",
+                "dom",
+              ],
+              "types"                 : [
+                "core-js",
+                "node"
+              ]
+            },
             ignoreDiagnostics: [
               2403, // 2403 -> Subsequent variable declarations
-              2300, // 2300 Duplicate identifier
-              2304, // 2304 Cannot find name
-              2374, // 2374 -> Duplicate number index signature
-              2375  // 2375 -> Duplicate string index signature
-            ]
+              //     2300, // 2300 Duplicate identifier
+              //     2304, // 2304 Cannot find name
+              //     2374, // 2374 -> Duplicate number index signature
+              //     2375  // 2375 -> Duplicate string index signature
+            ],
           },
-          exclude: [/\.spec\.ts$/, /\.e2e\.ts$/, /node_modules/]
+          exclude: [
+            "src/*/client/**/*",
+            "src/app/*/client/**/*",
+            /\.spec\.ts$/,
+            /\.e2e\.ts$/,
+            /node_modules/
+          ]
         },
         {test: /\.json$/, loader: 'raw-loader'}
       ]

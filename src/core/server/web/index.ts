@@ -12,7 +12,7 @@ let morgan = require('morgan');
 
 let log = require('log4js').getLogger('web');
 
-class WebServer {
+export class WebServer {
 
   express;
   server;
@@ -130,5 +130,3 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
     );
   }
 }
-
-export = new WebServer();

@@ -1,3 +1,5 @@
+var log = require('log4js').getLogger('wallet');
+
 export = transactionProcess;
 
 function transactionProcess(schema, Account) {
@@ -24,13 +26,9 @@ function transactionProcess(schema, Account) {
           }
         }))
       .catch(err => {
-        console.log('transaction failed', err);
+        log.error('transaction failed', err.message);
         return Transaction.rollback(transaction)
-          .then(
-            () => {
-              throw new Error(err);
-            }
-          );
+          .then(() => Promise.reject(err));
       })
       .then(() => Promise.all([
         transactionCommitFrom(transaction),
@@ -70,7 +68,7 @@ function transactionProcess(schema, Account) {
         transaction._id))
       .catch(
         err => {
-          console.log('transaction rollback failed', err);
+          log.error('transaction rollback failed', err);
         }
       );
   }

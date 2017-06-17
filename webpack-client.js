@@ -6,11 +6,11 @@ const path = require('path');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-module.exports = function({
-                            root,
-                            name,
-                            index,
-                          }) {
+module.exports = function ({
+                             root,
+                             name,
+                             index,
+                           }) {
   /**
    * Env
    * Get npm lifecycle event to identify the environment
@@ -37,8 +37,8 @@ module.exports = function({
         '.json',
         '.html',
         '.css',
-        '.scss'
-      ]
+        '.scss',
+      ],
     },
     entry  : {
       vendor: [
@@ -55,18 +55,18 @@ module.exports = function({
         '@angular/router',
         '@angular/http',
         // RxJS
-        'rxjs'
+        'rxjs',
         // Other
       ],
       app   : [
-        index
-      ]
+        index,
+      ],
     },
     devtool: 'source-map',
     output : {
       path             : resolve(`dist/${name}/client/js`),
       filename         : '[name].js',
-      sourceMapFilename: '[name].js.map'
+      sourceMapFilename: '[name].js.map',
     },
     module : {
       // preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
@@ -75,37 +75,38 @@ module.exports = function({
         {
           test   : /\.ts$/,
           loader : 'ts-loader',
-          query  : {
-            // "compilerOptions": {
-            //   "emitDecoratorMetadata" : true,
-            //   "experimentalDecorators": true,
-            //   "target"                : isDev ? "es6" : "es5",
-            //   "module"                : "commonjs",
-            //   "removeComments"        : true,
-            //   "sourceMap"             : true,
-            //   "inlineSources"         : true,
-            //   "lib"                   : [
-            //     "es5",
-            //     "dom"
-            //   ],
-            //   "types"                 : [
-            //     "core-js",
-            //   ]
-            // },
-            // "exclude"        : [
-            //   "src/**/*.integration.ts",
-            //   "node_modules",
-            //   "!node_modules/@types/**/*.d.ts"
-            // ],
+          options: {
+            // configFileName : path.join(__dirname, 'tsconfig.client.json'),
+            "compilerOptions": {
+              "emitDecoratorMetadata": true,
+              "experimentalDecorators": true,
+              "target": "es5",
+              "module": "commonjs",
+              "removeComments": true,
+              "sourceMap": true,
+              "inlineSources": true,
+              "lib": [
+                "es2017",
+                "dom"
+              ],
+              "types": [
+                "core-js",
+                "node"
+              ]
+            },
             ignoreDiagnostics: [
               2403, // 2403 -> Subsequent variable declarations
-              2300, // 2300 Duplicate identifier
-              2304, // 2304 Cannot find name
-              2374, // 2374 -> Duplicate number index signature
-              2375  // 2375 -> Duplicate string index signature
-            ]
+              //     2300, // 2300 Duplicate identifier
+              //     2304, // 2304 Cannot find name
+              //     2374, // 2374 -> Duplicate number index signature
+              //     2375  // 2375 -> Duplicate string index signature
+            ],
           },
-          exclude: [/\.spec\.ts$/, /\.e2e\.ts$/, /node_modules/]
+          exclude: [
+            /\.spec\.ts$/,
+            /\.e2e\.ts$/,
+            /node_modules/
+          ],
         },
 
         // *.json files.
@@ -114,7 +115,7 @@ module.exports = function({
         // CSS as raw text
         {
           test  : /\.css$/,
-          loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader']
+          loader: ['to-string-loader', 'css-loader?minimize', 'postcss-loader'],
         },
 
         // SCSS as raw text
@@ -124,12 +125,12 @@ module.exports = function({
             'to-string-loader',
             'css-loader?minimize',
             'postcss-loader',
-            'sass-loader'
-          ]
+            'sass-loader',
+          ],
         },
 
         // support for .html as raw text
-        {test: /\.html$/, loader: 'raw-loader'}
+        {test: /\.html$/, loader: 'raw-loader'},
       ],
       noParse: [
         /zone\.js\/dist\/.+/,
@@ -137,8 +138,8 @@ module.exports = function({
         /es(6|7)-.+/,
         /.zone-microtask/,
         /.long-stack-trace-zone/,
-        /jwt-decode.js$/
-      ]
+        /jwt-decode.js$/,
+      ],
     },
 
     /* postcss: function () {
@@ -147,10 +148,10 @@ module.exports = function({
 
     plugins: [
       new WebpackBuildLogger({
-        logEnabled: true
+        logEnabled: true,
       }),
       new webpack.DefinePlugin({
-        PRODUCTION: isProd
+        PRODUCTION: isProd,
       }),
       // Minify all javascript, switch loaders to minimizing mode
       ... (isDev ? [] : [
@@ -161,14 +162,14 @@ module.exports = function({
           mangle   : true,
           sourceMap: true,
           comments : false,
-        })
+        }),
       ]),
       new webpack.optimize.CommonsChunkPlugin({
         name     : 'vendor',
         filename : 'vendor.js',
-        minChunks: Infinity
-      })
-    ]
+        minChunks: Infinity,
+      }),
+    ],
 
     /*tslint: {
      emitErrors: false,

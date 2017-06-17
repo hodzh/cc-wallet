@@ -16,9 +16,9 @@ function factory(model) {
   function indexPage(req, res) {
     return Promise.resolve()
       .then(function () {
-        return model.query({}, {
+        return model.query(req.body.query || {}, {
           page: req.query.page,
-          limit: req.query.limit
+          limit: req.query.limit,
         });
       })
       .then(controller.responseWithResult(res))
@@ -64,7 +64,7 @@ function factory(model) {
         if (req.body._id) {
           delete req.body._id;
         }
-        return model.findById(req.params.id)
+        return model.findById(req.params.id);
       })
       .then(controller.handleEntityNotFound(res))
       .then(saveUpdates(req.body))

@@ -28,7 +28,7 @@ export = function(schema) {
     return Promise.all(listeners.map(listener => listener.apply(events, args)))
       .catch((err) => {
         log.error('emitEvent', err);
-        throw err;
+        return Promise.reject(err);
       })
       ;
   };

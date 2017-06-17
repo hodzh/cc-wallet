@@ -139,5 +139,7 @@ require('./transaction-process')(schema, Account);
 
 schema.plugin(require('./../../../core/server/db/events-plugin'));
 schema.plugin(require('../../../core/server/db/query-plugin'));
+schema.plugin(require('../../../core/server/db/created-plugin'));
+schema.plugin(require('../../../core/server/db/updated-plugin'));
 
 export = mongoose.model('Transaction', schema);

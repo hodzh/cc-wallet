@@ -14,12 +14,12 @@ export class WithdrawalMaxPerHour {
       this.config.paygates.withdrawal.maxPerHour)
       .catch((err) => {
         if (err.code === 11000) {
-          throw new Error(
+          return Promise.reject(new Error(
             `You have exceeded the max ${
               this.config.paygates.withdrawal.maxPerHour
-            } withdrawals per hour allowed`);
+            } withdrawals per hour allowed`));
         }
-        throw err;
+        return Promise.reject(err);
       });
   }
 }

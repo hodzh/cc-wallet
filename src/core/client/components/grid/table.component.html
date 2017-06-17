@@ -51,6 +51,7 @@
               [source]="source"
               [row]="row"
               [actions]="column.actions"
+              (action)="onAction($event)"
             ></cc-table-row-actions>
           </ng-template>
           <ng-template ngSwitchDefault>

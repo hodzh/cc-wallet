@@ -1,5 +1,6 @@
 import { Mailer } from './mailer/index';
 import { ClusterWorker } from './cluster/worker';
+import { WebServer } from './web/index';
 let EventEmitter = require('events').EventEmitter;
 
 let log = require('log4js').getLogger('core');
@@ -7,10 +8,10 @@ let User = require('./model/user');
 let Token = require('./token');
 
 class App {
+  web: any;
   config = null;
   db = require('./db');
   auth = require('./auth');
-  web = require('./web');
   mail: Mailer = null;
   token = null;
   eventEmitter = new EventEmitter();
@@ -61,13 +62,25 @@ class App {
   }
 
   private async init(config, modules) {
-    log.trace('app init node', process.version);
+    log.info('app init node', process.version);
     this.emit('init');
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);
     this.mail = new Mailer();
     this.token = Token(this.config.token);
+    if (this.config.web.enable) {
+      this.web = new WebServer();
+    } else {
+      this.web = {
+        init: () => {
+        },
+        start: () => {
+        },
+        route: () => {
+        },
+      };
+    }
     modules.slice(1).forEach((moduleServer) => {
       /*let path = require('path');
        let fs = require('fs');
