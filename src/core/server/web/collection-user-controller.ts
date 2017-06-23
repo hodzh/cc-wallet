@@ -33,7 +33,7 @@ function factory(model) {
       .then(function () {
         return model.find({
           owner: req.user._id
-        });
+        }).exec();
       })
       .then(controller.responseWithResult(res))
       .catch(controller.handleError(res));

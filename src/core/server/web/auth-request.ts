@@ -25,14 +25,14 @@ export class AuthRequest {
       this.authToken = JSON.parse(result.body).token;
       return;
     }
-    return Promise.reject(new Error('bad authToken'));
+    throw new Error('bad authToken');
   }
 
   async request(data) {
     await this.auth();
     let url = this.options.url + data.url;
     let result: any = await callback2promise(request.bind(request, url, {
-      body: data.form || {},
+      body: data.body || {},
       json: true,
       method: data.method || 'GET',
       headers: {
@@ -40,7 +40,7 @@ export class AuthRequest {
       }
     }));
     if (!result || !result.statusCode) {
-      return Promise.reject(new Error('bad request result'));
+      throw new Error('bad request result');
     }
     if (result.statusCode === 401) {
       // auth error
@@ -48,12 +48,11 @@ export class AuthRequest {
       return await request(data);
     }
     if (result.statusCode === 404) {
-      return Promise.reject(new Error('not found'));
+      throw new Error('not found');
     }
     if (result.statusCode >= 400) {
-      return Promise.reject(new Error('bad request status'));
+      throw new Error('bad request status');
     }
-    //return JSON.parse(result.body);
     return result.body;
   }
 }

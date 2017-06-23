@@ -44,7 +44,7 @@ export = function (schema, pluginOptions) {
     } else {
       page = 1;
       offset = 0;
-      skip = offset;
+      skip = 0;
     }
     if (limit <= 0) {
       throw new Error('limit should be positive');

@@ -30,7 +30,7 @@ function factory(model) {
     return Promise.resolve()
       .then(function () {
         // todo limit
-        return model.find({});
+        return model.find({}).exec();
       })
       .then(controller.responseWithResult(res))
       .catch(controller.handleError(res));

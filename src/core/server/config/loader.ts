@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 // import * as JSON5 from 'json5';
 
+let log = require('log4js').getLogger('core');
+
 declare function require(name: string);
 
 const ext = '.js';
@@ -26,6 +28,10 @@ export class ConfigLoader {
   constructor() {
     this.env = process.env.NODE_ENV || 'development';
     this.parseCommandLine();
+    if (!this.config) {
+      log.error('Please, specify config path');
+      throw new Error('config path is not specified');
+    }
   }
 
   public load(config) {

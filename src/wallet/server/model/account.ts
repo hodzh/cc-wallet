@@ -80,7 +80,7 @@ schema.statics.getAccounts = function (type, userId) {
   return this.find({
     type: type,
     owner: userId
-  });
+  }).exec();
 };
 
 schema.methods.sanitize = function () {
