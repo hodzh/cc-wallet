@@ -80,6 +80,7 @@
     "bootstrap": "3.3.7",
     "browser-sync": "2.18.12",
     "connect-livereload": "0.6.0",
+    "copy-pkg-json-webpack-plugin": "0.0.29",
     "core-js": "2.4.1",
     "css-loader": "0.28.4",
     "del": "3.0.0",

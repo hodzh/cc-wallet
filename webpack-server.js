@@ -1,8 +1,9 @@
 'use strict';
 
-var webpack = require('webpack');
-var WebpackBuildLogger = require('webpack-build-logger');
-var path = require('path');
+const webpack = require('webpack');
+const WebpackBuildLogger = require('webpack-build-logger');
+const path = require('path');
+const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 
 module.exports = function({
                             root,
@@ -112,6 +113,10 @@ module.exports = function({
         banner   : 'require("source-map-support").install();',
         raw      : true,
         entryOnly: false
+      }),
+      new CopyPkgJsonPlugin({
+        remove: ['devDependencies', 'scripts'],
+        replace: {scripts: {start: 'node index.js'}}
       })
     ]
   };
