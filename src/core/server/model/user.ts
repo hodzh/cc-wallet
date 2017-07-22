@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
-var UserSchema = new Schema({
+var schema = new Schema({
   name: String,
   email: {
     type: String,
@@ -31,7 +31,7 @@ var UserSchema = new Schema({
  */
 
 // Non-sensitive info we'll be putting in the token
-UserSchema
+schema
   .virtual('token')
   .get(getToken);
 
@@ -40,18 +40,18 @@ UserSchema
  */
 
 // Validate empty email
-UserSchema
+schema
   .path('email')
   .validate(validateEmail, 'Email cannot be blank');
 
 // Validate empty password
-UserSchema
+schema
   .path('password')
   .validate(validatePassword,
     'Password cannot be blank');
 
 // Validate email is not taken
-UserSchema
+schema
   .path('email')
   .validate(validateEmailAlreadyInUse,
     'The specified email address is already in use.');
@@ -59,20 +59,20 @@ UserSchema
 /**
  * Pre-save hook
  */
-UserSchema
+schema
   .pre('save', beforeSave);
 
 /**
  * Methods
  */
-UserSchema.methods = {
+schema.methods = {
   authenticate: authenticate,
   makeSalt: makeSalt,
   encryptPassword: encryptPassword,
   sanitize: sanitize
 };
 
-UserSchema.statics.addUser = async function(model) {
+schema.statics.addUser = async function(model) {
   const User = this;
   await User.remove({
     email: model.email
@@ -81,9 +81,11 @@ UserSchema.statics.addUser = async function(model) {
   return await user.save();
 };
 
-UserSchema.plugin(require('../db/query-plugin'));
+schema.plugin(require('../db/query-plugin'));
+schema.plugin(require('../../../core/server/db/created-plugin'));
+schema.plugin(require('../../../core/server/db/updated-plugin'));
 
-export = mongoose.model('User', UserSchema);
+export = mongoose.model('User', schema);
 
 /**
  * returns only non secret data

@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptionsArgs, RequestMethod, Response } from '@angular/http';
+import {
+  Headers,
+  Http,
+  RequestMethod,
+  RequestOptionsArgs,
+  Response
+} from '@angular/http';
 import { AuthToken } from './auth-token';
 import { Observable } from 'rxjs/Observable';
 
@@ -45,21 +51,50 @@ export class AuthHttp {
         obs.error(new Error('No JWT present'));
       });
     }
-    options.headers = this.createHeader();
-    if (typeof options.body !== 'string' &&
-      typeof options.body !== 'undefined') {
-      options.body = JSON.stringify(options.body);
+    let authOptions = Object.assign({}, options);
+    authOptions.headers = this.createHeader();
+    if (typeof authOptions.body !== 'string' &&
+      typeof authOptions.body !== 'undefined') {
+      authOptions.body = JSON.stringify(options.body);
     }
-    request = this.http.request(url, options)
+    request = this.http.request(url, authOptions)
       .catch(
-        (error: any, caught: Observable<Response>) => {
+        (error: any) => {
           if (error.status === 401) {
+            if (this.authToken.refreshToken) {
+              return this.refresh()
+                .flatMap((refreshResult: Response): Observable<Response> => {
+                  this.authToken.token = refreshResult.json().token;
+                  authOptions.headers = this.createHeader();
+                  return this.http.request(url, authOptions);
+                })
+                .catch(error => {
+                  if (error.status === 401) {
+                    this.authToken.reset();
+                  }
+                  return Observable.throw(error);
+                });
+            }
             this.authToken.reset();
+            return Observable.throw(error);
           }
           return Observable.throw(error);
         }
-      );
+      )
+    ;
 
+    return request;
+  }
+
+  private refresh(): Observable<Response> {
+    let body = JSON.stringify({
+      refreshToken: this.authToken.refreshToken,
+    });
+    let request = this.http.post(
+      '/auth/local/refresh',
+      body, {
+        headers: this.createHeader()
+      });
     return request;
   }
 

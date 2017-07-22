@@ -102,6 +102,7 @@ export class Auth {
   private onSignIn(response: Response): void {
     let res = response;
     this.authToken.token = res['token'];
+    this.authToken.refreshToken = res['refreshToken'];
     this.currentUser = res['user'];
     this.router.navigate(['/']);
   }

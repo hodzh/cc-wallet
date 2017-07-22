@@ -13,17 +13,24 @@ module.exports = {
   jwt: {
     secret: 'G5rT9pLnljwVvCdcmUlM6kiC097IGC0I5228kTjuqUxiACYvXJl7E42KYfcUEWf3',
     // expiresIn: 60 * 60 * 5 /* seconds */
-    // expiresIn: 60 * 5 /* seconds */
-    expiresIn: 99999999
+    expiresIn: 60 * 5 /* seconds */
+    // expiresIn: 99999999
   },
 
   /**
-   * redirect
+   * allow register new user
    */
-  // landingPage: '/',
-
   signup: true,
+
+  /**
+   * allow password reset by user
+   */
   resetPassword: true,
+
+  /**
+   * auth request delay
+   */
+  delay: 500,
 
   /**
    * auth using email

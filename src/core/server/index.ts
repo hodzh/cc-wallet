@@ -97,7 +97,7 @@ class App {
     this.mail.init(this.config.email, this.db.queueService);
     this.web.init(this.config);
     this.web.route({
-      '/auth/local': require('./auth/local'),
+      '/auth/local': require('./auth/local')(config.auth),
       '/api/me': require('./api/user/user')(config.auth, this.token, this.mail, this.auth),
       '/api/token': require('./api/user/token')(this.token),
       '/aapi/user': require('./api/admin/user'),
