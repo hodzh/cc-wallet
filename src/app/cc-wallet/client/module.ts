@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { CoreModule } from '../../../core/client/module';
 import { DevModule } from '../../../dev/client/module';
 import { WalletModule } from '../../../wallet/client/module';
-import { VpModule } from '../../../vp/client/module';
+import { VpModule } from '../../../games-video-poker/client/module';
 import { PaygatesModule } from '../../../paygates/client/module';
 import { PaygatesBitcoinModule } from '../../../paygates-bitcoin/client/module';
 import { LayoutModule } from '../../../core/client/layout/module';
