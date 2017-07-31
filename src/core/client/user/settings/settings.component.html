@@ -5,9 +5,8 @@
   <div class="col-sm-12">
     <form
       class="form"
-      role="form"
-      [formGroup]="settingsForm"
-      (ngSubmit)="changePassword()">
+      [formGroup]="form"
+      (ngSubmit)="submit()">
       <div
         class="form-group"
         [class.has-success]="password.valid && submitted"
@@ -18,7 +17,7 @@
         ></cc-password-input>
         <p
           class="help-block"
-          *ngIf="submitted && settingsForm.controls.password.errors?.required">
+          *ngIf="submitted && form.controls.password.errors?.required">
           Please enter a password.
         </p>
       </div>
@@ -44,10 +43,10 @@
       <div
         class="form-group"
         [class.has-success]="(confirmPassword.valid &&
-            settingsForm.controls.matchingPassword.valid) &&
+            form.controls.matchingPassword.valid) &&
              submitted"
         [class.has-error]="(!confirmPassword.valid ||
-            !settingsForm.controls.matchingPassword.valid) &&
+            !form.controls.matchingPassword.valid) &&
              submitted">
         <label>Confirm New Password</label>
         <cc-password-input
@@ -62,7 +61,7 @@
         </p>
         <p class="help-block"
            *ngIf="!confirmPassword.errors?.required &&
-            settingsForm.controls.matchingPassword.errors?.areEqual &&
+            form.controls.matchingPassword.errors?.areEqual &&
              submitted">
           Passwords must match.
         </p>

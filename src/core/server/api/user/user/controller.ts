@@ -2,6 +2,69 @@ import Recaptcha = require('../../../captcha/recaptcha');
 let log = require('log4js').getLogger('token');
 import controller = require('../../../web/controller');
 import User = require('../../../model/user');
+import { Validator } from '../../../validate/index';
+import {
+  MAX_PASSWORD_LENGTH,
+  MIN_PASSWORD_LENGTH
+} from '../../../../common/validate';
+
+let emailSchema = {
+  type: 'string',
+  format: 'email',
+};
+let passwordSchema = {
+  type: 'string',
+  maxLength: MAX_PASSWORD_LENGTH,
+  minLength: MIN_PASSWORD_LENGTH
+};
+let tokenSchema = {
+  type: 'string',
+  format: 'jsonwebtoken',
+};
+
+const changePasswordSchema = {
+  $async: true,
+  additionalProperties: false,
+  properties: {
+    password: passwordSchema,
+    oldPassword: passwordSchema,
+  },
+  required: ['password', 'oldPassword'],
+};
+Validator.addSchema(changePasswordSchema, 'changePassword');
+
+const createUserSchema = {
+  $async: true,
+  additionalProperties: false,
+  properties: {
+    email: emailSchema,
+    password: passwordSchema,
+  },
+  required: ['password', 'email'],
+};
+Validator.addSchema(createUserSchema, 'createUser');
+
+const resetPasswordSchema = {
+  $async: true,
+  additionalProperties: false,
+  properties: {
+    email: emailSchema,
+    password: passwordSchema,
+  },
+  required: ['password', 'email'],
+};
+Validator.addSchema(resetPasswordSchema, 'resetPassword');
+
+const setPasswordSchema = {
+  $async: true,
+  additionalProperties: false,
+  properties: {
+    token: tokenSchema,
+    password: passwordSchema,
+  },
+  required: ['password', 'token'],
+};
+Validator.addSchema(setPasswordSchema, 'setPassword');
 
 export = controllerFactory;
 
@@ -24,6 +87,9 @@ function controllerFactory(tokenService, mail, auth) {
   function changePassword(req, res) {
     return Promise.resolve()
       .then(() => {
+        return Validator.validate('changePassword', req.body);
+      })
+      .then(() => {
         let userId = req.user._id;
         return User.findById(userId);
       })
@@ -36,7 +102,7 @@ function controllerFactory(tokenService, mail, auth) {
             .then(() => {
               res.status(204).end();
             })
-            .catch(validationError(res));
+            .catch(controller.handleError(res));
         } else {
           return res.status(403).end();
         }
@@ -71,6 +137,9 @@ function controllerFactory(tokenService, mail, auth) {
     return Promise.resolve()
       .then(() => Recaptcha.RecaptchaService.verify(req))
       .then(() => {
+        return Validator.validate('createUser', req.body);
+      })
+      .then(() => {
         let user = new User({
           email: req.body.email,
           password: req.body.password,
@@ -95,7 +164,7 @@ function controllerFactory(tokenService, mail, auth) {
             log.error(err);
           });
       })
-      .catch(validationError(res));
+      .catch(controller.handleError(res));
   }
 
   /**
@@ -103,6 +172,9 @@ function controllerFactory(tokenService, mail, auth) {
    */
   function resetPassword(req, res) {
     return Promise.resolve()
+      .then(() => {
+        return Validator.validate('resetPassword', req.body);
+      })
     // .then(() => Recaptcha.RecaptchaService.verify(req))
       .then(() => true)
       .then(controller.responseWithResult(res))
@@ -148,6 +220,9 @@ function controllerFactory(tokenService, mail, auth) {
   function setPassword(req, res) {
     return Promise.resolve()
       .then(() => {
+        return Validator.validate('setPassword', req.body);
+      })
+      .then(() => {
         let token = req.body.token;
         if (!token) {
           throw new Error('undefined token');
@@ -183,13 +258,6 @@ function controllerFactory(tokenService, mail, auth) {
         return user;
       })
       .catch(controller.handleError(res));
-  }
-
-  function validationError(res, statusCode = 422) {
-    return err => {
-      log.error(err);
-      res.status(statusCode).json(err);
-    };
   }
 
   function sendConfirmEmail(user, firstTime) {

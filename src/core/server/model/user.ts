@@ -266,7 +266,8 @@ function encryptPassword(password, callback) {
       password,
       salt,
       defaultIterations,
-      defaultKeyLength)
+      defaultKeyLength,
+      defaultDigest)
       .toString('base64');
   }
 

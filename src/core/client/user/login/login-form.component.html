@@ -1,44 +1,42 @@
 <form method="post"
       class="form"
-      role="form"
-      [formGroup]="loginForm"
-      (ngSubmit)="signIn()">
-
+      [formGroup]="form"
+      (ngSubmit)="submit()">
   <div
     class="form-group"
-    [class.has-success]="loginForm.controls.email.valid && submitted"
-    [class.has-error]="!loginForm.controls.email.valid && submitted">
+    [class.has-success]="form.controls.email.valid && submitted"
+    [class.has-error]="!form.controls.email.valid && submitted">
     <label>Email</label>
     <cc-email-input
       [(ngModel)]="auth.currentUser.email"
-      [formControl]="loginForm.controls.email"
+      [formControl]="form.controls.email"
     ></cc-email-input>
     <p
       class="help-block"
-      *ngIf="submitted && loginForm.controls.email?.errors?.required">
+      *ngIf="submitted && form.controls.email?.errors?.required">
       Please enter a valid email.
     </p>
   </div>
 
   <div
     class="form-group"
-    [class.has-success]="loginForm.controls.password.valid && submitted"
-    [class.has-error]="!loginForm.controls.password.valid && submitted">
+    [class.has-success]="form.controls.password.valid && submitted"
+    [class.has-error]="!form.controls.password.valid && submitted">
     <label>Password</label>
     <cc-password-input
-      [formControl]="loginForm.controls.password"
+      [formControl]="form.controls.password"
     ></cc-password-input>
     <p
       class="help-block"
-      *ngIf="submitted && loginForm.controls.password?.errors?.required">
+      *ngIf="submitted && form.controls.password?.errors?.required">
       Please enter a password.
     </p>
   </div>
 
   <div
     class="form-group"
-    [class.has-success]="loginForm.controls.captcha.valid && submitted"
-    [class.has-error]="!loginForm.controls.captcha.valid && submitted">
+    [class.has-success]="form.controls.captcha.valid && submitted"
+    [class.has-error]="!form.controls.captcha.valid && submitted">
     <label>Please complete this CAPTCHA.</label>
     <re-captcha
       #recaptcha
@@ -48,7 +46,7 @@
     ></re-captcha>
     <p
       class="help-block"
-      *ngIf="submitted && loginForm.controls.captcha?.errors?.required">
+      *ngIf="submitted && form.controls.captcha?.errors?.required">
       You also need to complete this CAPTCHA (JavaScript required).
     </p>
   </div>

@@ -6,30 +6,29 @@
   <div class="col-sm-12">
     <form
       class="form"
-      role="form"
-      [formGroup]="signupForm"
-      (ngSubmit)="signUp()">
+      [formGroup]="form"
+      (ngSubmit)="submit()">
       <div
         class="form-group"
-        [class.has-success]="signupForm.controls.email.valid && submitted"
-        [class.has-error]="!signupForm.controls.email.valid && submitted">
+        [class.has-success]="form.controls.email.valid && submitted"
+        [class.has-error]="!form.controls.email.valid && submitted">
 
         <label>Email</label>
         <cc-email-input
-          [formControl]="signupForm.controls.email"
+          [formControl]="form.controls.email"
         ></cc-email-input>
         <p class="help-block"
-           *ngIf="signupForm.controls.email.errors?.emailFormat && submitted">
+           *ngIf="form.controls.email.errors?.emailFormat && submitted">
           Doesn't look like a valid email.
         </p>
         <p
           class="help-block"
-          *ngIf="signupForm.controls.email.errors?.required && submitted">
+          *ngIf="form.controls.email.errors?.required && submitted">
           What's your email address?
         </p>
         <p class="help-block"
-           *ngIf="signupForm.controls.email.errors">
-          {{ errors.email }}
+           *ngIf="form.controls.email.errors?.remote && submitted">
+          {{form.controls.email.errors?.remote}}
         </p>
       </div>
       <div
@@ -49,14 +48,18 @@
            *ngIf="password.errors?.maxlength && submitted">
           Password must be less then {{MAX_PASSWORD_LENGTH}} characters.
         </p>
+        <p class="help-block"
+           *ngIf="password.errors?.remote && submitted">
+          {{password.errors?.remote}}
+        </p>
       </div>
       <div
         class="form-group"
         [class.has-success]="(confirmPassword.valid &&
-            signupForm.controls.matchingPassword.valid) &&
+            form.controls.matchingPassword.valid) &&
              submitted"
         [class.has-error]="(!confirmPassword.valid ||
-            !signupForm.controls.matchingPassword.valid) &&
+            !form.controls.matchingPassword.valid) &&
              submitted">
         <label>Confirm Password</label>
         <cc-password-input
@@ -71,15 +74,15 @@
         </p>
         <p class="help-block"
            *ngIf="!confirmPassword.errors?.required &&
-            signupForm.controls.matchingPassword.errors?.areEqual &&
+            form.controls.matchingPassword.errors?.areEqual &&
              submitted">
           Passwords must match.
         </p>
       </div>
       <div
         class="form-group"
-        [class.has-success]="signupForm.controls.captcha.valid && submitted"
-        [class.has-error]="!signupForm.controls.captcha.valid && submitted">
+        [class.has-success]="form.controls.captcha.valid && submitted"
+        [class.has-error]="!form.controls.captcha.valid && submitted">
         <label>Please complete this CAPTCHA.</label>
         <re-captcha
           site_key="6LdKlwgUAAAAANiQwucCM5Gstqlv11UrYKnOAPuh"
@@ -88,7 +91,7 @@
         ></re-captcha>
         <p
           class="help-block"
-          *ngIf="submitted && signupForm.controls.captcha?.errors?.required">
+          *ngIf="submitted && form.controls.captcha?.errors?.required">
           You also need to complete this CAPTCHA (JavaScript required).
         </p>
       </div>

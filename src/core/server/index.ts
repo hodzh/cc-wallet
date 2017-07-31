@@ -3,7 +3,8 @@ import { ClusterWorker } from './cluster/worker';
 import { WebServer } from './web/index';
 let EventEmitter = require('events').EventEmitter;
 
-let log = require('log4js').getLogger('core');
+let log4js = require('log4js');
+let log = log4js.getLogger('core');
 let User = require('./model/user');
 let Token = require('./token');
 
@@ -62,6 +63,7 @@ class App {
   }
 
   private async init(config, modules) {
+    this.initLog(config.log);
     log.info('app init node', process.version);
     this.emit('init');
     this.config = config;
@@ -102,6 +104,13 @@ class App {
       '/api/token': require('./api/user/token')(this.token),
       '/aapi/user': require('./api/admin/user'),
     });
+  }
+
+  private initLog(options) {
+    let logger = log4js.getLogger();
+    if (options.level) {
+      logger.level = options.level;
+    }
   }
 }
 

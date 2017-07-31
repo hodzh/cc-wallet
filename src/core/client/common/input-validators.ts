@@ -1,9 +1,5 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-
-export const MIN_PASSWORD_LENGTH = 6;
-export const MAX_PASSWORD_LENGTH = 32;
-export const EMAIL_PATTERN =
-  /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+import { EMAIL_PATTERN } from '../../common/validate';
 
 export class InputValidators {
 

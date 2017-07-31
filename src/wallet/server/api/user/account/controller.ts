@@ -7,7 +7,10 @@ function responseWithUserResult(res, statusCode = 200) {
       res.status(statusCode).json(entity.sanitize());
     }
   };
-}
+}let tokenSchema = {
+  type: 'string',
+  format: /^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/,
+};
 
 export = {
   index,
