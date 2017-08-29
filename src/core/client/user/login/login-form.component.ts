@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Auth } from '../../auth';
 import { AbstractForm } from '../../common/abstract-form';
+import { ReCaptchaComponent } from '../../components/recaptcha/recaptcha.component';
 
 const template = require('./login-form.component.html');
 
@@ -11,6 +12,8 @@ const template = require('./login-form.component.html');
   template,
 })
 export class LoginFormComponent extends AbstractForm {
+  @ViewChild('recaptcha')
+  private recaptchaComponent: ReCaptchaComponent;
 
   constructor(
     builder: FormBuilder,
@@ -28,6 +31,11 @@ export class LoginFormComponent extends AbstractForm {
   onSubmit() {
     let params = this.form.value;
     return this.auth.signIn(params);
+  }
+
+  onError(error) {
+    super.onError(error);
+    this.recaptchaComponent.reset();
   }
 
   signUp(event) {

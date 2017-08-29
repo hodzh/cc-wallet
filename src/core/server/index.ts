@@ -108,7 +108,7 @@ class App {
 
   private initLog(options) {
     let logger = log4js.getLogger();
-    if (options.level) {
+    if (options && options.level) {
       logger.level = options.level;
     }
   }

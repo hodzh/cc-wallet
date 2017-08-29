@@ -14,7 +14,7 @@ import {
 } from '../../common/input-validators';
 import { Subscription } from 'rxjs';
 import { MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../../../common/validate';
-import { AbstractForm } from "../../common/abstract-form";
+import { AbstractForm } from '../../common/abstract-form';
 
 const template = require('./set-password.component.html');
 

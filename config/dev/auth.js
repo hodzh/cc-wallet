@@ -40,7 +40,7 @@ module.exports = {
     /**
      * enable email auth
      */
-    enabled: true,
+    enable: true,
 
     /**
      * validate user email by sending a token

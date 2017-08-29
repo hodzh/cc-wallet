@@ -26,15 +26,15 @@ export abstract class AbstractForm {
           this.submitPending = false;
         },
         (error) => {
-          this.displayErrors(error.json());
+          this.onError(error.json());
           this.submitPending = false;
         }
       );
   }
 
-  displayErrors(submitResponse) {
-    if (submitResponse.messages) {
-      let messages = submitResponse.messages;
+  onError(error) {
+    if (error.messages) {
+      let messages = error.messages;
       messages.forEach((message) => {
         let control = this.getControl(message.property);
         if (!control) {
@@ -45,7 +45,7 @@ export abstract class AbstractForm {
         });
       });
     } else {
-      this.errors = `${submitResponse.message || 'Unknown error'}`;
+      this.errors = `${error.message || 'Unknown error'}`;
     }
   }
 

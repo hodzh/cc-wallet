@@ -25,6 +25,7 @@ export class WebServer {
   }
 
   init(config) {
+    this.express.disable('x-powered-by');
     this.clusterWorker = new ClusterWorker(config.cluster, this.server);
     this.express.use(this.clusterWorker.middleware.bind(this.clusterWorker));
     this.express.use(compression());

@@ -1,6 +1,6 @@
 import { ConfigLoader } from './loader';
 
-export const CONFIG = {};
+export const CONFIG: any = {};
 
 loadConfig();
 

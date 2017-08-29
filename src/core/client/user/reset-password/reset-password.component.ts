@@ -32,23 +32,6 @@ export class ResetPasswordComponent extends AbstractForm implements AfterViewIni
   ngOnDestroy() {
   }
 
-  displayErrors(error) {
-    if (!error) {
-      return;
-    }
-    if (error.messages) {
-      let messages = error.messages;
-      messages.forEach((message) => {
-        /*this.loginForm.controls[message.property]
-         .setErrors({
-         remote: message.message
-         });*/
-      });
-    } else if (error.message) {
-      this.errors = `${error.message}`;
-    }
-  }
-
   onSubmit() {
     return this.userResource.resetPassword({
       email: this.form.value.email

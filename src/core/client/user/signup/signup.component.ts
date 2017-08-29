@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AbstractControl,
@@ -13,6 +13,7 @@ import {
   MIN_PASSWORD_LENGTH,
 } from '../../../common/validate';
 import { AbstractForm } from '../../common/abstract-form';
+import { ReCaptchaComponent } from '../../components/recaptcha/recaptcha.component';
 
 //const styles   = require('./signup.component.scss');
 const template = require('./signup.component.html');
@@ -23,6 +24,8 @@ const template = require('./signup.component.html');
   providers: [],
 })
 export class SignupComponent extends AbstractForm {
+  @ViewChild('recaptcha')
+  private recaptchaComponent: ReCaptchaComponent;
   public password: AbstractControl;
   public confirmPassword: AbstractControl;
   public MIN_PASSWORD_LENGTH: number = MIN_PASSWORD_LENGTH;
@@ -65,6 +68,11 @@ export class SignupComponent extends AbstractForm {
       password: this.password.value,
       captcha: this.form.value.captcha,
     });
+  }
+
+  onError(error) {
+    super.onError(error);
+    this.recaptchaComponent.reset();
   }
 
   captchaResponse(captcha) {

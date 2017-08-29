@@ -49,9 +49,8 @@ const resetPasswordSchema = {
   additionalProperties: false,
   properties: {
     email: emailSchema,
-    password: passwordSchema,
   },
-  required: ['password', 'email'],
+  required: ['email'],
 };
 Validator.addSchema(resetPasswordSchema, 'resetPassword');
 
@@ -172,12 +171,12 @@ function controllerFactory(tokenService, mail, auth) {
    */
   function resetPassword(req, res) {
     return Promise.resolve()
-      .then(() => {
-        return Validator.validate('resetPassword', req.body);
-      })
     // .then(() => Recaptcha.RecaptchaService.verify(req))
       .then(() => true)
       .then(controller.responseWithResult(res))
+      .then(() => {
+        return Validator.validate('resetPassword', req.body);
+      })
       .then(() => User.findOne({
         email: req.body.email
       }))
@@ -211,7 +210,9 @@ function controllerFactory(tokenService, mail, auth) {
           }
         });
       })
-      .catch(controller.handleError(res));
+      .catch((err) => {
+        log.error(err);
+      });
   }
 
   /**

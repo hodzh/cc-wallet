@@ -2,7 +2,7 @@
 
 module.exports = {
   Bitcoin: {
-    enable: true,
+    //enable: true,
     name: 'Bitcoin',
     code: 'BTC',
     decimal: 8,
@@ -12,7 +12,7 @@ module.exports = {
     withdrawalConfirmations: 10,
   },
   Dash: {
-    enable: true,
+    //enable: true,
     name: 'Dash',
     code: 'DASH',
     decimal: 8,
