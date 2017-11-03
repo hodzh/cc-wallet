@@ -14,6 +14,7 @@ import {
 } from '../../../common/validate';
 import { AbstractForm } from '../../common/abstract-form';
 import { ReCaptchaComponent } from '../../components/recaptcha/recaptcha.component';
+import {signupForm, SignupForm} from './signup-form';
 
 //const styles   = require('./signup.component.scss');
 const template = require('./signup.component.html');
@@ -30,6 +31,7 @@ export class SignupComponent extends AbstractForm {
   public confirmPassword: AbstractControl;
   public MIN_PASSWORD_LENGTH: number = MIN_PASSWORD_LENGTH;
   public MAX_PASSWORD_LENGTH: number = MAX_PASSWORD_LENGTH;
+  private config: SignupForm;
 
   constructor(
     builder: FormBuilder,
@@ -37,7 +39,8 @@ export class SignupComponent extends AbstractForm {
     public auth: Auth,
   ) {
     super();
-    this.form = builder.group({
+    this.config = signupForm;
+    let controlsConfig: any = {
       email: ['', Validators.compose([
         Validators.required,
         InputValidators.emailFormat])],
@@ -51,8 +54,11 @@ export class SignupComponent extends AbstractForm {
       }, {
         validator: InputValidators.areEqual,
       }),
-      captcha: ['', Validators.required],
-    });
+    };
+    if (this.config.recaptcha) {
+      controlsConfig.captcha = ['', Validators.required];
+    }
+    this.form = builder.group(controlsConfig);
 
     this.password = (<FormGroup>this.form
       .controls['matchingPassword'])

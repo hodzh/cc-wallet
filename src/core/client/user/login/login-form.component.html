@@ -35,6 +35,7 @@
 
   <div
     class="form-group"
+    *ngIf="config.recaptcha"
     [class.has-success]="form.controls.captcha.valid && submitted"
     [class.has-error]="!form.controls.captcha.valid && submitted">
     <label>Please complete this CAPTCHA.</label>

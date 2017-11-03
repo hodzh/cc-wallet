@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Auth } from '../../auth';
 import { AbstractForm } from '../../common/abstract-form';
 import { ReCaptchaComponent } from '../../components/recaptcha/recaptcha.component';
+import {loginForm, LoginForm} from './login-form';
 
 const template = require('./login-form.component.html');
 
@@ -14,6 +15,7 @@ const template = require('./login-form.component.html');
 export class LoginFormComponent extends AbstractForm {
   @ViewChild('recaptcha')
   private recaptchaComponent: ReCaptchaComponent;
+  private config: LoginForm;
 
   constructor(
     builder: FormBuilder,
@@ -21,11 +23,15 @@ export class LoginFormComponent extends AbstractForm {
     public auth: Auth,
   ) {
     super();
-    this.form = builder.group({
+    this.config = loginForm;
+    let controlsConfig: any = {
       email: ['', Validators.required],
       password: ['', Validators.required],
-      captcha: ['', Validators.required],
-    });
+    };
+    if (this.config.recaptcha) {
+      controlsConfig.captcha = ['', Validators.required];
+    }
+    this.form = builder.group(controlsConfig);
   }
 
   onSubmit() {
