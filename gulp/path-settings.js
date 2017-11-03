@@ -32,7 +32,7 @@ module.exports = {
     temp: 'temp/client',
     favicon: 'src/core/client/favicon.ico',
     index: 'src/core/client/index.html',
-    //indexTs: 'src/app/client/index.ts',
+    indexTs: 'src/app/client/index.ts',
     karmaConf: 'karma.conf.js',
 
     js: [
