@@ -1,6 +1,11 @@
-bitcoind
-games
-games-slot
-games-video-poker
-market
-paygates-bitcoin
+/*
+!/app
+!/app/**/*
+!/core
+!/core/**/*
+!/dev
+!/dev/**/*
+!/paygates
+!/paygates/**/*
+!/wallet
+!/wallet/**/*

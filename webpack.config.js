@@ -3,6 +3,7 @@ const path = require('path');
 
 let appDir = path.join(__dirname, 'src/app');
 const files = fs.readdirSync(appDir)
+  .filter((dir) => dir !== 'sample')
   .map(dir => path.join(appDir, dir, 'webpack.config.js'))
   .filter(file => {
     // console.log(file);

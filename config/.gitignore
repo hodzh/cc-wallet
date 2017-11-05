@@ -1,3 +1,5 @@
-*
-!dev
-!test
+/*
+!/dev
+!/dev/**/*
+!/test
+!/test/**/*
