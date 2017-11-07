@@ -64,7 +64,7 @@ export abstract class AbstractForm {
     return this.submitPending || this.form.pending;
   }
 
-  protected abstract onSubmit(): Observable<Response>;
+  protected abstract onSubmit(): Observable<any>;
 
   private findControlByName(controls, name: string): AbstractControl {
     let control = controls[name];

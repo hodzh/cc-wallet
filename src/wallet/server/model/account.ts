@@ -5,25 +5,25 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   type: {
     type: String,
-    require: true
+    required: true
   },
   owner: {
     type: Schema.ObjectId,
-    require: true
+    required: true
   },
   currency: {
     type: String,
-    require: true
+    required: true
   },
   balance: {
     type: Schema.Types.Long,
     default: mongoose.Types.Long(0),
-    require: true
+    required: true
   },
   enable: {
     type: Boolean,
     default: true,
-    require: true
+    required: true
   },
   pendingTransactions: [
     {
@@ -114,4 +114,4 @@ schema.plugin(require('../../../core/server/db/query-plugin'));
 schema.plugin(require('../../../core/server/db/created-plugin'));
 schema.plugin(require('../../../core/server/db/updated-plugin'));
 
-export = mongoose.model('AdminAccount', schema);
+export = mongoose.model('Account', schema);

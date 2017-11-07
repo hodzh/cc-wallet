@@ -7,15 +7,15 @@ var schema = new Schema({
   owner: {
     type: Schema.ObjectId,
     ref: 'User',
-    require: true
+    required: true
   },
   stat: {
     type: [Date],
-    require: true
+    required: true
   },
   updated: {
     type: Date,
-    require: true
+    required: true
   },
 }, {
   collection: 'withdrawalStat',

@@ -49,6 +49,9 @@ export class TableComponent {
       if (column.pipe) {
         value = column.pipe.transform(value, ...column.pipeArgs);
       }
+      if (typeof value === 'undefined') {
+        value = '-';
+      }
     } else {
       value = column.format(row);
     }
@@ -58,6 +61,11 @@ export class TableComponent {
   public setCellText(row, column: TableColumn, text: string): void {
     this.setCellValue(row, column,
       this.textToValue(row, column, text));
+  }
+
+  public checkboxChange(row, column, $event) {
+    let value = $event.target.checked;
+    this.saveEdit(row, column, value);
   }
 
   public saveEdit(row, column: TableColumn, text: string) {

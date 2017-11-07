@@ -78,7 +78,9 @@ export class SignupComponent extends AbstractForm {
 
   onError(error) {
     super.onError(error);
-    this.recaptchaComponent.reset();
+    if (this.config.recaptcha) {
+      this.recaptchaComponent.reset();
+    }
   }
 
   captchaResponse(captcha) {

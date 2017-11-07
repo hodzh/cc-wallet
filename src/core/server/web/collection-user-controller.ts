@@ -57,7 +57,9 @@ function factory(model) {
   function create(req, res) {
     return Promise.resolve()
       .then(function () {
-        return model.create(req.body);
+        let newObject = Object.assign(req.body);
+        newObject.owner = req.user._id;
+        return model.create(newObject);
       })
       .then(controller.responseWithResult(res, 201))
       .catch(controller.handleError(res));
@@ -99,8 +101,8 @@ function factory(model) {
 
 function saveUpdates(updates) {
   return function (entity) {
-    var updated = Object.merge(entity, updates);
-    return updated.save();
+    entity.merge(updates);
+    return entity.save();
   };
 }
 

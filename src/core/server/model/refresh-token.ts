@@ -7,12 +7,12 @@ var schema = new Schema({
   token: {
     type: String,
     unique: true,
-    require: true
+    required: true
   },
   user: {
     type: Schema.ObjectId,
     ref: 'User',
-    require: true,
+    required: true,
   }
 }, {
   collection: 'refreshToken',

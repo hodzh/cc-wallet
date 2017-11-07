@@ -93,7 +93,7 @@ function hasRole(roleRequired) {
      * auth has failed
      */
     function forbidden() {
-      res.status(403).send('Forbidden');
+      res.status(403).send({message: 'Forbidden'});
     }
   }
 }

@@ -6,7 +6,7 @@ var schema = new Schema({
   token: {
     type: String,
     unique: true,
-    require: true
+    required: true
   }
 }, {
   discriminatorKey: 'type',

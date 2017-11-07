@@ -87,8 +87,8 @@ function factory(model) {
 
 function saveUpdates(updates) {
   return function (entity) {
-    var updated = entity.merge(updates);
-    return updated.save();
+    entity.merge(updates);
+    return entity.save();
   };
 }
 

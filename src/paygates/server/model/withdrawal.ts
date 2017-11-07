@@ -10,38 +10,38 @@ var schema = new Schema({
   owner: {
     type: Schema.ObjectId,
     ref: 'User',
-    require: true
+    required: true
   },
   account: {
     type: Schema.ObjectId,
-    ref: 'AdminAccount',
-    require: true
+    ref: 'Account',
+    required: true
   },
   transaction: {
     type: Schema.ObjectId,
     ref: 'Transaction',
-    require: true
+    required: true
   },
   transactionCancel: {
     type: Schema.ObjectId,
     ref: 'Transaction',
-    require: true
+    required: true
   },
   currency: {
     type: String,
-    require: true
+    required: true
   },
   amount: {
     type: Schema.Types.Long,
-    require: true
+    required: true
   },
   fee: {
     type: Schema.Types.Long,
-    require: true
+    required: true
   },
   status: {
     type: String,
-    require: true
+    required: true
   }
 }, {
   discriminatorKey: 'type',

@@ -2,10 +2,10 @@ export = function(schema) {
   schema.add({
     created: {
       type: Date,
-      require: true
+      required: true
     },
   });
-  schema.pre('save', function (next) {
+  schema.pre('validate', function (next) {
     if (this.isNew) {
       this.created = new Date();
     }

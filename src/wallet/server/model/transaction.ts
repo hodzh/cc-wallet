@@ -7,34 +7,34 @@ var Account = require('./account');
 var schema = new Schema({
   state: {
     type: String,
-    require: true
+    required: true
   },
   currency: {
     type: String,
-    require: true
+    required: true
   },
   amount: {
     type: Schema.Types.Long,
     default: mongoose.Types.Long(0),
-    require: true
+    required: true
   },
   from: {
     type: Schema.ObjectId,
-    ref: 'AdminAccount',
-    require: true
+    ref: 'Account',
+    required: true
   },
   to: {
     type: Schema.ObjectId,
-    ref: 'AdminAccount',
-    require: true
+    ref: 'Account',
+    required: true
   },
   category: {
     type: String,
-    require: true
+    required: true
   },
   status: {
     type: String,
-    require: true
+    required: true
   },
   purpose: {
     type: String

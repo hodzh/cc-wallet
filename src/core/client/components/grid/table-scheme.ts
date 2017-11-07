@@ -5,7 +5,7 @@ import { Type, PipeTransform } from '@angular/core';
 export interface TableColumn {
   title?: string;
   field?: string;
-  type?: string;
+  type?: 'text' | 'bool' | 'email' | 'select' | 'actions';
   sortable?: string;
   sort?: string;
   converter?: ValueConverter;

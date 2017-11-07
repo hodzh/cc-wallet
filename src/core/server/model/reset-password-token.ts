@@ -6,7 +6,7 @@ var ResetPasswordTokenSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User',
-    require: true
+    required: true
   }
 }, {
   discriminatorKey: 'type',

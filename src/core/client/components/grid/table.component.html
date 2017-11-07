@@ -32,6 +32,13 @@
               (onSave)="saveEdit(row, column, $event)"
             ></cc-inline-edit>
           </ng-template>
+          <ng-template [ngSwitchCase]="'bool'">
+            <input
+              type="checkbox"
+              [checked]="getCellValue(row, column)"
+              (change)="checkboxChange(row, column, $event)"
+            >
+          </ng-template>
           <ng-template [ngSwitchCase]="'email'">
             <cc-inline-edit
               [value]="getCellText(row, column)"

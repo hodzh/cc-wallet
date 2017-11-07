@@ -9,14 +9,14 @@ var schema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    require: true,
+    required: true,
     mergeable: false
   },
   emailVerify: Date,
   resetPassword: Date,
   role: {
     type: String,
-    require: true,
+    required: true,
     mergeable: false
   },
   password: { type: String, mergeable: false },
