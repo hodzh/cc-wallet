@@ -23,10 +23,10 @@ export class RowActionsComponent {
   }
 
   onAction(action) {
-    console.log(action);
+    // console.log(action);
     this.action.emit({
-      row: this.row,
-      action
+      target: this.row,
+      action,
     });
   }
 

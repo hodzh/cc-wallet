@@ -15,17 +15,17 @@
         (click)="refresh()">
       </button>
     </ng-template>
-    <ng-template [ngSwitchCase]="'custom'">
-      <cc-dynamic-block
-        [factory]="action.factory"
-        [bind]="getBind(action)"></cc-dynamic-block>
-    </ng-template>
-    <ng-template ngSwitchDefault>
+    <ng-template [ngSwitchCase]="'action'">
       <button
         class="btn"
         (click)="onAction(action)">
         {{action.text}}
       </button>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'custom'">
+      <cc-dynamic-block
+        [factory]="action.factory"
+        [bind]="getBind(action)"></cc-dynamic-block>
     </ng-template>
   </span>
 </span>

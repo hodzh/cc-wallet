@@ -95,6 +95,21 @@ export class DataSource<TDocument extends IDocument> implements IDataSource<TDoc
     return req;
   }
 
+  public action(document, action, data?): Observable<any> {
+    this.loading = true;
+    let req = this.resource.action(document._id, action, data);
+    req.subscribe(
+      (document) => {
+        this.loading = false;
+      },
+      (error) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
+    return req;
+  }
+
   public read(): Observable<TDocument[]> {
     //this.loadingSubject.next(true);
     this.loading = true;

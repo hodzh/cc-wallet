@@ -47,8 +47,8 @@ export class Resource<TDocument extends IDocument> {
       .map((res: Response) => <TDocument>res.json()).share();
   }
 
-  action(id, action, params): Observable<any> {
-    return this.http.put(`${this.URL}/${id}/${action}`, params)
+  action(id, action, params?): Observable<any> {
+    return this.http.put(`${this.URL}/${id}/${action}`, params || {})
       .map((res: Response) => res.json()).share();
   }
 
