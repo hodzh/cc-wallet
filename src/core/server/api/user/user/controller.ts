@@ -90,7 +90,7 @@ function controllerFactory(tokenService, mail, auth) {
       })
       .then(() => {
         let userId = req.user._id;
-        return User.findById(userId);
+        return User.findByOrderNumber(userId);
       })
       .then(user => {
         let oldPass = String(req.body.oldPassword);
@@ -236,7 +236,7 @@ function controllerFactory(tokenService, mail, auth) {
         }
         return token;
       })
-      .then((token) => User.findById(token.user))
+      .then((token) => User.findByOrderNumber(token.user))
       .then((user) => {
         if (!user) {
           throw new Error('bad user id');

@@ -98,7 +98,7 @@ schema.methods.sanitize = function () {
 function adminTransaction(Transaction, type, adminId, accountId, data) {
   log.trace(type, adminId, accountId, JSON.stringify(data));
 
-  return Account.findById(accountId)
+  return Account.findByOrderNumber(accountId)
     .then((userAccount) => {
       if (!userAccount) {
         throw new Error('account not found');

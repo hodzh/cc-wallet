@@ -47,7 +47,7 @@ function isAuthenticated() {
     })
     // Attach user to request
     .use((req, res, next) => {
-      User.findById(req.user._id)
+      User.findByOrderNumber(req.user._id)
         .then(user => {
           if (!user) {
             return res.status(401).end();
