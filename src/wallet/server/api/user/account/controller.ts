@@ -28,7 +28,7 @@ function index(req, res) {
 
 // Gets a single Account from the DB
 function show(req, res) {
-  Account.findByOrderNumber(req.params.id)
+  Account.findById(req.params.id)
     .then(controller.checkOwner(req))
     .then((entity) => {
       if (!entity) {

@@ -99,7 +99,7 @@ export = function(options) {
           if (!valid) {
             throw new Error('invalid signature');
           }
-          return Promise.all([User.findByOrderNumber(code.payload._id), RefreshToken.findOne({
+          return Promise.all([User.findById(code.payload._id), RefreshToken.findOne({
             token: refreshToken,
           })]);
         })

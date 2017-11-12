@@ -46,7 +46,7 @@ function show(req, res) {
   var userId = req.params.id;
   Promise.resolve()
     .then(function () {
-      return User.findByOrderNumber(userId);
+      return User.findById(userId);
     })
     .then(function (user) {
       if (!user) {
@@ -64,7 +64,7 @@ function update(req, res) {
   var userId = req.params.id;
   Promise.resolve()
     .then(function () {
-      return User.findByOrderNumber(userId);
+      return User.findById(userId);
     })
     .then(function (user) {
       if (!user) {

@@ -40,7 +40,7 @@ function factory(model) {
   function show(req, res) {
     return Promise.resolve()
       .then(function () {
-        return model.findByOrderNumber(req.params.id);
+        return model.findById(req.params.id);
       })
       .then(controller.handleEntityNotFound(res))
       .then(controller.responseWithResult(res))
@@ -64,7 +64,7 @@ function factory(model) {
         if (req.body._id) {
           delete req.body._id;
         }
-        return model.findByOrderNumber(req.params.id);
+        return model.findById(req.params.id);
       })
       .then(controller.handleEntityNotFound(res))
       .then(saveUpdates(req.body))
@@ -76,7 +76,7 @@ function factory(model) {
   function destroy(req, res) {
     return Promise.resolve()
       .then(function () {
-        return model.findByOrderNumber(req.params.id);
+        return model.findById(req.params.id);
       })
       .then(controller.handleEntityNotFound(res))
       .then(removeEntity(res))
