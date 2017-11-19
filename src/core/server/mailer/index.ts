@@ -1,6 +1,6 @@
 import { MailerQueue } from './mailer-queue';
 import { QueueService } from '../queue/queue-service';
-import { callback2promise } from '../polyfills/promisify';
+import { callback2promise } from '../util/promisify';
 
 export class Mailer {
   private mailer: any;

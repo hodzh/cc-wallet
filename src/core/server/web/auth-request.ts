@@ -1,4 +1,4 @@
-import { callback2promise } from '../polyfills/promisify';
+import { callback2promise } from '../util/promisify';
 var request = require('request');
 
 export class AuthRequest {

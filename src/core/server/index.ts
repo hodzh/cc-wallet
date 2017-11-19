@@ -1,6 +1,7 @@
 import { Mailer } from './mailer/index';
 import { ClusterWorker } from './cluster/worker';
 import { WebServer } from './web/index';
+import {EventEmitterAsync} from './util/event-emitter-async';
 let EventEmitter = require('events').EventEmitter;
 
 let log4js = require('log4js');
@@ -15,25 +16,26 @@ class App {
   auth = require('./auth');
   mail: Mailer = null;
   token = null;
-  eventEmitter = new EventEmitter();
+  eventEmitter = new EventEmitterAsync();
+  private clusterWorker: ClusterWorker;
 
   constructor() {
   }
 
-  on(...args) {
-    this.eventEmitter.on(...args);
+  on(event, handler) {
+    this.eventEmitter.on(event, handler);
   }
 
-  once(...args) {
-    this.eventEmitter.once(...args);
+  once(event, handler) {
+    this.eventEmitter.once(event, handler);
   }
 
-  off(...args) {
-    this.eventEmitter.removeEventEmitter(...args);
+  off(event, handler) {
+    this.eventEmitter.off(event, handler);
   }
 
-  emit(...args) {
-    this.eventEmitter.emit(...args);
+  async emit(event, ...args) {
+    return await this.eventEmitter.emit(event, ...args);
   }
 
   async start(config, modules) {
@@ -65,12 +67,14 @@ class App {
   private async init(config, modules) {
     this.initLog(config.log);
     log.info('app init node', process.version);
-    this.emit('init');
+    await this.emit('init');
     this.config = config;
     this.db.models.user = User;
     this.auth.init(User, this.config);
     this.mail = new Mailer();
     this.token = Token(this.config.token);
+    this.clusterWorker = new ClusterWorker(config.cluster);
+    this.clusterWorker.events.on('shutdown', () => this.emit('shutdown'));
     if (this.config.web.enable) {
       this.web = new WebServer();
     } else {
@@ -97,7 +101,7 @@ class App {
     });
     await this.db.init(this.config.db);
     this.mail.init(this.config.email, this.db.queueService);
-    this.web.init(this.config);
+    this.web.init(this.config, this.clusterWorker);
     this.web.route({
       '/auth/local': require('./auth/local')(config.auth),
       '/api/me': require('./api/user/user')(config.auth, this.token, this.mail, this.auth),

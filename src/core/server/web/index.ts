@@ -1,4 +1,5 @@
 import { ClusterWorker } from '../cluster/worker';
+import {callback2promise} from '../util/promisify';
 let path = require('path');
 let http = require('http');
 
@@ -24,10 +25,14 @@ export class WebServer {
     this.server = http.createServer(this.express);
   }
 
-  init(config) {
+  init(config, clusterWorker) {
+    this.clusterWorker = clusterWorker;
+    this.clusterWorker.events.on('shutdown', async () => {
+      await callback2promise(this.server.close.bind(this.server));
+      log.info('Closed out remaining connections');
+    });
     this.express.disable('x-powered-by');
-    this.clusterWorker = new ClusterWorker(config.cluster, this.server);
-    this.express.use(this.clusterWorker.middleware.bind(this.clusterWorker));
+    this.express.use(this.shutdownMiddleware.bind(this));
     this.express.use(compression());
     this.express.use(bodyParser.urlencoded(config.web.bodyParser.urlencoded));
     this.express.use(bodyParser.json(config.web.bodyParser.json));
@@ -129,5 +134,13 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
         this.routers[key] = routers[key];
       }
     );
+  }
+
+  shutdownMiddleware (req, res, next) {
+    if (!this.clusterWorker.shuttingDown) {
+      return next();
+    }
+    res.set('Connection', 'close');
+    res.status(503).send('Server is in the process of restarting');
   }
 }

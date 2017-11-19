@@ -1,19 +1,23 @@
+import {EventEmitterAsync} from '../util/event-emitter-async';
+
 let log = require('log4js').getLogger('worker');
 
-const DEFAULT_FORCE_TIMEOUT = 1000;
+const DEFAULT_FORCE_TIMEOUT = 300000;
 
 export class ClusterWorker {
+  events: EventEmitterAsync;
   static get isRoot(): boolean {
     if (process.platform === 'win32') {
       return true;
     }
     return process.getuid && process.getuid() === 0;
   }
-  private shuttingDown: boolean;
+  shuttingDown: boolean;
   private config: any;
 
-  constructor(config, private server) {
+  constructor(config) {
     this.config = config || {};
+    this.events = new EventEmitterAsync();
     process.on('SIGINT', () => {
       log.trace('SIGINT');
       this.shutdown();
@@ -40,14 +44,6 @@ export class ClusterWorker {
     }
   }
 
-  middleware (req, res, next) {
-    if (!this.shuttingDown) {
-      return next();
-    }
-    res.set('Connection', 'close');
-    res.status(503).send('Server is in the process of restarting');
-  }
-
   private shutdown() {
     // Don't bother with graceful shutdown on development to speed up round trip
     // if (!process.env.NODE_ENV) return process.exit(1);
@@ -57,15 +53,13 @@ export class ClusterWorker {
     }
     this.shuttingDown = true;
     log.warn('Shutting down');
-
     setTimeout(() => {
-      log.error('Could not close connections in time, forcefully shutting down');
+      log.error('Could not shutdown in time, forcefully shutting down');
       process.exit(1);
     }, this.config.forceTimeout || DEFAULT_FORCE_TIMEOUT);
 
-    this.server.close(() => {
-      log.info('Closed out remaining connections');
-      process.exit();
-    });
+    this.events.emit('shutdown')
+      .catch((err) => {log.error(err);})
+      .then(() => {process.exit();});
   }
 }
