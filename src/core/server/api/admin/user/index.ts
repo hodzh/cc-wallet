@@ -1,11 +1,12 @@
-var controller = require('./controller');
+import { AdminUserConfigController } from './controller';
 
 export = route;
 
 function route(router, auth) {
-  router.get('/', auth.hasRole('admin'), controller.indexPage);
-  router.get('/:id', auth.hasRole('admin'), controller.show);
-  router.put('/:id', auth.hasRole('admin'), controller.update);
-  router.post('/', auth.hasRole('admin'), controller.create);
-  router.delete('/:id', auth.hasRole('admin'), controller.destroy);
+  let controller = new AdminUserConfigController();
+  router.get('/', auth.hasRole('admin'), controller.route(controller.indexPage));
+  router.get('/:id', auth.hasRole('admin'), controller.route(controller.show));
+  router.put('/:id', auth.hasRole('admin'), controller.route(controller.update));
+  router.post('/', auth.hasRole('admin'), controller.route(controller.create));
+  router.delete('/:id', auth.hasRole('admin'), controller.route(controller.destroy));
 }

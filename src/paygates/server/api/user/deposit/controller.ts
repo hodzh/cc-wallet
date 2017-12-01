@@ -1,4 +1,9 @@
+import { RouteControllerUserCollection } from '../../../../../core/server/web/collection-user-controller';
+
 var Deposit = require('../../../model/deposit');
-var CollectionController = require('../../../../../core/server/web/collection-user-controller');
-var collectionController = CollectionController(Deposit);
-export = collectionController;
+
+export class DepositController extends RouteControllerUserCollection {
+  constructor() {
+    super(Deposit);
+  }
+}

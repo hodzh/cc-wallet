@@ -1,10 +1,12 @@
-export = function (config) {
-  return {
-    index: index
-  };
+import { RouteController } from '../../../../../core/server/web/controller';
 
-  function index(req, res) {
-    res.json(Object.keys(config.currency)
-      .map(key => config.currency[key]));
+export class CurrencyController extends RouteController {
+  constructor(private config) {
+    super();
   }
-};
+
+  async index(req, res) {
+    res.json(Object.keys(this.config.currency)
+      .map(key => this.config.currency[key]));
+  }
+}

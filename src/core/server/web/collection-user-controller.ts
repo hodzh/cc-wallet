@@ -1,118 +1,71 @@
-var controller = require('./controller');
+import { RouteController } from './controller';
 
-export = factory;
+export class RouteControllerUserCollection extends RouteController {
 
-function factory(model) {
-  return {
-    index: index,
-    indexPage: indexPage,
-    show: show,
-    create: create,
-    update: update,
-    destroy: destroy
-  };
+  constructor(public model) {
+    super();
+  }
 
   // Gets a list of object
-  function indexPage(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        return model.query({
-          owner: req.user._id
-        }, {
-          page: req.query.page,
-          limit: req.query.limit,
-        });
-      })
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async indexPage(req, res) {
+    const data = await this.model.query({
+      owner: req.user._id,
+    }, {
+      page: req.query.page,
+      limit: req.query.limit,
+    });
+    this.responseWithResult(res, data);
   }
 
 // Gets a list of object
-  function index(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        return model.find({
-          owner: req.user._id
-        }).exec();
-      })
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async index(req, res) {
+    const data = await this.model.find({
+      owner: req.user._id,
+    }).exec();
+    this.responseWithResult(res, data);
   }
 
 // Gets a single object from the DB
-  function show(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        return model.findOne({
-          _id: req.params.id,
-          owner: req.user._id
-        });
-      })
-      .then(controller.handleEntityNotFound(res))
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async show(req, res) {
+    const data = await this.model.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    this.handleEntityNotFound(res, data);
+    this.responseWithResult(res, data);
   }
 
 // Creates a new object in the DB
-  function create(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        let newObject = Object.assign(req.body);
-        newObject.owner = req.user._id;
-        return model.create(newObject);
-      })
-      .then(controller.responseWithResult(res, 201))
-      .catch(controller.handleError(res));
+  async create(req, res) {
+    let newObject = Object.assign(req.body);
+    newObject.owner = req.user._id;
+    const data = await this.model.create(newObject);
+    this.responseWithResult(res, data, 201);
   }
 
 // Updates an existing object in the DB
-  function update(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        if (req.body._id) {
-          delete req.body._id;
-        }
-        return model.findOne({
-          _id: req.params.id,
-          owner: req.user._id
-        });
-      })
-      .then(controller.handleEntityNotFound(res))
-      .then(saveUpdates(req.body))
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async update(req, res) {
+    if (req.body._id) {
+      delete req.body._id;
+    }
+    const data = await this.model.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    this.handleEntityNotFound(res, data);
+    data.merge(res.body);
+    await data.save();
+    this.responseWithResult(res, data);
   }
 
 // Deletes a object from the DB
-  function destroy(req, res) {
-    return Promise.resolve()
-      .then(function () {
-        return model.findOne({
-          _id: req.params.id,
-          owner: req.user._id
-        });
-      })
-      .then(controller.handleEntityNotFound(res))
-      .then(removeEntity(res))
-      .catch(controller.handleError(res));
+  async destroy(req, res) {
+    const data = await this.model.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    this.handleEntityNotFound(res, data);
+    await data.remove();
+    res.status(204).end();
   }
-
-}
-
-function saveUpdates(updates) {
-  return function (entity) {
-    entity.merge(updates);
-    return entity.save();
-  };
-}
-
-function removeEntity(res) {
-  return function (entity) {
-    if (entity) {
-      return entity.remove()
-        .then(function () {
-          res.status(204).end();
-        });
-    }
-  };
 }

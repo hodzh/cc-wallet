@@ -1,19 +1,22 @@
-import Ajv = require('ajv');
 import { ValidateError } from '../validate/validate-error';
+import { HttpError } from './http-error';
+
 let log = require('log4js').getLogger('web');
 
-export = {
-  handleError: handleError,
-  responseWithResult: responseWithResult,
-  handleEntityNotFound: handleEntityNotFound,
-  checkOwner: checkOwner
-};
+export class RouteController {
+  constructor() {
+  }
 
-function handleError(res, statusCode?) {
-  return function (err) {
+  handleError(res, err, statusCode?) {
     if (err instanceof ValidateError) {
       res.status(statusCode || 422).json({
         messages: err.messages,
+      });
+      return;
+    }
+    if (err instanceof HttpError) {
+      res.status(err.status || statusCode || 500).json({
+        message: err.message,
       });
       return;
     }
@@ -21,35 +24,30 @@ function handleError(res, statusCode?) {
     res.status(statusCode || 500).json({
       message: err.message,
     });
-  };
-}
+  }
 
-function responseWithResult(res, statusCode = 200) {
-  return function (entity) {
-    if (entity) {
-      res.status(statusCode).json(entity);
-    }
-  };
-}
+  responseWithResult(res, entity, statusCode: number = 200) {
+    res.status(statusCode).json(entity);
+  }
 
-function handleEntityNotFound(res) {
-  return function (entity) {
+  handleEntityNotFound(res, entity) {
     if (!entity) {
-      res.status(404).end();
-      return null;
+      throw new HttpError('not found', 404);
     }
-    return entity;
-  };
-}
+  }
 
-function checkOwner(req) {
-  return function (entity) {
-    if (!entity) {
-      return null;
-    }
+  checkOwner(req, entity) {
     if (entity.owner.toString() !== req.user._id.toString()) {
-      return null;
+      throw new HttpError('not found', 404);
     }
-    return entity;
-  };
+  }
+
+  route(handler) {
+    return (req, res) => {
+      handler.call(this, req, res)
+        .catch((error) => {
+          this.handleError(res, error);
+        });
+    };
+  }
 }

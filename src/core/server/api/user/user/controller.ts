@@ -1,12 +1,13 @@
 import Recaptcha = require('../../../captcha/recaptcha');
-let log = require('log4js').getLogger('token');
-import controller = require('../../../web/controller');
 import User = require('../../../model/user');
+
+let log = require('log4js').getLogger('token');
 import { Validator } from '../../../validate/index';
 import {
   MAX_PASSWORD_LENGTH,
-  MIN_PASSWORD_LENGTH
+  MIN_PASSWORD_LENGTH,
 } from '../../../../common/validate';
+import { RouteController } from '../../../web/controller';
 
 let emailSchema = {
   type: 'string',
@@ -15,7 +16,7 @@ let emailSchema = {
 let passwordSchema = {
   type: 'string',
   maxLength: MAX_PASSWORD_LENGTH,
-  minLength: MIN_PASSWORD_LENGTH
+  minLength: MIN_PASSWORD_LENGTH,
 };
 let tokenSchema = {
   type: 'string',
@@ -65,204 +66,144 @@ const setPasswordSchema = {
 };
 Validator.addSchema(setPasswordSchema, 'setPassword');
 
-export = controllerFactory;
+export class UserController extends RouteController {
 
-function controllerFactory(tokenService, mail, auth) {
-
-  tokenService.on('confirmEmail', confirmEmail);
-
-  return {
-    create: create,
-    changePassword: changePassword,
-    resetPassword: resetPassword,
-    setPassword: setPassword,
-    me: me,
-    emailVerify: emailVerify
-  };
+  constructor(public tokenService, public mail, public auth) {
+    super();
+    tokenService.on('confirmEmail', (params) => this.confirmEmail(params));
+  }
 
   /**
    * Change a users password
    */
-  function changePassword(req, res) {
-    return Promise.resolve()
-      .then(() => {
-        return Validator.validate('changePassword', req.body);
-      })
-      .then(() => {
-        let userId = req.user._id;
-        return User.findById(userId);
-      })
-      .then(user => {
-        let oldPass = String(req.body.oldPassword);
-        let newPass = String(req.body.password);
-        if (user.authenticate(oldPass)) {
-          user.password = newPass;
-          return user.save()
-            .then(() => {
-              res.status(204).end();
-            })
-            .catch(controller.handleError(res));
-        } else {
-          return res.status(403).end();
-        }
-      })
-      .catch(controller.handleError(res));
+  async changePassword(req, res) {
+    await Validator.validate('changePassword', req.body);
+    let userId = req.user._id;
+    const user = await User.findById(userId);
+    let oldPass = String(req.body.oldPassword);
+    let newPass = String(req.body.password);
+    if (user.authenticate(oldPass)) {
+      user.password = newPass;
+      await user.save();
+      res.status(204).end();
+    } else {
+      return res.status(403).end();
+    }
   }
 
   /**
    * Get my info
    */
-  function me(req, res) {
-
-    return Promise.resolve()
-      .then(() => {
-        let userId = req.user._id;
-        return User.findOne({_id: userId}, '-salt -password');
-      })
-      .then(user => {
-        if (!user) {
-          return res.status(401).end();
-        }
-        // don't ever give out the password or salt
-        res.json(user.sanitize());
-      })
-      .catch(controller.handleError(res));
+  async me(req, res) {
+    let userId = req.user._id;
+    const user = await User.findOne({_id: userId}, '-salt -password');
+    if (!user) {
+      return res.status(401).end();
+    }
+    // don't ever give out the password or salt
+    res.json(user.sanitize());
   }
 
   /**
    * Creates a new user
    */
-  function create(req, res) {
-    return Promise.resolve()
-      .then(() => Recaptcha.RecaptchaService.verify(req))
-      .then(() => {
-        return Validator.validate('createUser', req.body);
-      })
-      .then(() => {
-        let user = new User({
-          email: req.body.email,
-          password: req.body.password,
-          provider: 'local',
-          role: auth.isEmailVerify() ? 'applicant' : 'user',
-          emailVerify: new Date(),
-          resetPassword: new Date()
-        });
-        return user.save();
-      })
-      .then(user => {
-        let code = auth.signToken(user._id, user.role);
-        res.json({
-          token: code,
-          user: user.sanitize()
-        });
-        return user;
-      })
-      .then(user => {
-        sendConfirmEmail(user, true)
-          .catch((err) => {
-            log.error(err);
-          });
-      })
-      .catch(controller.handleError(res));
-  }
-
-  /**
-   * Reset a user password
-   */
-  function resetPassword(req, res) {
-    return Promise.resolve()
-    // .then(() => Recaptcha.RecaptchaService.verify(req))
-      .then(() => true)
-      .then(controller.responseWithResult(res))
-      .then(() => {
-        return Validator.validate('resetPassword', req.body);
-      })
-      .then(() => User.findOne({
-        email: req.body.email
-      }))
-      .then((user) => {
-        if (!user) {
-          return;
-        }
-        if (user.resetPassword) {
-          const resetPasswordInterval = 60 /*min*/;
-          let nextTime = user.resetPassword.getTime() +
-            resetPasswordInterval * 60 * 1000;
-          if (nextTime > Date.now()) {
-            return;
-          }
-        }
-
-        // create verification code
-        let code = tokenService.create({
-          type: 'resetPassword',
-          user: user._id.toString(),
-        });
-
-        // send email with code
-        return mail.send({
-          options: {
-            to: user.email
-          },
-          key: 'resetPassword',
-          context: {
-            token: code
-          }
-        });
-      })
+  async create(req, res) {
+    await Recaptcha.RecaptchaService.verify(req);
+    await Validator.validate('createUser', req.body);
+    let user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      provider: 'local',
+      role: this.auth.isEmailVerify() ? 'applicant' : 'user',
+      emailVerify: new Date(),
+      resetPassword: new Date(),
+    });
+    await user.save();
+    let code = this.auth.signToken(user._id, user.role);
+    res.json({
+      token: code,
+      user: user.sanitize(),
+    });
+    await this.sendConfirmEmail(user, true)
       .catch((err) => {
         log.error(err);
       });
   }
 
   /**
+   * Reset a user password
+   */
+  async resetPassword(req, res) {
+    this.responseWithResult(res, true);
+    try {
+      await Validator.validate('resetPassword', req.body);
+      const user = await User.findOne({
+        email: req.body.email,
+      });
+      if (!user) {
+        return;
+      }
+      if (user.resetPassword) {
+        const resetPasswordInterval = 60 /*min*/;
+        let nextTime = user.resetPassword.getTime() +
+          resetPasswordInterval * 60 * 1000;
+        if (nextTime > Date.now()) {
+          return;
+        }
+      }
+
+      // create verification code
+      let code = this.tokenService.create({
+        type: 'resetPassword',
+        user: user._id.toString(),
+      });
+
+      // send email with code
+      await this.mail.send({
+        options: {
+          to: user.email,
+        },
+        key: 'resetPassword',
+        context: {
+          token: code,
+        },
+      });
+    } catch (err) {
+      log.error(err);
+    }
+  }
+
+  /**
    * Set a user password
    */
-  function setPassword(req, res) {
-    return Promise.resolve()
-      .then(() => {
-        return Validator.validate('setPassword', req.body);
-      })
-      .then(() => {
-        let token = req.body.token;
-        if (!token) {
-          throw new Error('undefined token');
-        }
-        return tokenService.verify(token);
-      })
-      .then(token => {
-        if (token.type !== 'resetPassword') {
-          throw new Error('bad token type');
-        }
-        return token;
-      })
-      .then((token) => User.findById(token.user))
-      .then((user) => {
-        if (!user) {
-          throw new Error('bad user id');
-        }
-        user.password = req.body.password;
-        return user.save();
-      })
-      .then(() => true)
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async setPassword(req, res) {
+    await Validator.validate('setPassword', req.body);
+    let token = req.body.token;
+    if (!token) {
+      throw new Error('undefined token');
+    }
+    await this.tokenService.verify(token);
+    if (token.type !== 'resetPassword') {
+      throw new Error('bad token type');
+    }
+    const user = await User.findById(token.user);
+    if (!user) {
+      throw new Error('bad user id');
+    }
+    user.password = req.body.password;
+    await user.save();
+    this.responseWithResult(res, true);
   }
 
-  function emailVerify(req, res) {
-    return Promise.resolve()
-      .then(() => sendConfirmEmail(req.user, false))
-      .then(user => {
-        res.json({
-          emailVerify: req.user.emailVerify
-        });
-        return user;
-      })
-      .catch(controller.handleError(res));
+  async emailVerify(req, res) {
+    await this.sendConfirmEmail(req.user, false);
+    res.json({
+      emailVerify: req.user.emailVerify,
+    });
   }
 
-  function sendConfirmEmail(user, firstTime) {
-    if (!auth.isEmailVerify()) {
+  async sendConfirmEmail(user, firstTime) {
+    if (!this.auth.isEmailVerify()) {
       return;
     }
     if (user.role !== 'applicant') {
@@ -280,50 +221,39 @@ function controllerFactory(tokenService, mail, auth) {
       }
     }
 
-    return Promise.resolve()
-      .then(() => {
-        if (firstTime) {
-          return;
-        }
-        user.emailVerify = new Date();
-        return user.save();
-      })
-      .then(() => {
-        // create verification code
-        let code = tokenService.create({
-          type: 'confirmEmail',
-          user: user._id
-        });
-        // send email with code
-        return mail.send({
-          options: {
-            to: user.email
-          },
-          key: 'confirmEmail',
-          context: {
-            token: code
-          }
-        });
-      });
+    if (firstTime) {
+      return;
+    }
+    user.emailVerify = new Date();
+    await user.save();
+    // create verification code
+    let code = this.tokenService.create({
+      type: 'confirmEmail',
+      user: user._id,
+    });
+    // send email with code
+    this.mail.send({
+      options: {
+        to: user.email,
+      },
+      key: 'confirmEmail',
+      context: {
+        token: code,
+      },
+    });
   }
 
-  function confirmEmail(token) {
-    return Promise.resolve()
-      .then(() => User.update({
-        _id: token.user,
-        role: 'applicant'
-      }, {
-        $set: {
-          role: 'user'
-        }
-      }))
-      .then(result => {
-        if (!result || !result.nModified) {
-          log.error('fail to confirm email');
-        }
-      })
-      .catch(err => {
-        log.error(err);
-      });
+  async confirmEmail(token) {
+    const result = await User.update({
+      _id: token.user,
+      role: 'applicant',
+    }, {
+      $set: {
+        role: 'user',
+      },
+    });
+    if (!result || !result.nModified) {
+      log.error('fail to confirm email');
+    }
   }
 }

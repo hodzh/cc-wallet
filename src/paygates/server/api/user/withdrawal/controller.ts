@@ -1,6 +1,9 @@
-var Withdrawal = require('../../../model/withdrawal');
-var CollectionController = require('../../../../../core/server/web/collection-user-controller');
-var controller = require('../../../../../core/server/web/controller');
-var collectionController = CollectionController(Withdrawal);
+import { RouteControllerUserCollection } from '../../../../../core/server/web/collection-user-controller';
 
-export = collectionController;
+var Withdrawal = require('../../../model/withdrawal');
+
+export class WithdrawalController extends RouteControllerUserCollection {
+  constructor() {
+    super(Withdrawal);
+  }
+}

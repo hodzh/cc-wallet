@@ -1,11 +1,12 @@
+import { DevDbController } from './controller';
+
 export = function (config) {
 
   return route;
 
   function route(router, auth) {
-    var ControllerFactory = require('./controller');
-    var controller = new ControllerFactory(config);
-    router.get('/clear-all', controller.clearAll.bind(controller));
-    router.get('/add-users', controller.addUsers.bind(controller));
+    var controller = new DevDbController(config);
+    router.get('/clear-all', controller.route(controller.clearAll));
+    router.get('/add-users', controller.route(controller.addUsers));
   }
 }

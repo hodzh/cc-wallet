@@ -1,22 +1,22 @@
-import controllerFactory = require('./controller');
+import { UserController } from './controller';
 
 export = routeFactory;
 
 function routeFactory(config, token, mailer, auth) {
 
-  let controller = controllerFactory(token, mailer, auth);
+  let controller = new UserController(token, mailer, auth);
   return route;
 
   function route(router) {
-    router.get('/', auth.isAuthenticated(), controller.me);
-    router.put('/password', auth.hasRole('user'), controller.changePassword);
+    router.get('/', auth.isAuthenticated(), controller.route(controller.me));
+    router.put('/password', auth.hasRole('user'), controller.route(controller.changePassword));
     if (config.resetPassword) {
-      router.put('/reset-password', controller.resetPassword);
+      router.put('/reset-password', controller.route(controller.resetPassword));
     }
-    router.put('/set-password', controller.setPassword);
-    router.put('/email-verify', auth.hasRole('applicant'), controller.emailVerify);
+    router.put('/set-password', controller.route(controller.setPassword));
+    router.put('/email-verify', auth.hasRole('applicant'), controller.route(controller.emailVerify));
     if (config.signup) {
-      router.post('/', controller.create);
+      router.post('/', controller.route(controller.create));
     }
   }
 }

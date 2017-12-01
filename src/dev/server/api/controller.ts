@@ -1,26 +1,23 @@
-var controller = require('../../../core/server/web/controller');
+import { RouteController } from '../../../core/server/web/controller';
+
 var mongoose = require('mongoose');
 var User = require('../../../core/server/model/user');
 
-class DevDbController {
+export class DevDbController extends RouteController {
   constructor(private config) {
+    super();
   }
 
-  clearAll(req, res) {
-    return Promise.all(Object.keys(mongoose.models)
-      .map(model => mongoose.models[model].remove()))
-      .then(() => true)
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async clearAll(req, res) {
+    await Promise.all(Object.keys(mongoose.models)
+      .map(model => mongoose.models[model].remove()));
+    this.responseWithResult(res, true);
   }
 
-  addUsers(req, res) {
-    return Promise.all(this.config.users
-      .map(model => User.addUser(model)))
-      .then(() => true)
-      .then(controller.responseWithResult(res))
-      .catch(controller.handleError(res));
+  async addUsers(req, res) {
+    await Promise.all(this.config.users
+      .map(model => User.addUser(model)));
+    this.responseWithResult(res, true);
   }
 }
 
-export = DevDbController;

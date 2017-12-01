@@ -1,12 +1,13 @@
+import { TokenController } from './controller';
+
 export = routeFactory;
 
 function routeFactory(token) {
 
-  var controllerFactory = require('./controller');
-  var controller = controllerFactory(token);
+  var controller = new TokenController(token);
   return route;
 
   function route(router, auth) {
-    router.get('/:token', /*auth.isAuthenticated(),*/ controller.token);
+    router.get('/:token', /*auth.isAuthenticated(),*/ controller.route(controller.tokenVerify));
   }
 }

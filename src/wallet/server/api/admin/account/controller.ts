@@ -1,31 +1,24 @@
+import { RouteControllerCollection } from '../../../../../core/server/web/collection-controller';
+
 var Account = require('../../../model/account');
 var Transaction = require('../../../model/transaction');
-var controller = require('../../../../../core/server/web/controller');
-var CollectionController = require('../../../../../core/server/web/collection-controller');
-var collectionController = CollectionController(Account);
-export = collectionController;
 
-collectionController.income = function (req, res) {
-  return Promise.resolve()
-    .then(function () {
-      return Transaction
-        .income(req.user._id, req.params.id, req.body);
-    })
-    .then(controller.handleEntityNotFound(res))
-    .then(controller.responseWithResult(res))
-    .catch(controller.handleError(res));
-};
+export class AdminAccountController extends RouteControllerCollection {
+  constructor() {
+    super(Account);
+  }
 
-collectionController.outcome = function (req, res) {
-  return Promise.resolve()
-    .then(function () {
-      return Transaction
-        .outcome(req.user._id, req.params.id, req.body);
-    })
-    .then(controller.handleEntityNotFound(res))
-    /*.then(function (result) {
-     return result.accountFrom.toObject();
-     })*/
-    .then(controller.responseWithResult(res))
-    .catch(controller.handleError(res));
-};
+  async income(req, res) {
+    let result = await Transaction
+          .income(req.user._id, req.params.id, req.body);
+    this.handleEntityNotFound(res, result);
+    this.responseWithResult(res, result);
+  }
+
+  async outcome(req, res) {
+    let result = await Transaction
+          .outcome(req.user._id, req.params.id, req.body);
+    this.handleEntityNotFound(res, result);
+    this.responseWithResult(res, result);
+  }
+}

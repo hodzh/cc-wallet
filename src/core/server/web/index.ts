@@ -1,5 +1,6 @@
 import { ClusterWorker } from '../cluster/worker';
 import {callback2promise} from '../util/promisify';
+
 let path = require('path');
 let http = require('http');
 
@@ -14,11 +15,12 @@ let morgan = require('morgan');
 let log = require('log4js').getLogger('web');
 
 export class WebServer {
-
   express;
   server;
   routers = {};
   private clusterWorker: ClusterWorker;
+  private config: any;
+  private auth: any;
 
   constructor() {
     this.express = express();
@@ -46,8 +48,8 @@ export class WebServer {
         stream: {
           write: (msg) => {
             log.info(msg.slice(0, -1));
-          }
-        }
+          },
+        },
       }));
     }
 
@@ -74,25 +76,12 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
   }
 
   beforeStart(config, auth) {
+    this.config = config;
+    this.auth = auth;
 
     // use api
 
-    registerApi(this.routers, this, '');
-
-    function registerApi(routers, router, routePath) {
-      Object.keys(routers).forEach((apiKey) => {
-        let api = routers[apiKey];
-        let apiRouter = express.Router();
-        let apiPath = [routePath, apiKey].join('');
-        if (typeof api === 'function') {
-          api(apiRouter, auth);
-        } else {
-          registerApi(api, apiRouter, apiPath);
-        }
-        log.info('route', apiPath);
-        router.express.use(apiKey, apiRouter);
-      });
-    }
+    this.registerApi(this.routers, this, '');
 
     if (config.static) {
 
@@ -103,37 +92,53 @@ ${config.http.host || '0.0.0.0'}:${config.http.port}`);
 
       // render index.html otherwise
 
-      this.express.get('/*', renderRoot);
+      this.express.get('/*', this.renderRoot.bind(this));
 
       log.info('serving static files from', staticRoot);
     }
 
     // error handler has to be last
 
-    this.express.use(onError);
-
-    function onError(err, req, res, next) {
-      log.error('on error', err);
-      let code = 500;
-      let msg = {message: 'Internal Server Error'};
-      return res.status(code).json(msg);
-    }
-    function renderRoot(req, res) {
-      if (req.originalUrl !== '/') {
-        log.error(req.originalUrl, 'not found');
-      }
-      let indexPath = path.join(path.resolve(config.static), 'index.html');
-      log.trace(indexPath);
-      res.sendFile(indexPath);
-    }
+    this.express.use(this.onError.bind(this));
   }
 
   route(routers) {
     Object.keys(routers).forEach(
       (key) => {
         this.routers[key] = routers[key];
-      }
+      },
     );
+  }
+
+  onError(err, req, res, next) {
+    log.error('on error', err);
+    let code = 500;
+    let msg = {message: 'Internal Server Error'};
+    return res.status(code).json(msg);
+  }
+
+  renderRoot(req, res) {
+    if (req.originalUrl !== '/') {
+      log.error(req.originalUrl, 'not found');
+    }
+    let indexPath = path.join(path.resolve(this.config.static), 'index.html');
+    log.trace(indexPath);
+    res.sendFile(indexPath);
+  }
+
+  registerApi(routers, router, routePath) {
+    Object.keys(routers).forEach((apiKey) => {
+      let api = routers[apiKey];
+      let apiRouter = express.Router();
+      let apiPath = [routePath, apiKey].join('');
+      if (typeof api === 'function') {
+        api(apiRouter, this.auth);
+      } else {
+        this.registerApi(api, apiRouter, apiPath);
+      }
+      log.info('route', apiPath);
+      router.express.use(apiKey, apiRouter);
+    });
   }
 
   shutdownMiddleware (req, res, next) {

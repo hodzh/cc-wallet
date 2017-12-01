@@ -1,18 +1,15 @@
+import { RouteController } from '../../../web/controller';
+
 var log = require('log4js').getLogger('token');
-var controller = require('../../../web/controller');
-export = controllerFactory;
 
-function controllerFactory(token) {
-  return {
-    token: tokenVerify
-  };
+export class TokenController extends RouteController {
 
-  function tokenVerify(req, res) {
-    return Promise.resolve()
-      .then(() => token.verify(req.params.token))
-      .then(() => {
-        res.redirect('/');
-      })
-      .catch(controller.handleError(res));
+  constructor(public token) {
+    super();
+  }
+
+  async tokenVerify(req, res) {
+    await this.token.verify(req.params.token);
+    res.redirect('/');
   }
 }

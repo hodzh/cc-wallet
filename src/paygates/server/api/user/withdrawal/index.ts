@@ -1,11 +1,13 @@
+import { WithdrawalController } from './controller';
+
 export = routeFactory;
 
-function routeFactory(game) {
-  var controller = require('./controller');
+function routeFactory() {
+  var controller = new WithdrawalController();
   return route;
 
   function route(router, auth) {
-    router.get('/', auth.hasRole('user'), controller.indexPage);
-    router.get('/:id', auth.hasRole('user'), controller.show);
+    router.get('/', auth.hasRole('user'), controller.route(controller.indexPage));
+    router.get('/:id', auth.hasRole('user'), controller.route(controller.show));
   }
 }
