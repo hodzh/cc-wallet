@@ -1,9 +1,10 @@
 import { IDocument } from '../../../../core/client/common/document';
+import { IDecimal } from '../../../common/decimal';
 
 export interface Account extends IDocument {
-  fee: string;
-  decimal: number;
-  code: string;
-  balance: string;
+  balance: IDecimal;
   currency: string;
+  currencyName: string;
+  decimal: number;
+  withdrawalFee: IDecimal;
 }

@@ -29,7 +29,7 @@ module.exports = function({
     context  : root,
     target   : 'node',
     resolve  : {
-      // root: rootDir,
+      // root: rootDir,moduleServer
       extensions: [
         '.ts',
         '.js',
@@ -82,11 +82,21 @@ module.exports = function({
             "src/app/*/client/**/*",
             /\.spec\.ts$/,
             /\.e2e\.ts$/,
-            /node_modules/
+            /node_modules/,
+            "**/*.spec.ts"
           ]
         },
         {test: /\.json$/, loader: 'raw-loader'}
-      ]
+      ],
+      noParse: [
+        /zone\.js\/dist\/.+/,
+        /reflect-metadata/,
+        /es(6|7)-.+/,
+        /\.zone-microtask/,
+        /\.long-stack-trace-zone/,
+        /jwt-decode\.js$/,
+        /\.spec\.js$/,
+      ],
     },
     externals: checkNodeImport,
     node     : {

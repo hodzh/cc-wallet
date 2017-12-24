@@ -58,13 +58,13 @@ export class FilteredAccountDataSource extends DataSourceDecorator<Account> {
     }
     return accounts.filter((account: Account): boolean => {
       if (searchString) {
-        if (account.code.toLowerCase().indexOf(searchString.toLowerCase()) === -1
+        if (account.currency.toLowerCase().indexOf(searchString.toLowerCase()) === -1
           && account.currency.toLowerCase().indexOf(searchString.toLowerCase()) === -1) {
           return false;
         }
       }
       if (hideZeroBalance) {
-        if (!account.balance || account.balance === '0') {
+        if (!account.balance || Number(account.balance.$numberDecimal) === 0) {
           return false;
         }
       }

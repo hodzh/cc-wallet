@@ -1,74 +1,73 @@
 import { Injectable } from '@angular/core';
-import {
-  Headers,
-  Http,
-  RequestMethod,
-  RequestOptionsArgs,
-  Response
-} from '@angular/http';
 import { AuthToken } from './auth-token';
 import { Observable } from 'rxjs/Observable';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 
 @Injectable()
 export class AuthHttp {
-  constructor(private http: Http,
-              private authToken: AuthToken) {
+  constructor(
+    private http: HttpClient,
+    private authToken: AuthToken,
+  ) {
   }
 
-  get(url: string, params?: RequestOptionsArgs): Observable<Response> {
-    return this.request(url, Object.assign({
-      method: RequestMethod.Get
-    }, params));
+  get<T>(url: string, params?: any): Observable<T> {
+    return this.request<T>('get', url, {params});
   }
 
-  post(url: string, body?: any, params?: RequestOptionsArgs): Observable<Response> {
-    return this.request(url, Object.assign({
-      body: body,
-      method: RequestMethod.Post
-    }, params));
+  post<T>(url: string, body?: any, params?: any): Observable<T> {
+    return this.request<T>('post', url, {body, params});
   }
 
-  put(url: string, body?: any, options?: RequestOptionsArgs): Observable<Response> {
-    return this.request(url, Object.assign({
-      body: body,
-      method: RequestMethod.Put
-    }, options));
+  put<T>(url: string, body?: any, params?: any): Observable<T> {
+    return this.request<T>('put', url, {body, params});
   }
 
-  delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
-    return this.request(url, Object.assign({
-      method: RequestMethod.Delete
-    }, options));
+  delete<T>(url: string, params?: any): Observable<T> {
+    return this.request<T>('delete', url, {params});
   }
 
-  private request(url: string,
-                  options: RequestOptionsArgs): Observable<Response> {
+  private request<T>(method: string, url: string, options: {
+    body?: any;
+    headers?: HttpHeaders | {
+      [header: string]: string | string[];
+    };
+    params?: HttpParams | {
+      [param: string]: string | string[];
+    };
+    reportProgress?: boolean;
+    withCredentials?: boolean;
+  }): Observable<T> {
 
     let request: any;
 
     if (this.authToken.isExpired()) {
-      return new Observable<Response>((obs: any) => {
+      return new Observable<T>((obs: any) => {
         obs.error(new Error('No JWT present'));
       });
     }
-    let authOptions = Object.assign({}, options);
+    let authOptions = Object.assign({
+      observe: 'body',
+      // responseType: 'text',
+    }, options);
     authOptions.headers = this.createHeader();
-    if (typeof authOptions.body !== 'string' &&
-      typeof authOptions.body !== 'undefined') {
-      authOptions.body = JSON.stringify(options.body);
-    }
-    request = this.http.request(url, authOptions)
+    request = this.http.request<T>(method, url, authOptions)
       .catch(
-        (error: any) => {
+        (error: HttpErrorResponse) => {
           if (error.status === 401) {
             if (this.authToken.refreshToken) {
               return this.refresh()
-                .flatMap((refreshResult: Response): Observable<Response> => {
-                  this.authToken.token = refreshResult.json().token;
+                .flatMap((refreshResult: any): Observable<any> => {
+                  this.authToken.token = refreshResult.token;
                   authOptions.headers = this.createHeader();
                   return this.http.request(url, authOptions);
                 })
-                .catch(error => {
+                .catch((error: HttpErrorResponse) => {
                   if (error.status === 401) {
                     this.authToken.reset();
                   }
@@ -79,30 +78,34 @@ export class AuthHttp {
             return Observable.throw(error);
           }
           return Observable.throw(error);
-        }
+        },
       )
     ;
 
     return request;
   }
 
-  private refresh(): Observable<Response> {
-    let body = JSON.stringify({
+  private refresh(): Observable<any> {
+    let body = {
       refreshToken: this.authToken.refreshToken,
-    });
+    };
     let request = this.http.post(
       '/auth/local/refresh',
       body, {
-        headers: this.createHeader()
-      });
+        headers: this.createHeader(),
+      },
+    );
     return request;
   }
 
-  private createHeader(): Headers {
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.authToken.token);
+  private createHeader(): {
+    [header: string]: string | string[];
+  } {
+    let headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' +this.authToken.token,
+    };
     return headers;
   }
 }

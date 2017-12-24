@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { AdminAccount } from './account';
 import { PageDataSource } from '../../../../core/client/common/page-data-source';
 import { AdminAccountResource } from './account.resource';
-import { CurrencyDataSource } from '../../currency/currency-data-source';
 import { Observable } from 'rxjs';
 import { Currency } from '../../currency/currency';
+import { AdminCurrencyDataSource } from '../currency/currency-data-source';
+import { AdminCurrency } from '../index';
 
 export interface TransactionParams {
   amount: string;
@@ -25,18 +26,18 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
   private mergeAccounts: Observable<AdminAccount[]>;
 
   constructor(resource: AdminAccountResource,
-              private currencyDataSource: CurrencyDataSource) {
+              private currencyDataSource: AdminCurrencyDataSource) {
     super(resource, {
       paginate: true,
-      sortable: true
+      sortable: true,
     });
 
     this.mergeAccounts = this.documentsSubject.asObservable()
       .combineLatest(
         this.currencyDataSource.documents,
         (accounts: AdminAccount[],
-         currencies: Currency[]): AdminAccount[] =>
-          this.updateAccountCurrency(accounts, currencies)
+         currencies: AdminCurrency[]): AdminAccount[] =>
+          this.updateAccountCurrency(accounts, currencies),
       );
   }
 
@@ -59,17 +60,17 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
   }
 
   private updateAccountCurrency(accounts: AdminAccount[],
-                                currencies: Currency[]): AdminAccount[] {
+                                currencies: AdminCurrency[]): AdminAccount[] {
     if (!accounts || !currencies) {
       return [];
     }
     accounts.forEach(account => {
       let currency = currencies.find(currency =>
-      account.currency === currency.name);
+      account.currency === currency.code);
       if (currency) {
-        account.decimal = currency.decimal;
-        account.code = currency.code;
-        account.fee = currency.fee;
+        account.currencyInfo = currency;
+      } else {
+        console.error('unknown currency');
       }
     });
     return accounts;

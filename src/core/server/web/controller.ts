@@ -26,18 +26,18 @@ export class RouteController {
     });
   }
 
-  responseWithResult(res, entity, statusCode: number = 200) {
-    res.status(statusCode).json(entity);
+  responseWithResult(res, data, statusCode: number = 200) {
+    res.status(statusCode).json(data);
   }
 
-  handleEntityNotFound(res, entity) {
-    if (!entity) {
+  handleEntityNotFound(res, data) {
+    if (!data) {
       throw new HttpError('not found', 404);
     }
   }
 
-  checkOwner(req, entity) {
-    if (entity.owner.toString() !== req.user._id.toString()) {
+  checkOwner(req, data) {
+    if (data.owner.toString() !== req.user._id.toString()) {
       throw new HttpError('not found', 404);
     }
   }

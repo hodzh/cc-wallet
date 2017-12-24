@@ -81,7 +81,7 @@ function transactionProcess(schema, Account) {
       },
       {
         $inc: {
-          balance: transaction.amount.negate()
+          balance: transaction.amount.negate().toString()
         },
         $pull: {pendingTransactions: transaction._id}
       })
@@ -103,7 +103,7 @@ function transactionProcess(schema, Account) {
       },
       {
         $inc: {
-          balance: transaction.amount
+          balance: transaction.amount.toString()
         },
         $pull: {pendingTransactions: transaction._id}
       })
@@ -127,7 +127,7 @@ function transactionProcess(schema, Account) {
       },
       {
         $inc: {
-          balance: transaction.amount
+          balance: transaction.amount.toString()
         },
         $push: {
           pendingTransactions: transaction._id
@@ -143,11 +143,14 @@ function transactionProcess(schema, Account) {
   function transactionFrom(transaction) {
     return Account.update(
       {
-        _id: transaction.from
+        _id: transaction.from,
+        pendingTransactions: {
+          $ne: transaction._id
+        }
       },
       {
         $inc: {
-          balance: transaction.amount.negate()
+          balance: transaction.amount.negate().toString()
         },
         $push: {
           pendingTransactions: transaction._id

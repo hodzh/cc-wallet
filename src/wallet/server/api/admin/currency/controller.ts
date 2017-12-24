@@ -1,8 +1,10 @@
+
 import { Currency } from '../../../model/currency';
 import { RouteControllerCollection } from '../../../../../core/server/web/collection-controller';
 
-export class CurrencyController extends RouteControllerCollection {
+export class AdminCurrencyController extends RouteControllerCollection {
   constructor() {
     super(Currency);
   }
+
 }

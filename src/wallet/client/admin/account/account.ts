@@ -1,9 +1,9 @@
 import { IDocument } from '../../../../core/client/common/document';
+import { AdminCurrency } from '../currency/currency';
 
 export interface AdminAccount extends IDocument {
-  fee: string;
+  type: string;
   balance: string;
   currency: string;
-  decimal: number;
-  code: string;
+  currencyInfo: AdminCurrency;
 }

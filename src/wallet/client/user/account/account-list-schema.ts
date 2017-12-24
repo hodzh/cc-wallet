@@ -1,23 +1,23 @@
-import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
+import { DECIMAL_TEXT_CONVERTER } from '../../../common/decimal-text-converter';
 export const ACCOUNT_LIST_ACTIONS = [];
 
 export const ACCOUNT_LIST_SCHEMA = [
   {
-    title: 'code',
-    field: 'code'
+    title: 'Coin',
+    field: 'currency',
   },
   {
-    title: 'currency',
-    field: 'currency'
+    title: 'Name',
+    field: 'currencyName',
   },
   {
-    title: 'balance',
+    title: 'Balance',
     field: 'balance',
-    converter: CURRENCY_TEXT_CONVERTER
+    converter: DECIMAL_TEXT_CONVERTER,
   },
   {
-    title: 'actions',
+    title: 'Actions',
     type: 'actions',
-    actions: ACCOUNT_LIST_ACTIONS
+    actions: ACCOUNT_LIST_ACTIONS,
   }
 ];

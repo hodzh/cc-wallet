@@ -75,7 +75,7 @@ export = function (schema, pluginOptions) {
       ])
       .then(([docs, count]) => {
         let result: QueryResult = {
-          docs: docs.map(doc => (doc.sanitize || doc.toObject).call(doc)),
+          docs: docs,
           total: count,
           limit: limit,
         };

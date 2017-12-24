@@ -19,6 +19,7 @@ import { OauthButtonsComponent } from './oauth-buttons/oauth-buttons.component';
 import { CoreModalModule } from './modal/module';
 import { ReCaptchaComponent } from './recaptcha/recaptcha.component';
 import { ReCaptchaService } from './recaptcha/recaptcha-service';
+import { CreateFormComponent } from './grid/create-form.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { ReCaptchaService } from './recaptcha/recaptcha-service';
     InlineEditComponent,
     InlineSelectComponent,
     RowActionsComponent,
+    CreateFormComponent,
 
     OauthButtonsComponent,
 
@@ -60,6 +62,7 @@ import { ReCaptchaService } from './recaptcha/recaptcha-service';
     EmailInputComponent,
     TableComponent,
     PageTableComponent,
+    CreateFormComponent,
     PasswordInputComponent,
     QRCodeComponent,
     OauthButtonsComponent,

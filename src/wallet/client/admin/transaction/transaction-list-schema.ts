@@ -1,37 +1,38 @@
-import { CURRENCY_TEXT_CONVERTER } from '../../../common/currency-text-converter';
+import { DECIMAL_TEXT_CONVERTER } from '../../../common/decimal-text-converter';
+
 export const TRANSACTION_LIST_SCHEMA = [
   {
     title: 'create date',
     field: 'created',
     sortable: 'both',
-    sort: 'desc'
+    sort: 'desc',
   },
   {
     title: 'update date',
     field: 'updated',
-    sortable: 'both'
+    sortable: 'both',
   },
   {
     title: 'status',
-    field: 'status'
+    field: 'status',
   },
   {
     title: 'state',
-    field: 'state'
+    field: 'state',
   },
   {
     title: 'category',
-    field: 'category'
+    field: 'category',
   },
   {
     title: 'currency',
-    field: 'currency'
+    field: 'currency',
   },
   {
     title: 'amount',
     field: 'amount',
     sortable: 'both',
-    converter: CURRENCY_TEXT_CONVERTER
+    converter: DECIMAL_TEXT_CONVERTER,
   },
   {
     title: 'actions',
@@ -39,6 +40,6 @@ export const TRANSACTION_LIST_SCHEMA = [
     actions: [
       {type: 'remove'},
       {type: 'refresh'},
-    ]
+    ],
   }
 ];

@@ -1,85 +1,87 @@
+import { currencies } from '../currencies';
+
 var log = require('log4js').getLogger('wallet');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+const ZEROES = '000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+
 var schema = new Schema({
   type: {
     type: String,
-    required: true
+    required: true,
   },
   owner: {
     type: Schema.ObjectId,
-    required: true
+    required: true,
   },
   currency: {
     type: String,
-    required: true
+    required: true,
   },
   balance: {
-    type: Schema.Types.Long,
-    default: mongoose.Types.Long(0),
-    required: true
+    type: Schema.Types.Decimal,
+    // default: Schema.Types.Decimal('0'),
+    required: true,
   },
   enable: {
     type: Boolean,
     default: true,
-    required: true
+    required: true,
   },
   pendingTransactions: [
     {
       type: Schema.ObjectId,
-      ref: 'Transaction'
-    }
-  ]
+      ref: 'Transaction',
+    },
+  ],
 }, {
-  collection: 'account'
+  collection: 'account',
 });
 
-schema.index({
+schema.index(
+  {
     owner: 1,
     type: 1,
-    currency: 1
+    currency: 1,
   },
   {
-    unique: true
-  });
+    unique: true,
+  },
+);
 
-schema.statics.enable = function (index, value) {
-  return this.findOneAndUpdate(
+schema.statics.enable = async function (index, value) {
+  let currency = currencies[index.currency];
+  const account = await this.findOneAndUpdate(
     index,
     {
       $setOnInsert: {
         created: new Date(),
-        balance: 0
+        balance: {
+          $numberDecimal: '0.' + ZEROES.slice(0, currency.decimal)
+        },
       },
       $set: {
         enable: (typeof value === 'undefined' ? true : value),
-        updated: new Date()
-      }
+        updated: new Date(),
+      },
     },
     {
       upsert: true,
       returnNewDocument: true,
-      new: true
-    })
-    .then(
-      function (account) {
-        if (!account) {
-          throw new Error('fail upsert account');
-        }
-        return account;
-      }
-    )
-    .catch(error => {
-      log.error('failed', 'enable', 'account',
-        JSON.stringify(index), 'due', JSON.stringify(error));
-    });
+      new: true,
+    },
+  );
+  if (!account) {
+    throw new Error('fail upsert account');
+  }
+  return account;
 };
 
 schema.statics.getAccounts = function (type, userId) {
   return this.find({
     type: type,
-    owner: userId
+    owner: userId,
   }).exec();
 };
 
@@ -105,13 +107,12 @@ schema.methods.getUserData = function () {
     enable: account.enable,
     currency: account.currency,
     balance: account.balance,
-    address: account.address
+    address: account.address,
   };
 };
-
 
 schema.plugin(require('../../../core/server/db/query-plugin'));
 schema.plugin(require('../../../core/server/db/created-plugin'));
 schema.plugin(require('../../../core/server/db/updated-plugin'));
 
-export = mongoose.model('Account', schema);
+export const Account = mongoose.model('Account', schema);

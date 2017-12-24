@@ -1,5 +1,6 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export abstract class AbstractForm {
   public errors: string = '';
@@ -25,8 +26,8 @@ export abstract class AbstractForm {
         () => {
           this.submitPending = false;
         },
-        (error) => {
-          this.onError(error.json());
+        (error: HttpErrorResponse) => {
+          this.onError(error.error);
           this.submitPending = false;
         }
       );

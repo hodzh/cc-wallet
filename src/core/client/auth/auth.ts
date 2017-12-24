@@ -1,4 +1,3 @@
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -7,6 +6,7 @@ import { AuthResource } from './auth.resource';
 import { UserResource } from './user.resource';
 import { Credentials } from './credentials';
 import { ChangePasswordParams } from './change-password-params';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const guest: IUserProfile = {
   email: '',
@@ -49,8 +49,8 @@ export class Auth {
       response => {
         this.onSignIn(response);
       },
-      error => {
-        console.error(error.text());
+      (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     );
     return req;
@@ -66,8 +66,8 @@ export class Auth {
       response => {
         this.onSignIn(response);
       },
-      error => {
-        console.error(error);
+      (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     );
     return req;
@@ -79,8 +79,8 @@ export class Auth {
       () => {
         this.router.navigate(['/']);
       },
-      error => {
-        console.error(error.text());
+      (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     );
     return req;
@@ -92,14 +92,14 @@ export class Auth {
       () => {
         this.router.navigate(['/signin']);
       },
-      error => {
-        console.error(error.text());
+      (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     );
     return req;
   }
 
-  private onSignIn(response: Response): void {
+  private onSignIn(response): void {
     let res = response;
     this.authToken.token = res['token'];
     this.authToken.refreshToken = res['refreshToken'];
@@ -116,10 +116,10 @@ export class Auth {
     let req = this.accountResource.profile();
     req.subscribe(
       response => {
-        this.currentUser = response.json();
+        this.currentUser = response;
       },
-      error => {
-        console.error(error.text());
+      (error: HttpErrorResponse) => {
+        console.error(error.message);
       }
     );
   }

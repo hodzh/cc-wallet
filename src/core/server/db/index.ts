@@ -1,10 +1,11 @@
 import mongoose = require('mongoose');
-mongoose.Promise = Promise;
-require('mongoose-long')(mongoose);
 import merge = require('mongoose-merge-plugin');
 import { QueueService } from '../queue/queue-service';
+import './decimal';
 const log = require('log4js').getLogger('db');
 const EventEmitter = require('events').EventEmitter;
+mongoose.Promise = Promise;
+mongoose.set('debug', true);
 
 class Database {
   public models: any;

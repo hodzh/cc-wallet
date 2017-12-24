@@ -1,7 +1,8 @@
 import { Mailer } from './mailer/index';
 import { ClusterWorker } from './cluster/worker';
 import { WebServer } from './web/index';
-import {EventEmitterAsync} from './util/event-emitter-async';
+import { EventEmitterAsync } from './util/event-emitter-async';
+
 let EventEmitter = require('events').EventEmitter;
 
 let log4js = require('log4js');
@@ -87,24 +88,21 @@ class App {
         },
       };
     }
-    modules.slice(1).forEach((moduleServer) => {
-      /*let path = require('path');
-       let fs = require('fs');
-       let modulePath = path.join(
-       __dirname, '../../../modules',
-       name, 'server');
-       if (!fs.existsSync(modulePath)) {
-       return;
-       }
-       let moduleServer = require(modulePath);*/
-      moduleServer(this, this.config);
-    });
     await this.db.init(this.config.db);
+    for (let i = 1; i < modules.length; ++i) {
+      const moduleServer = modules[i];
+      await moduleServer(this, this.config);
+    }
     this.mail.init(this.config.email, this.db.queueService);
     this.web.init(this.config, this.clusterWorker);
     this.web.route({
       '/auth/local': require('./auth/local')(config.auth),
-      '/api/me': require('./api/user/user')(config.auth, this.token, this.mail, this.auth),
+      '/api/me': require('./api/user/user')(
+        config.auth,
+        this.token,
+        this.mail,
+        this.auth,
+      ),
       '/api/token': require('./api/user/token')(this.token),
       '/aapi/user': require('./api/admin/user'),
     });

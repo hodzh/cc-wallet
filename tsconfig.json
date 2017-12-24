@@ -18,6 +18,7 @@
   },
   "exclude": [
     "src/**/*.integration.ts",
+    "src/**/*.spec.ts",
     "node_modules",
     "!node_modules/@types/**/*.d.ts"
   ],

@@ -1,0 +1,65 @@
+<form method="post"
+      class="form-horizontal"
+      [formGroup]="form"
+      (ngSubmit)="submit()">
+  <ng-container
+    *ngFor="let column of schema"
+    [ngSwitch]="column.type">
+    <div
+      *ngSwitchCase="'bool'"
+      class="form-group"
+      [class.has-success]="form.controls[column.field]?.valid && submitted"
+      [class.has-error]="!form.controls[column.field]?.valid && submitted"
+    >
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox-inline">
+          <label>
+            <input
+              type="checkbox"
+              [formControl]="form.controls[column.field]"
+            >
+            {{column.field}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngSwitchCase="'text'"
+      class="form-group"
+      [class.has-success]="form.controls[column.field]?.valid && submitted"
+      [class.has-error]="!form.controls[column.field]?.valid && submitted"
+    >
+      <label class="col-sm-2 control-label">{{column.title}}</label>
+      <div class="col-sm-10">
+        <input
+          class="form-control"
+          [formControl]="form.controls[column.field]"
+        >
+      </div>
+      <p
+        class="help-block"
+        *ngIf="submitted && form.controls[column.field]?.errors?.required">
+        Please enter a valid {{column.title}}.
+      </p>
+    </div>
+  </ng-container>
+  <div
+    class="form-group"
+    [class.has-error]="submitted && errors">
+    <button
+      [disabled]="shouldDisableSubmitButton()"
+      class="btn btn-inverse btn-lg btn-login"
+      type="submit">
+      Add
+      <span
+        *ngIf="shouldDisplaySubmitProgress()"
+        class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+      </span>
+    </button>
+    <p
+      class="help-block"
+      *ngIf="submitted && errors">
+      {{errors}}
+    </p>
+  </div>
+</form>

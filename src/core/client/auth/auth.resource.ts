@@ -1,34 +1,37 @@
-import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { contentHeaders } from '../common/headers';
 import { Credentials } from './credentials';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthResource {
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
   }
 
   signin(params: Credentials): Observable<any> {
-    let body = JSON.stringify(params);
     let req = this.http.post(
       '/auth/local',
-      body, {
-        headers: contentHeaders
+      params, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json',
       })
-      .map(res => res.json())
       .share();
     return req;
   }
 
   signup(params: Credentials): Observable<any> {
-    let body = JSON.stringify(params);
     let req = this.http.post(
       '/api/me',
-      body, {
-        headers: contentHeaders
+      params, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json',
       })
-      .map(res => res.json())
       .share();
     return req;
   }

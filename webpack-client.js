@@ -105,7 +105,8 @@ module.exports = function ({
           exclude: [
             /\.spec\.ts$/,
             /\.e2e\.ts$/,
-            /node_modules/
+            /node_modules/,
+            "**/*.spec.ts"
           ],
         },
 
@@ -136,9 +137,10 @@ module.exports = function ({
         /zone\.js\/dist\/.+/,
         /reflect-metadata/,
         /es(6|7)-.+/,
-        /.zone-microtask/,
-        /.long-stack-trace-zone/,
-        /jwt-decode.js$/,
+        /\.zone-microtask/,
+        /\.long-stack-trace-zone/,
+        /jwt-decode\.js$/,
+        /\.spec\.js$/,
       ],
     },
 

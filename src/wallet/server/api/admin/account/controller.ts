@@ -1,7 +1,7 @@
 import { RouteControllerCollection } from '../../../../../core/server/web/collection-controller';
+import { Account } from '../../../model/account';
+import { Transaction } from '../../../model/transaction';
 
-var Account = require('../../../model/account');
-var Transaction = require('../../../model/transaction');
 
 export class AdminAccountController extends RouteControllerCollection {
   constructor() {

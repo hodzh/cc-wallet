@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DbResource {
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
   }
 
   clearAll(): Observable<any> {

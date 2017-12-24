@@ -1,8 +1,9 @@
+import { Account } from '../../../wallet/server/model/account';
+import { Transaction } from '../../../wallet/server/model/transaction';
+
 var mongoose = require('mongoose');
 var log = require('log4js').getLogger('paygates');
 
-var Account = require('../../../wallet/server/model/account');
-var Transaction = require('../../../wallet/server/model/transaction');
 
 var Schema = mongoose.Schema;
 
@@ -32,11 +33,11 @@ var schema = new Schema({
     required: true
   },
   amount: {
-    type: Schema.Types.Long,
+    type: Schema.Types.Decimal,
     required: true
   },
   fee: {
-    type: Schema.Types.Long,
+    type: Schema.Types.Decimal,
     required: true
   },
   status: {

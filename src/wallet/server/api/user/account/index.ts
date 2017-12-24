@@ -2,7 +2,7 @@ import { AccountController } from './controller';
 
 export = routeFactory;
 
-function routeFactory(config) {
+function routeFactory() {
   let controller = new AccountController();
   return route;
 

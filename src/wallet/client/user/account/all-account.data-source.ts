@@ -23,7 +23,7 @@ export class AllAccountDataSource extends DataSourceDecorator<Account> {
         this.currencyDataSource.documents,
         (accounts: Account[],
          currencies: Currency[]): Account[] =>
-          this.updateAccountCurrency(accounts, currencies)
+          this.updateAccountCurrency(accounts, currencies),
       );
   }
 
@@ -33,22 +33,21 @@ export class AllAccountDataSource extends DataSourceDecorator<Account> {
       return [];
     }
     return currencies.map((currency: Currency): Account => {
-      let account = accounts.find(account => {
-        return account.currency === currency.name;
-      });
-
+      let account = accounts.find(account => account.currency === currency.code);
       if (account) {
-        account.fee = currency.fee;
-        account.code = currency.code;
+        account.withdrawalFee = currency.withdrawalFee;
+        account.currencyName = currency.name;
         account.decimal = currency.decimal;
         return account;
       }
       return {
-        currency: currency.name,
-        code: currency.code,
+        currency: currency.code,
+        currencyName: currency.name,
         decimal: currency.decimal,
-        fee: currency.fee,
-        balance: '0'
+        withdrawalFee: currency.withdrawalFee,
+        balance: {
+          $numberDecimal: '0.00000000',
+        },
       };
     });
   }

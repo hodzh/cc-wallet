@@ -45,6 +45,6 @@ export class AdminTransferComponent {
   }
 
   private getAmount() {
-    return CURRENCY_TEXT_CONVERTER.toValue(this.amount, this.account);
+    return this.amount;
   }
 }

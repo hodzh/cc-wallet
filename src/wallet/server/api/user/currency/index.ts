@@ -2,8 +2,8 @@ import { CurrencyController } from './controller';
 
 export = routeFactory;
 
-function routeFactory(config) {
-  var controller = new CurrencyController(config);
+function routeFactory() {
+  let controller = new CurrencyController();
   return route;
 
   function route(router, auth) {
