@@ -1,7 +1,6 @@
 'use strict';
 
 const webpack = require('webpack');
-const WebpackBuildLogger = require('webpack-build-logger');
 const path = require('path');
 const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 
@@ -26,6 +25,7 @@ module.exports = function({
   }
 
   const serverConfig = {
+    mode: isDev ? 'development' : 'production',
     context  : root,
     target   : 'node',
     resolve  : {
@@ -46,7 +46,7 @@ module.exports = function({
       libraryTarget: 'commonjs2'
     },
     module   : {
-      loaders: [
+      rules: [
         {
           test   : /\.ts$/,
           loader : 'ts-loader',
@@ -109,16 +109,6 @@ module.exports = function({
       setImmediate: false
     },
     plugins  : [
-      new WebpackBuildLogger({
-        logEnabled: true
-      }),
-      /*new webpack.SourceMapDevToolPlugin({
-       test: /\.js$/,
-       moduleFilenameTemplate: '[absolute-resource-path]',
-       fallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]',
-       filename: "[file].map",
-       sourceRoot: '/'
-       })*/
       new webpack.BannerPlugin({
         banner   : 'require("source-map-support").install();',
         raw      : true,
@@ -145,4 +135,4 @@ module.exports = function({
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [root].concat(args));
   }
-}
+};

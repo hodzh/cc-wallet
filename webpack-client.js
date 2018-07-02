@@ -1,32 +1,30 @@
 'use strict';
 
 const webpack = require('webpack');
-const WebpackBuildLogger = require('webpack-build-logger');
 const path = require('path');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-module.exports = function ({
-                             root,
-                             name,
-                             index,
-                           }) {
-  /**
-   * Env
-   * Get npm lifecycle event to identify the environment
-   */
+module.exports = function({
+  root,
+  name,
+  index,
+}){
   const ENV = process.env.npm_lifecycle_event;
-  const isTest = ENV === 'test' || ENV === 'test-watch';
-  const isProd = ENV === 'build';
-  if (isProd) {
+  const isTest = ENV==='test' || ENV==='test-watch';
+  const isProd = ENV==='build';
+  if (isProd)
+  {
     console.log('production mode');
   }
   const isDev = !isProd && !isTest;
-  if (isDev) {
+  if (isDev)
+  {
     console.log('development mode');
   }
 
   const clientConfig = {
+    mode   : isDev ? 'development' : 'production',
     context: root,
     target : 'web',
     resolve: {
@@ -41,24 +39,7 @@ module.exports = function ({
       ],
     },
     entry  : {
-      vendor: [
-        // Polyfills
-        'core-js/es6',
-        'core-js/es7/reflect',
-        'zone.js/dist/zone',
-        'zone.js/dist/long-stack-trace-zone',
-        // Angular2
-        '@angular/common',
-        '@angular/platform-browser',
-        '@angular/platform-browser-dynamic',
-        '@angular/core',
-        '@angular/router',
-        '@angular/http',
-        // RxJS
-        'rxjs',
-        // Other
-      ],
-      app   : [
+      app: [
         index,
       ],
     },
@@ -70,29 +51,29 @@ module.exports = function ({
     },
     module : {
       // preLoaders: [{test: /\.ts$/, loader: 'tslint-loader'}],
-      loaders: [
+      rules  : [
         // .ts files.
         {
           test   : /\.ts$/,
           loader : 'ts-loader',
           options: {
             // configFileName : path.join(__dirname, 'tsconfig.client.json'),
-            "compilerOptions": {
-              "emitDecoratorMetadata": true,
-              "experimentalDecorators": true,
-              "target": "es5",
-              "module": "commonjs",
-              "removeComments": true,
-              "sourceMap": true,
-              "inlineSources": true,
-              "lib": [
-                "es2017",
-                "dom"
+            'compilerOptions': {
+              'emitDecoratorMetadata' : true,
+              'experimentalDecorators': true,
+              'target'                : 'es5',
+              'module'                : 'commonjs',
+              'removeComments'        : true,
+              'sourceMap'             : true,
+              'inlineSources'         : true,
+              'lib'                   : [
+                'es2017',
+                'dom',
               ],
-              "types": [
-                "core-js",
-                "node"
-              ]
+              'types'                 : [
+                'core-js',
+                'node',
+              ],
             },
             ignoreDiagnostics: [
               2403, // 2403 -> Subsequent variable declarations
@@ -106,7 +87,7 @@ module.exports = function ({
             /\.spec\.ts$/,
             /\.e2e\.ts$/,
             /node_modules/,
-            "**/*.spec.ts"
+            '**/*.spec.ts',
           ],
         },
 
@@ -144,44 +125,38 @@ module.exports = function ({
       ],
     },
 
-    /* postcss: function () {
-     return [precss, autoprefixer];
-     }, */
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            chunks : 'initial',
+            test   : path.resolve(__dirname, 'node_modules'),
+            name   : 'vendor',
+            enforce: true,
+          },
+        },
+      },
+      // minimizer  : (isDev ? new webpack.optimize.UglifyJsPlugin({
+      //     compress : {
+      //       warnings: false,
+      //     },
+      //     mangle   : true,
+      //     sourceMap: true,
+      //     comments : false,
+      //   }) : false
+      // ),
+    },
 
     plugins: [
-      new WebpackBuildLogger({
-        logEnabled: true,
-      }),
       new webpack.DefinePlugin({
         PRODUCTION: isProd,
       }),
-      // Minify all javascript, switch loaders to minimizing mode
-      ... (isDev ? [] : [
-        new webpack.optimize.UglifyJsPlugin({
-          compress : {
-            warnings: false,
-          },
-          mangle   : true,
-          sourceMap: true,
-          comments : false,
-        }),
-      ]),
-      new webpack.optimize.CommonsChunkPlugin({
-        name     : 'vendor',
-        filename : 'vendor.js',
-        minChunks: Infinity,
-      }),
     ],
-
-    /*tslint: {
-     emitErrors: false,
-     failOnHint: false
-     }*/
   };
 
   return clientConfig;
 
-  function resolve(args) {
+  function resolve(args){
     args = Array.prototype.slice.call(arguments, 0);
     return path.join.apply(path, [root].concat(args));
   }

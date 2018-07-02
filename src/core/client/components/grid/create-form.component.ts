@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AbstractForm } from '../../../../core/client/common/abstract-form';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { DataSource } from '../../common/data-source';
 import { TableSchema } from './table-scheme';
 

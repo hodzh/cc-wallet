@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Credentials } from './credentials';
 import { HttpClient } from '@angular/common/http';
+import { share } from 'rxjs/operators';
 
 @Injectable()
 export class AuthResource {
@@ -9,7 +10,7 @@ export class AuthResource {
   }
 
   signin(params: Credentials): Observable<any> {
-    let req = this.http.post(
+    return this.http.post(
       '/auth/local',
       params, {
         headers: {
@@ -17,13 +18,13 @@ export class AuthResource {
           'Content-Type': 'application/json',
         },
         responseType: 'json',
-      })
-      .share();
-    return req;
+      }
+    )
+      .pipe(share());
   }
 
   signup(params: Credentials): Observable<any> {
-    let req = this.http.post(
+    return this.http.post(
       '/api/me',
       params, {
         headers: {
@@ -31,8 +32,8 @@ export class AuthResource {
           'Content-Type': 'application/json',
         },
         responseType: 'json',
-      })
-      .share();
-    return req;
+      }
+    )
+      .pipe(share());
   }
 }

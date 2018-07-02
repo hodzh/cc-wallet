@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Account } from './account';
 import { DataSourceDecorator } from '../../../../core/client/common/data-source';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  BehaviorSubject } from 'rxjs';
+import { debounceTime, combineLatest } from 'rxjs/operators';
 import { AllAccountDataSource } from './all-account.data-source';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class FilteredAccountDataSource extends DataSourceDecorator<Account> {
@@ -37,16 +37,15 @@ export class FilteredAccountDataSource extends DataSourceDecorator<Account> {
     super(accountDataSource);
     this.searchSubject = new BehaviorSubject<string>('');
     this.hideZeroBalanceSubject = new BehaviorSubject<boolean>(false);
-    this.filteredAccounts = this.accountDataSource.documents
-      .combineLatest(
-        this.search$
-          .debounceTime(400),
+    this.filteredAccounts = this.accountDataSource.documents.pipe(
+      combineLatest(
+        this.search$.pipe(debounceTime(400)),
         this.hideZeroBalance$,
         (accounts: Account[],
          searchString: string,
          hideZeroBalance: boolean): Account[] =>
           this.filterAccounts(accounts, searchString, hideZeroBalance)
-      );
+      ));
   }
 
   private filterAccounts(accounts: Account[],

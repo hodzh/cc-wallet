@@ -1,6 +1,5 @@
 import { Resource } from './resource';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  BehaviorSubject } from 'rxjs';
 import { IDocument } from './document';
 
 export interface IDataSource<TDocument extends IDocument> {

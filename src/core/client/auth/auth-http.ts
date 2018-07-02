@@ -1,12 +1,14 @@
+
+import {throwError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthToken } from './auth-token';
-import { Observable } from 'rxjs/Observable';
 import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
+import { catchError, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthHttp {
@@ -56,31 +58,31 @@ export class AuthHttp {
       // responseType: 'text',
     }, options);
     authOptions.headers = this.createHeader();
-    request = this.http.request<T>(method, url, authOptions)
-      .catch(
+    request = this.http.request<T>(method, url, authOptions).pipe(
+      catchError(
         (error: HttpErrorResponse) => {
           if (error.status === 401) {
             if (this.authToken.refreshToken) {
-              return this.refresh()
-                .flatMap((refreshResult: any): Observable<any> => {
+              return this.refresh().pipe(
+                flatMap((refreshResult: any): Observable<any> => {
                   this.authToken.token = refreshResult.token;
                   authOptions.headers = this.createHeader();
                   return this.http.request(url, authOptions);
-                })
-                .catch((error: HttpErrorResponse) => {
+                }),
+                catchError((error: HttpErrorResponse) => {
                   if (error.status === 401) {
                     this.authToken.reset();
                   }
-                  return Observable.throw(error);
-                });
+                  return throwError(error);
+                }));
             }
             this.authToken.reset();
-            return Observable.throw(error);
+            return throwError(error);
           }
-          return Observable.throw(error);
-        },
+          return throwError(error);
+        }
       )
-    ;
+  );
 
     return request;
   }
@@ -89,23 +91,21 @@ export class AuthHttp {
     let body = {
       refreshToken: this.authToken.refreshToken,
     };
-    let request = this.http.post(
+    return this.http.post(
       '/auth/local/refresh',
       body, {
         headers: this.createHeader(),
       },
     );
-    return request;
   }
 
   private createHeader(): {
     [header: string]: string | string[];
   } {
-    let headers = {
+    return {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' +this.authToken.token,
+      'Authorization': 'Bearer ' + this.authToken.token,
     };
-    return headers;
   }
 }

@@ -3,7 +3,7 @@ import { AdminAccount } from './account';
 import { PageDataSource } from '../../../../core/client/common/page-data-source';
 import { AdminAccountResource } from './account.resource';
 import { Observable } from 'rxjs';
-import { Currency } from '../../currency/currency';
+import { combineLatest } from 'rxjs/operators';
 import { AdminCurrencyDataSource } from '../currency/currency-data-source';
 import { AdminCurrency } from '../index';
 
@@ -32,13 +32,13 @@ export class AdminAccountDataSource extends PageDataSource<AdminAccount> {
       sortable: true,
     });
 
-    this.mergeAccounts = this.documentsSubject.asObservable()
-      .combineLatest(
+    this.mergeAccounts = this.documentsSubject.asObservable().pipe(
+      combineLatest(
         this.currencyDataSource.documents,
         (accounts: AdminAccount[],
          currencies: AdminCurrency[]): AdminAccount[] =>
           this.updateAccountCurrency(accounts, currencies),
-      );
+      ));
   }
 
   public income(id: string, params: TransactionParams) {

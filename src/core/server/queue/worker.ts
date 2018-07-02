@@ -96,7 +96,7 @@ export class QueueWorker extends EventEmitter {
    * Starts the worker.  If no queues have been specified yet, this will loop
    */
   start() {
-    if (this.queues.length === 0) {
+    if (!this.queues.length) {
       return setTimeout(this.start.bind(this), this.interval);
     }
     this.working = true;

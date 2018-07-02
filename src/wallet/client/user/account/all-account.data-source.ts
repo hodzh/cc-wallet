@@ -3,7 +3,8 @@ import { Account } from './account';
 import { DataSourceDecorator } from '../../../../core/client/common/data-source';
 import { AccountDataSource } from './account.data-source';
 import { CurrencyDataSource } from '../../currency/currency-data-source';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { combineLatest } from 'rxjs/operators';
 import { Currency } from '../../currency/currency';
 
 @Injectable()
@@ -18,13 +19,13 @@ export class AllAccountDataSource extends DataSourceDecorator<Account> {
   constructor(private account: AccountDataSource,
               private currencyDataSource: CurrencyDataSource) {
     super(account);
-    this.allAccounts = this.account.documents
-      .combineLatest(
+    this.allAccounts = this.account.documents.pipe(
+      combineLatest(
         this.currencyDataSource.documents,
         (accounts: Account[],
          currencies: Currency[]): Account[] =>
           this.updateAccountCurrency(accounts, currencies),
-      );
+      ));
   }
 
   private updateAccountCurrency(accounts: Account[],

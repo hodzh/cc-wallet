@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AuthHttp } from '../../auth/auth-http';
-import { Resource } from '../../common/resource';
+import { AuthHttp } from '../../auth';
+import { Resource } from '../../common';
 import { AdminUser } from './user';
 
 @Injectable()

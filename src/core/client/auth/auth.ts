@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AuthToken } from './auth-token';
 import { AuthResource } from './auth.resource';
 import { UserResource } from './user.resource';

@@ -1,10 +1,9 @@
 import { Resource } from './resource';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  Subject ,  BehaviorSubject } from 'rxjs';
 import { QueryResult } from '../../common/query-result';
 import { DataSource } from './data-source';
 import { IDocument } from './document';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 export interface DataSourceOptions {
   paginate?: boolean;
@@ -17,7 +16,6 @@ export interface PageInfo {
 }
 
 export class PageDataSource<TDocument extends IDocument> extends DataSource<TDocument> {
-
   private currentPageSubject: BehaviorSubject<number>;
   private pageSizeSubject: BehaviorSubject<number>;
   private totalCountSubject: BehaviorSubject<number>;
@@ -62,16 +60,16 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
     this.pageInfo = new Subject<PageInfo>();
     //this.loadingSubject = new Subject<boolean>();
 
-    this.currentPageSubject
-      .distinctUntilChanged()
+    this.currentPageSubject.pipe(
+      distinctUntilChanged())
       .subscribe((currentPage) => {
         this.pageInfo.next({
           size: this.pageSizeSubject.getValue(),
           index: currentPage
         });
       });
-    this.pageSizeSubject
-      .distinctUntilChanged()
+    this.pageSizeSubject.pipe(
+      distinctUntilChanged())
       .subscribe((pageSize) => {
         let pageCount = this.pageCount;
         if (pageCount > 0 &&
@@ -85,9 +83,9 @@ export class PageDataSource<TDocument extends IDocument> extends DataSource<TDoc
         });
       });
 
-    this.pageInfo
-      .debounceTime(300)
-      .switchMap(pageInfo => this.readPage(pageInfo))
+    this.pageInfo.pipe(
+      debounceTime(300),
+      switchMap(pageInfo => this.readPage(pageInfo)))
       .subscribe((data) => this.onRead(data),
         error => {
           console.error(error);

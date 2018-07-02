@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { fromEvent, timer, Subscription } from 'rxjs';
 import { UserResource } from '../../auth/user.resource';
-import { Auth } from '../../auth/auth';
+import { Auth } from '../../auth';
+import { throttle, flatMap, retryWhen, tap, delay } from 'rxjs/internal/operators';
 
 //const styles = require('./email-verify.component.scss');
 const template = require('./email-verify.component.html');
@@ -24,18 +25,17 @@ export class EmailVerifyComponent {
 
   ngAfterViewInit() {
     const throttleIntervalMin: number = 10;
-    this.emailVerifySubscription = Observable
-      .fromEvent(this.sendButton.nativeElement, 'click')
-      .throttle(() =>
-        Observable.timer(throttleIntervalMin * 60 * 1000))
-      .do(() => {
+    this.emailVerifySubscription = fromEvent(this.sendButton.nativeElement, 'click').pipe(
+      throttle(() =>
+        timer(throttleIntervalMin * 60 * 1000)),
+      tap(() => {
         this.submitPending = true;
-      })
-      .flatMap(() =>
-        this.userResource.emailVerify()
-          .retryWhen(function (errors) {
-            return errors.delay(2000);
-          }))
+      }),
+      flatMap(() =>
+        this.userResource.emailVerify().pipe(
+          retryWhen(function (errors) {
+            return errors.pipe(delay(2000));
+          }))))
       .subscribe(
         (res) => {
           if (res.error) {

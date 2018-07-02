@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageDataSource } from '../../common/page-data-source';
+import { PageDataSource } from '../../common';
 import { AdminUserResource } from './user.resource';
 import { USER_LIST_SCHEMA } from './user-list-schema';
 import { AdminUser } from './user';
